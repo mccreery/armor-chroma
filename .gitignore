@@ -1,0 +1,13 @@
+# Ignore everything
+/*
+
+# Un-ignores
+!src/
+!gradle/
+!/gradlew
+!/gradlew.bat
+!/build.gradle
+
+# Git files
+!/.gitignore
+!/.gitattributes

@@ -1,0 +1,14 @@
+[{
+	"modid": "armorchroma",
+	"name": "Armor Chroma",
+	"description": "Adds colors, including leather dye, and enchanted sheen to the in-game armor bar.",
+	"version": "1.0",
+	"mcversion": "1.7.10",
+	"url": "",
+	"updateUrl": "",
+	"authorList": ["NukeDuck"],
+	"credits": "",
+	"logoFile": "",
+	"screenshots": [],
+	"dependencies": []
+}]
