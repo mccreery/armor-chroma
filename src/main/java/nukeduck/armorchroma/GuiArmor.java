@@ -2,6 +2,9 @@ package nukeduck.armorchroma;
 
 import static nukeduck.armorchroma.ArmorChroma.mc;
 import static org.lwjgl.opengl.GL11.*;
+
+import javax.vecmath.Vector2d;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -61,7 +64,7 @@ public class GuiArmor extends Gui {
 
 			if(this.last == 0 && this.next > 0) { // First armor, draw the background
 				this.zLevel--;
-				this.drawTexturedModalRect(left, top, 18, 0, 82, 9);
+				this.drawTexturedModalRect(left, top, 175, 247, 82, 9);
 				this.zLevel++;
 				GuiIngameForge.left_height += 10;
 			}
@@ -72,7 +75,7 @@ public class GuiArmor extends Gui {
 		}
 		// Draw extra line at the end of the bar if necessary
 		if(last % 2 == 1) {
-			this.drawTexturedModalRect(left - 4, top, 18, 9, 9, 9);
+			this.drawTexturedModalRect(left - 4, top, 166, 247, 9, 9);
 		}
 
 		glPopAttrib();
@@ -88,25 +91,49 @@ public class GuiArmor extends Gui {
 		boolean addBreak = ArmorChroma.INSTANCE.config.alwaysBreak ||
 				this.glint != (this.glint = item.hasEffect(stack, 0));
 
+		String id = Item.itemRegistry.getNameForObject(item);
 		if(item instanceof ItemArmor) {
 			ItemArmor armor = (ItemArmor) item;
 			ArmorMaterial material = armor.getArmorMaterial();
 			this.next = this.last + armor.damageReduceAmount;
 
-			// Add a break if the material or color changes
-			if(ArmorChroma.INSTANCE.config.renderColor && material == ArmorMaterial.CLOTH) {
-				addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.iconLeather);
-				addBreak |= this.color != (this.color = item.getColorFromItemStack(stack, 0));
-			} else {
-				addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.getIconIndex(material));
+			if(ArmorChroma.INSTANCE.config.exceptions.containsKey(id)) {
+				addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.exceptions.get(id));
 				this.color = 0xFFFFFF;
+			} else {
+				// Add a break if the material or color changes
+				if(ArmorChroma.INSTANCE.config.renderColor && material == ArmorMaterial.CLOTH) {
+					addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.iconLeather);
+					addBreak |= this.color != (this.color = item.getColorFromItemStack(stack, 0));
+				} else {
+					addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.getIconIndex(material));
+					this.color = 0xFFFFFF;
+				}
 			}
 		} else if(stack.getItem() instanceof ISpecialArmor) {
+			if(ArmorChroma.INSTANCE.config.exceptions.containsKey(id)) {
+				addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.exceptions.get(id));
+			} else {
+				addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.iconDefault);
+			}
 			this.next = this.last + ((ISpecialArmor) item).getArmorDisplay(mc.thePlayer, stack, slot);
 			this.color = 0xFFFFFF;
 		}
 
 		return addBreak;
+	}
+
+	/** The amount of 9x9 tiles that fit horizontally in the tile sheet. */
+	public static final int SHEET_WIDTH = 28;
+
+	/** Calculates UV coordinates, in pixels, for the current quad.
+	 * @param pos The index in the armor bar, starting at 0 and ending at 19
+	 * @return A vector containing UV pixel coordinates */
+	public Vector2d getUV(int pos) {
+		int offsetX = pos % 2 == 1 ? 4 : 0;
+		return new Vector2d(
+				(this.materialIndex % SHEET_WIDTH) * 9 + offsetX,
+				(this.materialIndex / SHEET_WIDTH) * 9);
 	}
 
 	/** Renders an armor piece of the given width, using the current state.
@@ -119,14 +146,17 @@ public class GuiArmor extends Gui {
 	private int renderArmorBarPart(int left, int top, boolean addBreak) {
 		int i = this.last;
 		for(; i < this.next && i < 20; i++, left += 4) {
-			this.drawTexturedModalRectWithColor(left, top, i % 2 == 0 ? 0 : 9, this.materialIndex * 9, 4, 9);
+			Vector2d uv = this.getUV(i);
+			this.drawTexturedModalRectWithColor(left, top, (int) uv.x, (int) uv.y, 5, 9);
 
 			if(addBreak) { // Add a break if the state of the bar has changed
 				addBreak = false;
-				if(i % 2 == 1) this.drawTexturedModalRectWithColor(left - 4, top, 18, 9, 9, 9);
+				if(i % 2 == 1) {
+					this.drawTexturedModalRectWithColor(left - 4, top, 166, 247, 9, 9);
+				}
 			}
 			if(ArmorChroma.INSTANCE.config.renderGlint && glint) { // Draw glint
-				this.drawTexturedGlintRect(left, top, i % 2 == 0 ? 0 : 9, this.materialIndex * 9, 4, 9);
+				this.drawTexturedGlintRect(left, top, (int) uv.x, (int) uv.y, 5, 9);
 			}
 		}
 		return left;
