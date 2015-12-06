@@ -1,9 +1,12 @@
 package nukeduck.armorchroma;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -51,4 +54,12 @@ public class ArmorChroma {
 			this.armor.renderArmorBar(e.resolution.getScaledWidth(), e.resolution.getScaledHeight());
 		}
 	}
+
+	/*@SubscribeEvent
+	public void onTooltip(ItemTooltipEvent e) {
+		if(e.itemStack.getItem() instanceof ItemArmor) {
+			e.toolTip.add(((ItemArmor) e.itemStack.getItem()).getArmorMaterial().toString());
+		}
+		e.toolTip.add(Item.itemRegistry.getNameForObject(e.itemStack.getItem()));
+	}*/
 }

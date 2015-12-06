@@ -74,7 +74,7 @@ public class GuiArmor extends Gui {
 			last = next;
 		}
 		// Draw extra line at the end of the bar if necessary
-		if(last % 2 == 1) {
+		if(last < 20 && last % 2 == 1) {
 			this.drawTexturedModalRect(left - 4, top, 166, 247, 9, 9);
 		}
 

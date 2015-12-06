@@ -36,23 +36,62 @@ public class Config {
 		"TF:COPPER=56", "TF:TIN=57", "TF:SILVER=58",
 		"TF:LEAD=59", "TF:NICKEL=60", "TF:ELECTRUM=61",
 		"TF:INVAR=62", "TF:BRONZE=63", "TF:PLATINUM=64", // Thermal Foundation
-		"IC2_BRONZE=86", "IC2_ALLOY=87" // IC2
+		"IC2_BRONZE=86", "IC2_ALLOY=87", // IC2
+		"THAUMIUM=140", "VOID=141", "SPECIAL=142",
+		"FORTRESS=143", // Thaumcraft
+		"VOIDFORTRESS=141", "SHADOW2=142", // Tainted Magic
+		"WG:PRIMORDIALARMOR=146", "WG:ADVANCEDCLOTH=2", // Witching Gadgets
+		"ADAMINITEARMOR=147", "MASCOFCRUELTY=0", // Thaumic Additions
+		"ATHAUMINITE=148", "TBBLOODY=149", // Thaumic Bases
+		"VampireArmor=117", "GlassArmor=118", "ImbuedArmor=119", // Blood Arsenal
+		"NAGA_SCALE=168", "FIERY=169", "IRONWOOD=170",
+		"KNIGHTMETAL=172", "KNIGHTPHANTOM=173", "YETI=174",
+		"ARCTIC=175" // Twilight Forest
 	};
 
 	public static final String[] DEFAULT_EXCEPTIONS = {
 		"IC2:itemArmorHazmatHelmet=84", "IC2:itemArmorHazmatChestplate=84",
 		"IC2:itemArmorHazmatLeggings=84", "IC2:itemArmorRubBoots=85",
-
 		"IC2:itemArmorNanoHelmet=88", "IC2:itemArmorNanoChestplate=88",
 		"IC2:itemArmorNanoLegs=88", "IC2:itemArmorNanoBoots=88",
 		"IC2:itemArmorQuantumHelmet=89", "IC2:itemArmorQuantumChestplate",
 		"IC2:itemArmorQuantumLegs=89", "IC2:itemArmorQuantumBoots=89",
-
 		"IC2:itemSolarHelmet=2", "IC2:itemNightvisionGoggles=85",
 		"IC2:itemStaticBoots=85", "IC2:itemArmorJetpack=2",
 		"IC2:itemArmorJetpackElectric=2", "IC2:itemArmorCFPack=2",
 		"IC2:itemArmorEnergypack=2", "IC2:itemArmorBatpack=90",
-		"IC2:itemArmorAdvBatpack=91"
+		"IC2:itemArmorAdvBatpack=91", // IC2
+
+		"AWWayofTime:boundHelmet=112", "AWWayofTime:boundPlate=112",
+		"AWWayofTime:boundLeggings=112", "AWWayofTime:boundBoots=112",
+		"AWWayofTime:boundHelmetFire=113", "AWWayofTime:boundPlateFire=113",
+		"AWWayofTime:boundLeggingsFire=113", "AWWayofTime:boundBootsFire=113",
+		"AWWayofTime:boundHelmetWater=114", "AWWayofTime:boundPlateWater=114",
+		"AWWayofTime:boundLeggingsWater=114", "AWWayofTime:boundBootsWater=114",
+		"AWWayofTime:boundHelmetWind=115", "AWWayofTime:boundPlateWind=115",
+		"AWWayofTime:boundLeggingsWind=115", "AWWayofTime:boundBootsWind=115",
+		"AWWayofTime:boundHelmetEarth=116", "AWWayofTime:boundPlateEarth=116",
+		"AWWayofTime:boundLeggingsEarth=116", "AWWayofTime:boundBootsEarth=116", // Blood Magic
+
+		"Thaumcraft:BootsTraveller=0", "Thaumcraft:HoverHarness=0",
+		"Thaumcraft:ItemHelmetCultistRobe=144", "Thaumcraft:ItemChestplateCultistRobe=144",
+		"Thaumcraft:ItemLeggingsCultistRobe=144", "Thaumcraft:ItemHelmetCultistPlate=144",
+		"Thaumcraft:ItemChestplateCultistPlate=144", "Thaumcraft:ItemLeggingsCultistPlate=144",
+		"Thaumcraft:ItemBootsCultist=144", "Thaumcraft:ItemChestplateCultistLeaderPlate=144",
+		"Thaumcraft:ItemLeggingsCultistLeaderPlate=144", // Thaumcraft
+
+		"TaintedMagic:BootsVoidwalker=0",
+		"TaintedMagic:CrimsonVoidHelm=144", "TaintedMagic:CrimsonVoidChest=144",
+		"TaintedMagic:CrimsonVoidLegs=144", "TaintedMagic:CrimsonVoidBoots=144",
+		"TaintedMagic:CrimsonPlateVoidHelm=144", "TaintedMagic:CrimsonPlateVoidChest=144",
+		"TaintedMagic:CrimsonPlateVoidLegs=144",
+		"TaintedMagic:CrimsonLeaderVoidHelm=144", "TaintedMagic:CrimsonLeaderVoidChest=144",
+		"TaintedMagic:CrimsonLeaderVoidLegs=144",
+		"TaintedMagic:HelmetShadowFortress=145", "TaintedMagic:ChestShadowFortress=145",
+		"TaintedMagic:LegsShadowFortress=145", // Tainted Magic
+
+		"TwilightForest:item.steeleafHelm=171", "TwilightForest:item.steeleafPlate=171",
+		"TwilightForest:item.steeleafLegs=171", "TwilightForest:item.steeleafBoots=171" // Twilight Forest
 	};
 
 	/** Initializes the configuration.
