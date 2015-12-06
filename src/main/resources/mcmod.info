@@ -2,7 +2,7 @@
 	"modid": "armorchroma",
 	"name": "Armor Chroma",
 	"description": "Adds colors, including leather dye, and enchanted sheen to the in-game armor bar.",
-	"version": "1.0",
+	"version": "1.0.1",
 	"mcversion": "1.7.10",
 	"url": "http://minecraft.curseforge.com/projects/armor-chroma",
 	"updateUrl": "",

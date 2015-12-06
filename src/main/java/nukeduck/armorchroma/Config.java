@@ -46,7 +46,8 @@ public class Config {
 		"VampireArmor=117", "GlassArmor=118", "ImbuedArmor=119", // Blood Arsenal
 		"NAGA_SCALE=168", "FIERY=169", "IRONWOOD=170",
 		"KNIGHTMETAL=172", "KNIGHTPHANTOM=173", "YETI=174",
-		"ARCTIC=175" // Twilight Forest
+		"ARCTIC=175", // Twilight Forest
+		"MONACLE=0", "exosuit=198", "GILDEDGOLD=3", "BRASS=199" // Flaxbeard's Steam Power
 	};
 
 	public static final String[] DEFAULT_EXCEPTIONS = {
@@ -91,7 +92,14 @@ public class Config {
 		"TaintedMagic:LegsShadowFortress=145", // Tainted Magic
 
 		"TwilightForest:item.steeleafHelm=171", "TwilightForest:item.steeleafPlate=171",
-		"TwilightForest:item.steeleafLegs=171", "TwilightForest:item.steeleafBoots=171" // Twilight Forest
+		"TwilightForest:item.steeleafLegs=171", "TwilightForest:item.steeleafBoots=171", // Twilight Forest
+
+		"witchery:vampirehat=196", "witchery:vampirehelmet=196",
+		"witchery:vampirecoat=196", "witchery:vampirecoat_female=196",
+		"witchery:vampirechaincoat=196", "witchery:vampirechaincoat_female=196",
+		"witchery:vampirelegs=196", "witchery:vampirelegs_kilt=196",
+		"witchery:vampireboots=196", "witchery:deathscowl=197",
+		"witchery:deathsrobe=197", "witchery:deathsfeet=197" // Witchery
 	};
 
 	/** Initializes the configuration.
