@@ -106,6 +106,7 @@ public class GuiArmor extends Gui {
 				this.glint != (this.glint = item.hasEffect(stack, 0));
 
 		if(!ArmorChroma.INSTANCE.config.renderColor && item instanceof ItemArmor && ((ItemArmor) item).getArmorMaterial() == ArmorMaterial.CLOTH) {
+			// Use pre-colored leather
 			addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.iconLeather);
 			addBreak |= this.color != (this.color = 0xFFFFFF);
 		} else {
@@ -119,35 +120,6 @@ public class GuiArmor extends Gui {
 		} else if(item instanceof ISpecialArmor) {
 			this.next += ((ISpecialArmor) item).getArmorDisplay(mc.thePlayer, stack, slot);
 		}
-
-		/*String id = Item.itemRegistry.getNameForObject(item);
-		if(item instanceof ItemArmor) {
-			ItemArmor armor = (ItemArmor) item;
-			ArmorMaterial material = armor.getArmorMaterial();
-			this.next = this.last + armor.damageReduceAmount;
-
-			if(ArmorChroma.INSTANCE.config.exceptions.containsKey(id)) {
-				addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.exceptions.get(id));
-				this.color = 0xFFFFFF;
-			} else {
-				// Add a break if the material or color changes
-				if(ArmorChroma.INSTANCE.config.renderColor && material == ArmorMaterial.CLOTH) {
-					addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.iconLeather);
-					addBreak |= this.color != (this.color = item.getColorFromItemStack(stack, 0));
-				} else {
-					addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.getIconIndex(material));
-					this.color = 0xFFFFFF;
-				}
-			}
-		} else if(stack.getItem() instanceof ISpecialArmor) {
-			if(ArmorChroma.INSTANCE.config.exceptions.containsKey(id)) {
-				addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.exceptions.get(id));
-			} else {
-				addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.iconDefault);
-			}
-			this.next = this.last + ((ISpecialArmor) item).getArmorDisplay(mc.thePlayer, stack, slot);
-			this.color = 0xFFFFFF;
-		}*/
 
 		return addBreak;
 	}

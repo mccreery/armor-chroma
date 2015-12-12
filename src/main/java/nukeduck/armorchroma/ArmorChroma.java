@@ -69,13 +69,18 @@ public class ArmorChroma {
 			this.armor.renderArmorBar(e.resolution.getScaledWidth(), e.resolution.getScaledHeight());
 		}
 
+		if(!Constants.DEBUG) return;
 		if(!press && (press = Keyboard.isKeyDown(Keyboard.KEY_Y))) {
 			this.config.reload();
+		} else {
+			press = Keyboard.isKeyDown(Keyboard.KEY_Y);
 		}
 	}
 
 	@SubscribeEvent
 	public void onTooltip(ItemTooltipEvent e) {
+		if(!Constants.DEBUG) return;
+
 		if(e.itemStack.getItem() instanceof ItemArmor) {
 			e.toolTip.add(((ItemArmor) e.itemStack.getItem()).getArmorMaterial().toString());
 		}

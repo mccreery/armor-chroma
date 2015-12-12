@@ -4,7 +4,7 @@
 			"_comment": "Vanilla",
 			"modid": "minecraft",
 			"materials": [
-				{"name": "CLOTH", "index": 0},
+				{"name": "CLOTH", "index": 5},
 				{"name": "CHAIN", "index": 1},
 				{"name": "IRON", "index": 2},
 				{"name": "GOLD", "index": 3},
@@ -287,6 +287,30 @@
 				{"name": "TIGERSEYE", "index": 290},
 				{"name": "QUEEN", "index": 291},
 				{"name": "LAPIS", "index": 292}
+			]
+		}, {
+			"modid": "DraconicEvolution",
+			"materials": [
+				{"name": "DRACONIUMARMOR_T1", "index": 308},
+				{"name": "DRACONIUMARMOR_T2", "index": 309}
+			]
+		}, {
+			"modid": "RandomThings",
+			"materials": [
+				{"name": "Spectre", "index": 336}
+			]
+		}, {
+			"modid": "magicalcrops",
+			"materials": [
+				{"name": "InfusedIngotArmor", "index": 364},
+				{"name": "InfusedArmorEpic", "index": 365},
+				{"name": "InfusedArmor", "index": 366}
+			],
+			"items": [
+				{"id": "magicalcrops_infusedHelmetEpicFlight", "index": 367},
+				{"id": "magicalcrops_infusedPlatebodyEpicFlight", "index": 367},
+				{"id": "magicalcrops_infusedLeggingsEpicFlight", "index": 367},
+				{"id": "magicalcrops_infusedBootsEpicFlight", "index": 367}
 			]
 		}
 	]

@@ -1,10 +1,25 @@
 package nukeduck.armorchroma;
 
+import static nukeduck.armorchroma.Constants.ALWAYS_BREAK;
+import static nukeduck.armorchroma.Constants.ALWAYS_BREAK_DESC;
+import static nukeduck.armorchroma.Constants.BREAK_DEFAULT;
+import static nukeduck.armorchroma.Constants.COLOR_DEFAULT;
+import static nukeduck.armorchroma.Constants.GLINT_DEFAULT;
+import static nukeduck.armorchroma.Constants.ICON_DEFAULT;
+import static nukeduck.armorchroma.Constants.ICON_DEFAULT_DESC;
+import static nukeduck.armorchroma.Constants.ICON_LEATHER;
+import static nukeduck.armorchroma.Constants.ICON_LEATHER_DESC;
+import static nukeduck.armorchroma.Constants.RENDER_COLOR;
+import static nukeduck.armorchroma.Constants.RENDER_COLOR_DESC;
+import static nukeduck.armorchroma.Constants.RENDER_GLINT;
+import static nukeduck.armorchroma.Constants.RENDER_GLINT_DESC;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +45,9 @@ public class Config {
 	public File directory;
 	private File icons;
 
+	/** Reloads the config from the existing file. */
 	public void reload() {
+		ArmorChroma.INSTANCE.logger.info(Constants.RELOAD);
 		this.init(this.config.getConfigFile(), this.icons);
 	}
 
@@ -48,12 +65,6 @@ public class Config {
 	public boolean renderColor;
 	/** Flag to break between each piece regardless of type */
 	public boolean alwaysBreak;
-
-	/** Default values for {@link #renderGlint}, {@link #renderColor} and {@link #alwaysBreak} */
-	public static final boolean GLINT_DEFAULT = true, COLOR_DEFAULT = true, BREAK_DEFAULT = false;
-
-	/** Separator for key-value combinations within the icon list */
-	private static final String KEYVAL_SEPARATOR = "=";
 
 	/** Returns the icon index of the given {@link ItemStack}.
 	 * @param stack The item stack to look up
@@ -83,7 +94,7 @@ public class Config {
 		if(item instanceof ItemArmor) {
 			MaterialEntry materialNeedle = new MaterialEntry();
 			materialNeedle.name = ((ItemArmor) item).getArmorMaterial().name();
-	
+
 			i = Arrays.binarySearch(this.iconData.materialsA, materialNeedle, ComparatorMaterialEntry.INSTANCE);
 			if(i >= 0) {
 				return this.iconData.materialsA[i].index;
@@ -98,23 +109,25 @@ public class Config {
 		this.config = new Configuration(file);
 		this.config.load();
 
-		this.iconDefault = this.config.getInt("iconDefault", Configuration.CATEGORY_GENERAL, 2, 0, 28, "Default Y index for armor bar icons");
-		this.iconLeather = this.config.getInt("leatherColor", Configuration.CATEGORY_GENERAL, 5, 0, 28, "Default Y index for uncolored leather armor");
-		this.renderGlint = this.config.getBoolean("renderGlint", Configuration.CATEGORY_GENERAL, GLINT_DEFAULT, "Whether or not to render enchanted glint");
-		this.renderColor = this.config.getBoolean("renderColor", Configuration.CATEGORY_GENERAL, COLOR_DEFAULT, "Whether or not to render leather color");
-		this.alwaysBreak = this.config.getBoolean("alwaysBreak", Configuration.CATEGORY_GENERAL, BREAK_DEFAULT, "Whether or not to always insert a breaking line between armor pieces, when necessary");
+		this.iconDefault = this.config.getInt(ICON_DEFAULT, Configuration.CATEGORY_GENERAL, 2, 0, 28, ICON_DEFAULT_DESC);
+		this.iconLeather = this.config.getInt(ICON_LEATHER, Configuration.CATEGORY_GENERAL, 0, 0, 28, ICON_LEATHER_DESC);
+		this.renderGlint = this.config.getBoolean(RENDER_GLINT, Configuration.CATEGORY_GENERAL, GLINT_DEFAULT, RENDER_GLINT_DESC);
+		this.renderColor = this.config.getBoolean(RENDER_COLOR, Configuration.CATEGORY_GENERAL, COLOR_DEFAULT, RENDER_COLOR_DESC);
+		this.alwaysBreak = this.config.getBoolean(ALWAYS_BREAK, Configuration.CATEGORY_GENERAL, BREAK_DEFAULT, ALWAYS_BREAK_DESC);
 
 		this.icons = icons;
 		try {
 			this.iconData = this.getIconData();
 		} catch (IOException e) {
-			ArmorChroma.INSTANCE.logger.error("Unable to load icon data");
+			ArmorChroma.INSTANCE.logger.error(Constants.getMessage(Constants.ERROR, this.icons));
 			e.printStackTrace();
 		}
 
 		if(this.config.hasChanged()) this.config.save();
 	}
 
+	/** Reads (and copies, if necessary) icons.json to load icon information.
+	 * @return The resultant icon data from file */
 	private IconData getIconData() throws IOException {
 		BufferedReader reader = null;
 		try {
@@ -138,10 +151,17 @@ public class Config {
 
 			data.materialsA = materials.toArray(new MaterialEntry[materials.size()]);
 			Arrays.sort(data.materialsA, ComparatorMaterialEntry.INSTANCE);
+
+			ArmorChroma.INSTANCE.logger.info(Constants.getMessage(Constants.SUCCESS, this.icons));
 			return data;
 		} catch(FileNotFoundException e) {
-			ArmorChroma.INSTANCE.logger.info("icons.json did not exist. Loading defaults");
-			FileUtils.copyURLToFile(this.getClass().getResource("/assets/armorchroma/icons.json"), this.icons);
+			ArmorChroma.INSTANCE.logger.warn(Constants.getMessage(Constants.NOT_FOUND, this.icons));
+			URL iconsInternal = this.getClass().getResource("/assets/armorchroma/icons.json");
+			try {
+				FileUtils.copyURLToFile(iconsInternal, this.icons);
+			} catch(FileNotFoundException f) {
+				ArmorChroma.INSTANCE.logger.error(Constants.getMessage(Constants.NOT_FOUND, iconsInternal));
+			}
 			return this.getIconData();
 		} finally {
 			if(reader != null) {
