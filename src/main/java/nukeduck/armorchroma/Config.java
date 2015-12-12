@@ -108,7 +108,7 @@ public class Config {
 		try {
 			this.iconData = this.getIconData();
 		} catch (IOException e) {
-			ArmorChroma.INSTANCE.LOGGER.severe("Unable to load icon data");
+			ArmorChroma.INSTANCE.logger.error("Unable to load icon data");
 			e.printStackTrace();
 		}
 
@@ -140,7 +140,7 @@ public class Config {
 			Arrays.sort(data.materialsA, ComparatorMaterialEntry.INSTANCE);
 			return data;
 		} catch(FileNotFoundException e) {
-			ArmorChroma.INSTANCE.LOGGER.info("icons.json did not exist. Loading defaults");
+			ArmorChroma.INSTANCE.logger.info("icons.json did not exist. Loading defaults");
 			FileUtils.copyURLToFile(this.getClass().getResource("/assets/armorchroma/icons.json"), this.icons);
 			return this.getIconData();
 		} finally {

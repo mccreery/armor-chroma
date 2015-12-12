@@ -138,7 +138,7 @@
 				{"id": "ItemBootsCultist", "index": 144},
 				{"id": "ItemChestplateCultistLeaderPlate", "index": 144},
 				{"id": "ItemLeggingsCultistLeaderPlate", "index": 144},
-				{"id": "ItemHelmetCultistLeaderPlate", "index": 144},
+				{"id": "ItemHelmetCultistLeaderPlate", "index": 144}
 			]
 		}, {
 			"modid": "TaintedMagic",
@@ -221,7 +221,7 @@
 				{"id": "vampireboots", "index": 196},
 				{"id": "deathscowl", "index": 197},
 				{"id": "deathsrobe", "index": 197},
-				{"id": "deathsfeet", "index": 197},
+				{"id": "deathsfeet", "index": 197}
 			]
 		}, {
 			"modid": "ThaumicExploration",
@@ -245,7 +245,7 @@
 			"modid": "aether",
 			"materials": [
 				{"name": "OBSIDIAN", "index": 255},
-				{"name": "Aether_Legendary_armor", "index:": 256}
+				{"name": "Aether_Legendary_armor", "index": 256}
 			],
 			"items": [
 				{"id": "phoenixHelmet", "index": 252},
@@ -256,12 +256,12 @@
 				{"id": "zaniteHelmet", "index": 253},
 				{"id": "zaniteChestplate", "index": 253},
 				{"id": "zaniteLeggings", "index": 253},
-				{"id": "zaniteBoots", "index": 253}
+				{"id": "zaniteBoots", "index": 253},
 
 				{"id": "neptuneHelmet", "index": 254},
 				{"id": "neptuneChestplate", "index": 254},
 				{"id": "neptuneLeggings", "index": 254},
-				{"id": "neptuneBoots", "index": 254}
+				{"id": "neptuneBoots", "index": 254},
 
 				{"id": "gravititeHelmet", "index": 257},
 				{"id": "gravititeChestplate", "index": 257},

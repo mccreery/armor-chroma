@@ -1,7 +1,6 @@
 package nukeduck.armorchroma;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
@@ -11,6 +10,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 
 import cpw.mods.fml.common.Mod;
@@ -33,7 +33,8 @@ public class ArmorChroma {
 	 * Always use this rather than literals. */
 	public static final String MODID = "armorchroma";
 
-	public final Logger LOGGER = Logger.getLogger(MODID);
+	/** Logger instance for error and info messages */
+	public Logger logger;
 
 	/** Mod configuration to load into */
 	public final Config config;
@@ -47,6 +48,7 @@ public class ArmorChroma {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
+		this.logger = e.getModLog();
 		this.config.directory = new File(e.getModConfigurationDirectory(), "armorchroma");
 		this.config.init(
 				new File(this.config.directory, MODID + ".cfg"),
