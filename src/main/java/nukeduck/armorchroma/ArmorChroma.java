@@ -1,5 +1,8 @@
 package nukeduck.armorchroma;
 
+import java.io.File;
+import java.util.logging.Logger;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -7,6 +10,9 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+
+import org.lwjgl.input.Keyboard;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -27,6 +33,8 @@ public class ArmorChroma {
 	 * Always use this rather than literals. */
 	public static final String MODID = "armorchroma";
 
+	public final Logger LOGGER = Logger.getLogger(MODID);
+
 	/** Mod configuration to load into */
 	public final Config config;
 	/** Instance of the Gui class for rendering */
@@ -39,7 +47,10 @@ public class ArmorChroma {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
-		this.config.init(e.getSuggestedConfigurationFile());
+		this.config.directory = new File(e.getModConfigurationDirectory(), "armorchroma");
+		this.config.init(
+				new File(this.config.directory, MODID + ".cfg"),
+				new File(this.config.directory, "icons.json"));
 	}
 
 	@EventHandler
@@ -47,19 +58,25 @@ public class ArmorChroma {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
+	boolean press = false;
+
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onRenderOverlay(RenderGameOverlayEvent.Pre e) {
 		if(e.type == ElementType.ARMOR) {
 			e.setCanceled(true); // Don't want anything else rendering on top
 			this.armor.renderArmorBar(e.resolution.getScaledWidth(), e.resolution.getScaledHeight());
 		}
+
+		if(!press && (press = Keyboard.isKeyDown(Keyboard.KEY_Y))) {
+			this.config.reload();
+		}
 	}
 
-	/*@SubscribeEvent
+	@SubscribeEvent
 	public void onTooltip(ItemTooltipEvent e) {
 		if(e.itemStack.getItem() instanceof ItemArmor) {
 			e.toolTip.add(((ItemArmor) e.itemStack.getItem()).getArmorMaterial().toString());
 		}
 		e.toolTip.add(Item.itemRegistry.getNameForObject(e.itemStack.getItem()));
-	}*/
+	}
 }

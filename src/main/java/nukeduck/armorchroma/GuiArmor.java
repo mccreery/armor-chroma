@@ -29,10 +29,22 @@ public class GuiArmor extends Gui {
 
 	/** Resets the state of the bar. */
 	private void resetState() {
+		this.zLevel = 0;
 		this.last = this.next = 0;
 		this.materialIndex = 0;
 		this.glint = false;
 		this.color = 0xFFFFFF;
+	}
+
+	private static final int ROW_SPACING = 5;
+
+	/** Moves the bar onto the next line and resets the left offset. */
+	private void nextRow() {
+		GuiIngameForge.left_height += ROW_SPACING;
+		this.top = this.height - GuiIngameForge.left_height;
+		this.zLevel--;
+
+		this.left = 0;
 	}
 
 	/** Holds the current armor material's icon index. */
@@ -43,6 +55,8 @@ public class GuiArmor extends Gui {
 	private boolean glint;
 	/** {@link #last} holds the previous cumulative armor, {@link #next} holds the current cumulative armor. */
 	private int last, next;
+	/** {@link #left} holds the current left offset, {@link top} holds the current top of the bar and {@link height} holds the window height. */
+	private int left, top, height;
 
 	/** Renders the full armor bar.
 	 * @param width The width of the scaled GUI, in pixels
@@ -50,7 +64,9 @@ public class GuiArmor extends Gui {
 	public void renderArmorBar(int width, int height) {
 		mc.mcProfiler.startSection("armor");
 		this.resetState();
-		int left = width / 2 - 91, top = height - GuiIngameForge.left_height;
+		int left = width / 2 - 91;
+		GuiIngameForge.left_height -= ROW_SPACING;
+		this.height = height;
 
 		glPushAttrib(GL_TEXTURE_BIT);
 		mc.getTextureManager().bindTexture(ARMOR_ICONS);
@@ -60,22 +76,20 @@ public class GuiArmor extends Gui {
 			if(stack == null || stack.getItem() == null) continue;
 
 			boolean addBreak = this.setState(stack, i);
-			int right = this.renderArmorBarPart(left, top, addBreak);
+			this.renderArmorBarPart(left, addBreak);
 
 			if(this.last == 0 && this.next > 0) { // First armor, draw the background
 				this.zLevel--;
-				this.drawTexturedModalRect(left, top, 175, 247, 82, 9);
+				this.drawTexturedModalRect(left, this.top, 175, 247, 82, 9);
 				this.zLevel++;
-				GuiIngameForge.left_height += 10;
 			}
 
 			// Move forward in the bar
-			left = right;
-			last = next;
+			this.last = this.next;
 		}
 		// Draw extra line at the end of the bar if necessary
-		if(last < 20 && last % 2 == 1) {
-			this.drawTexturedModalRect(left - 4, top, 166, 247, 9, 9);
+		if(last % 2 == 1) {
+			this.drawTexturedModalRect(left + this.left - 4, this.top, 166, 247, 9, 9);
 		}
 
 		glPopAttrib();
@@ -91,7 +105,22 @@ public class GuiArmor extends Gui {
 		boolean addBreak = ArmorChroma.INSTANCE.config.alwaysBreak ||
 				this.glint != (this.glint = item.hasEffect(stack, 0));
 
-		String id = Item.itemRegistry.getNameForObject(item);
+		if(!ArmorChroma.INSTANCE.config.renderColor && item instanceof ItemArmor && ((ItemArmor) item).getArmorMaterial() == ArmorMaterial.CLOTH) {
+			addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.iconLeather);
+			addBreak |= this.color != (this.color = 0xFFFFFF);
+		} else {
+			addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.getIcon(stack));
+			addBreak |= this.color != (this.color = item.getColorFromItemStack(stack, 0));
+		}
+
+		this.next = this.last;
+		if(item instanceof ItemArmor) {
+			this.next += ((ItemArmor) item).damageReduceAmount;
+		} else if(item instanceof ISpecialArmor) {
+			this.next += ((ISpecialArmor) item).getArmorDisplay(mc.thePlayer, stack, slot);
+		}
+
+		/*String id = Item.itemRegistry.getNameForObject(item);
 		if(item instanceof ItemArmor) {
 			ItemArmor armor = (ItemArmor) item;
 			ArmorMaterial material = armor.getArmorMaterial();
@@ -118,7 +147,7 @@ public class GuiArmor extends Gui {
 			}
 			this.next = this.last + ((ISpecialArmor) item).getArmorDisplay(mc.thePlayer, stack, slot);
 			this.color = 0xFFFFFF;
-		}
+		}*/
 
 		return addBreak;
 	}
@@ -141,25 +170,25 @@ public class GuiArmor extends Gui {
 	 * @param top The Y position to start at
 	 * @param last The previous cumulative armor
 	 * @param next The current cumulative armor
-	 * @param addBreak Whether or not to add a break at the start of the bar part, if necessary
-	 * @return A modified version of {@code left}, i.e. the X position for the next piece */
-	private int renderArmorBarPart(int left, int top, boolean addBreak) {
-		int i = this.last;
-		for(; i < this.next && i < 20; i++, left += 4) {
+	 * @param addBreak Whether or not to add a break at the start of the bar part, if necessary */
+	private void renderArmorBarPart(int left, boolean addBreak) {
+		for(int i = this.last; i < this.next; i++, this.left += 4) {
+			if(i % 20 == 0) {
+				this.nextRow();
+			}
 			Vector2d uv = this.getUV(i);
-			this.drawTexturedModalRectWithColor(left, top, (int) uv.x, (int) uv.y, 5, 9);
+			this.drawTexturedModalRectWithColor(left + this.left, this.top, (int) uv.x, (int) uv.y, 5, 9);
 
 			if(addBreak) { // Add a break if the state of the bar has changed
 				addBreak = false;
 				if(i % 2 == 1) {
-					this.drawTexturedModalRectWithColor(left - 4, top, 166, 247, 9, 9);
+					this.drawTexturedModalRectWithColor(left + this.left - 4, this.top, 166, 247, 9, 9);
 				}
 			}
 			if(ArmorChroma.INSTANCE.config.renderGlint && glint) { // Draw glint
-				this.drawTexturedGlintRect(left, top, (int) uv.x, (int) uv.y, 5, 9);
+				this.drawTexturedGlintRect(left + this.left, this.top, (int) uv.x, (int) uv.y, 5, 9);
 			}
 		}
-		return left;
 	}
 
 	/** Draws a textured rectangle at the stored z-value.
