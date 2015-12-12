@@ -21,7 +21,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-@Mod(modid = ArmorChroma.MODID, name = "Armor Chroma", version = "1.0.1")
+@Mod(modid = ArmorChroma.MODID, name = "Armor Chroma", version = "1.1")
 public class ArmorChroma {
 	/** Minecraft instance for convenience purposes (don't want to call {@link Minecraft#getMinecraft()} every time). */
 	public static final Minecraft mc = Minecraft.getMinecraft();
