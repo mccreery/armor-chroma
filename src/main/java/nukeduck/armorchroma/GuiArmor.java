@@ -10,6 +10,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
@@ -105,13 +106,18 @@ public class GuiArmor extends Gui {
 		boolean addBreak = ArmorChroma.INSTANCE.config.alwaysBreak ||
 				this.glint != (this.glint = item.hasEffect(stack, 0));
 
-		if(!ArmorChroma.INSTANCE.config.renderColor && item instanceof ItemArmor && ((ItemArmor) item).getArmorMaterial() == ArmorMaterial.CLOTH) {
+		boolean leather = item instanceof ItemArmor && (item == Items.leather_helmet || item == Items.leather_chestplate || item == Items.leather_leggings || item == Items.leather_boots);
+		if(!ArmorChroma.INSTANCE.config.renderColor && leather) {
 			// Use pre-colored leather
 			addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.iconLeather);
 			addBreak |= this.color != (this.color = 0xFFFFFF);
 		} else {
 			addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.getIcon(stack));
-			addBreak |= this.color != (this.color = item.getColorFromItemStack(stack, 0));
+			if(leather) {
+				addBreak |= this.color != (this.color = item.getColorFromItemStack(stack, 0));
+			} else {
+				addBreak |= this.color != (this.color = 0xFFFFFF);
+			}
 		}
 
 		this.next = this.last;
