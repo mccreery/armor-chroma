@@ -16,6 +16,7 @@ public class IconData {
 		public List<ItemEntry> items;
 
 		public ItemEntry[] itemsA;
+		public MaterialEntry[] materialsA;
 
 		public static class MaterialEntry {
 			public String name;

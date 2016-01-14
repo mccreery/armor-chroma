@@ -76,6 +76,8 @@ public class Config {
 		IconGroup groupNeedle = new IconGroup();
 		groupNeedle.modid = fullName[0];
 
+		MaterialEntry materialNeedle = null;
+
 		int i = Arrays.binarySearch(this.iconData.groupsA, groupNeedle, ComparatorIconGroup.INSTANCE);
 		if(i >= 0) {
 			IconGroup group = this.iconData.groupsA[i];
@@ -89,10 +91,25 @@ public class Config {
 					return group.itemsA[i].index;
 				}
 			}
+
+			if(group.materialsA != null && item instanceof ItemArmor) {
+				materialNeedle = new MaterialEntry();
+				materialNeedle.name = ((ItemArmor) item).getArmorMaterial().name();
+
+				i = Arrays.binarySearch(group.materialsA, materialNeedle, ComparatorMaterialEntry.INSTANCE);
+				if(i >= 0) {
+					return group.materialsA[i].index;
+				}
+			}
 		}
 
-		if(item instanceof ItemArmor) {
-			MaterialEntry materialNeedle = new MaterialEntry();
+		if(materialNeedle != null) {
+			i = Arrays.binarySearch(this.iconData.materialsA, materialNeedle, ComparatorMaterialEntry.INSTANCE);
+			if(i >= 0) {
+				return this.iconData.materialsA[i].index;
+			}
+		} else if(item instanceof ItemArmor) {
+			materialNeedle = new MaterialEntry();
 			materialNeedle.name = ((ItemArmor) item).getArmorMaterial().name();
 
 			i = Arrays.binarySearch(this.iconData.materialsA, materialNeedle, ComparatorMaterialEntry.INSTANCE);
@@ -145,6 +162,8 @@ public class Config {
 					Arrays.sort(group.itemsA, ComparatorItemEntry.INSTANCE);
 				}
 				if(group.materials != null) {
+					group.materialsA = group.materials.toArray(new MaterialEntry[group.materials.size()]);
+					Arrays.sort(group.materialsA, ComparatorMaterialEntry.INSTANCE);
 					materials.addAll(group.materials);
 				}
 			}

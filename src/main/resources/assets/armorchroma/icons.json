@@ -81,6 +81,7 @@
 				{"id": "SolarHelmetRevealing", "index": 2}
 			]
 		}, {
+			"_comment": "Blood Magic",
 			"modid": "AWWayofTime",
 			"items": [
 				{"id": "boundHelmet", "index": 112},
@@ -311,6 +312,40 @@
 				{"id": "magicalcrops_infusedPlatebodyEpicFlight", "index": 367},
 				{"id": "magicalcrops_infusedLeggingsEpicFlight", "index": 367},
 				{"id": "magicalcrops_infusedBootsEpicFlight", "index": 367}
+			]
+		}, {
+			"modid": "MekanismTools",
+			"materials": [
+				{"name": "GLOWSTONE", "index": 392},
+				{"name": "BRONZE", "index": 393},
+				{"name": "OBSIDIAN", "index": 394},
+				{"name": "STEEL", "index": 395},
+				{"name": "OSMIUM", "index": 396},
+				{"name": "LAZULI", "index": 397}
+			]
+		}, {
+			"modid": "Mekanism",
+			"materials": [
+				{"name": "GASMASK", "index": 398},
+				{"name": "SCUBATANK", "index": 398},
+				{"name": "JETPACK", "index": 399},
+				{"name": "FRICTIONBOOTS", "index": 399}
+			]
+		}, {
+			"modid": "ProjectE",
+			"items": [
+				{"id": "item.pe_rm_armor_0", "index": 112},
+				{"id": "item.pe_rm_armor_1", "index": 112},
+				{"id": "item.pe_rm_armor_2", "index": 112},
+				{"id": "item.pe_rm_armor_3", "index": 112},
+				{"id": "item.pe_gem_armor_0", "index": 420},
+				{"id": "item.pe_gem_armor_1", "index": 420},
+				{"id": "item.pe_gem_armor_2", "index": 420},
+				{"id": "item.pe_gem_armor_3", "index": 420},
+				{"id": "item.pe_dm_armor_0", "index": 421},
+				{"id": "item.pe_dm_armor_1", "index": 421},
+				{"id": "item.pe_dm_armor_2", "index": 421},
+				{"id": "item.pe_dm_armor_3", "index": 421}
 			]
 		}
 	]
