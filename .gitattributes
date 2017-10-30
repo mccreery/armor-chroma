@@ -1,7 +1,0 @@
-# Default line breaks unified
-* text=auto
-
-# Explicit text files
-*.java text
-*.lang text
-*.info text
