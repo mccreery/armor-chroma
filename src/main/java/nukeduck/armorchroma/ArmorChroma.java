@@ -2,6 +2,9 @@ package nukeduck.armorchroma;
 
 import java.io.File;
 
+import org.apache.logging.log4j.Logger;
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -9,17 +12,13 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-
-import org.apache.logging.log4j.Logger;
-import org.lwjgl.input.Keyboard;
-
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod(modid = ArmorChroma.MODID, name = "Armor Chroma", version = "${version}")
 public class ArmorChroma {
@@ -84,6 +83,6 @@ public class ArmorChroma {
 		if(e.itemStack.getItem() instanceof ItemArmor) {
 			e.toolTip.add(((ItemArmor) e.itemStack.getItem()).getArmorMaterial().toString());
 		}
-		e.toolTip.add(Item.itemRegistry.getNameForObject(e.itemStack.getItem()));
+		e.toolTip.add(Item.itemRegistry.getNameForObject(e.itemStack.getItem()).toString());
 	}
 }

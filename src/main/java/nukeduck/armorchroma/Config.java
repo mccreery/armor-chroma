@@ -71,7 +71,7 @@ public class Config {
 	 * @return The icon index found, or {@link #iconDefault} if none was found. */
 	public int getIcon(ItemStack stack) {
 		Item item = stack.getItem();
-		String[] fullName = Item.itemRegistry.getNameForObject(item).split(":");
+		String[] fullName = Item.itemRegistry.getNameForObject(item).toString().split(":");
 
 		IconGroup groupNeedle = new IconGroup();
 		groupNeedle.modid = fullName[0];

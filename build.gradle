@@ -22,7 +22,7 @@ group            = "nukeduck.armorchroma"
 archivesBaseName = "armorchroma"
 
 minecraft {
-	version = "1.7.10-10.13.4.1614-1.7.10"
+	version = "1.8-11.14.4.1563"
 	runDir  = "eclipse"
 	replace "\${version}": project.version, "\${mcversion}": project.minecraft.version
 }

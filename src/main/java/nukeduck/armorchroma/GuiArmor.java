@@ -34,6 +34,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -127,7 +128,7 @@ public class GuiArmor extends Gui {
 	public boolean setState(ItemStack stack, int slot) {
 		Item item = stack.getItem();
 		boolean addBreak = ArmorChroma.INSTANCE.config.alwaysBreak ||
-				this.glint != (this.glint = item.hasEffect(stack, 0));
+				this.glint != (this.glint = item.hasEffect(stack));
 
 		boolean leather = item instanceof ItemArmor && (item == Items.leather_helmet || item == Items.leather_chestplate || item == Items.leather_leggings || item == Items.leather_boots);
 		if(!ArmorChroma.INSTANCE.config.renderColor && leather) {
@@ -206,13 +207,14 @@ public class GuiArmor extends Gui {
 		double minV = (double) v / 256.0;
 		double maxV = (double) (v + height) / 256.0;
 		
-		Tessellator tessellator = Tessellator.instance;
-		tessellator.startDrawingQuads();
-		tessellator.setColorOpaque_I(this.color);
-		tessellator.addVertexWithUV(x, y + height, this.zLevel, minU, maxV);
-		tessellator.addVertexWithUV(x + width, y + height, this.zLevel, maxU, maxV);
-		tessellator.addVertexWithUV(x + width, y, this.zLevel, maxU, minV);
-		tessellator.addVertexWithUV(x, y, this.zLevel, minU, minV);
+		Tessellator tessellator = Tessellator.getInstance();
+		WorldRenderer renderer = tessellator.getWorldRenderer();
+		renderer.startDrawingQuads();
+		renderer.setColorOpaque_I(this.color);
+		renderer.addVertexWithUV(x, y + height, this.zLevel, minU, maxV);
+		renderer.addVertexWithUV(x + width, y + height, this.zLevel, maxU, maxV);
+		renderer.addVertexWithUV(x + width, y, this.zLevel, maxU, minV);
+		renderer.addVertexWithUV(x, y, this.zLevel, minU, minV);
 		tessellator.draw();
 	}
 
