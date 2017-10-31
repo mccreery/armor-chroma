@@ -1,10 +1,7 @@
 package nukeduck.armorchroma;
 
 import java.io.File;
-import java.net.URI;
 import java.net.URL;
-
-import org.apache.logging.log4j.message.Message;
 
 public class Constants {
 	public static final boolean DEBUG = false;

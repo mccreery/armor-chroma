@@ -1,7 +1,31 @@
 package nukeduck.armorchroma;
 
 import static nukeduck.armorchroma.ArmorChroma.mc;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_BLEND;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_CURRENT_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_ENABLE_BIT;
+import static org.lwjgl.opengl.GL11.GL_EQUAL;
+import static org.lwjgl.opengl.GL11.GL_LIGHTING;
+import static org.lwjgl.opengl.GL11.GL_ONE;
+import static org.lwjgl.opengl.GL11.GL_SRC_COLOR;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_BIT;
+import static org.lwjgl.opengl.GL11.GL_TRANSFORM_BIT;
+import static org.lwjgl.opengl.GL11.GL_ZERO;
+import static org.lwjgl.opengl.GL11.glColor4f;
+import static org.lwjgl.opengl.GL11.glDepthFunc;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glMatrixMode;
+import static org.lwjgl.opengl.GL11.glPopAttrib;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushAttrib;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glRotatef;
+import static org.lwjgl.opengl.GL11.glScalef;
+import static org.lwjgl.opengl.GL11.glTranslatef;
 
 import javax.vecmath.Vector2d;
 
@@ -13,7 +37,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.GuiIngameForge;
