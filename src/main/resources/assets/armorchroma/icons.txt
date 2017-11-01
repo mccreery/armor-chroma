@@ -1,0 +1,292 @@
+auto id
+{
+	# vanilla
+	modid minecraft
+	{
+		match materials
+		icon 1
+		ids CHAIN, IRON, GOLD, DIAMOND, CLOTH
+	}
+}{
+	modid Botania
+	{
+		match materials
+		icon 28
+		ids MANASTEEL, TERRASTEEL, B_ELEMENTIUM, MANAWEAVE
+	}
+}{
+	modid ThermalFoundation
+	{
+		match materials
+		icon 56
+		prefix TF:
+		ids COPPER, TIN, SILVER, LEAD, NICKEL, ELECTRUM, INVAR, BRONZE, PLATINUM
+	}
+}{
+	# IndustrialCraft 2
+	modid IC2
+	{
+		match materials
+		icon 86
+		prefix IC2_
+		ids BRONZE, ALLOY
+	}{
+		match items
+		prefix item
+		auto off
+		{
+			icon 2
+			ids SolarHelmet
+			{
+				prefix Armor
+				ids Jetpack, JetpackElectric, CFPack, Energypack
+			}
+		}{
+			icon 85
+			ids ArmorRubBoots, NightvisionGoggles, StaticBoots
+		}{
+			prefix Armor
+			auto id
+			icon 90
+			ids Batpack, AdvBatpack
+		}{
+			prefix Armor
+			ids Helmet, Chestplate, Leggings
+		}
+	}
+}{
+	# Electro-Magic Tools
+	modid EMT
+	{
+		match materials
+		icon 93
+		ids FEATHERWiNG
+	}{
+		match items
+		auto off
+
+		{icon 88; ids NanoBootsTraveller, NanosuitWing}
+		{icon 89; ids QuantumBootsTraveller, QuantumWing}
+		{icon 92; ids ElectricBootsTraveller, ElectricGogglesRevealing}
+		{icon 2; ids SolarHelmetRevealing}
+	}
+}{
+	# Blood Magic
+	modid AWWayofTime
+	match items
+	{
+		prefix bound
+		icon 112
+		ids Helmet, Plate, Leggings, Boots
+		auto group
+
+		{suffix Fire}
+		{suffix Water}
+		{suffix Wind}
+		{suffix Earth}
+	}
+	{color 112; ids itemBloodPack}
+}{
+	modid BloodArsenal
+	match materials
+
+	{icon 154; ids ICHOR}
+	{icon 117; suffix Armor; ids Vampire, Glass, Imbued}
+}{
+	modid Thaumcraft
+	{
+		match materials
+		icon 140
+		ids THAUMIUM, VOID, SPECIAL, FORTRESS
+	}{
+		match items
+		auto off
+
+		{icon 0; ids BootsTraveller, HoverHarness}
+		{
+			icon 144
+			prefix Item
+			ids HelmetCultistRobe, ChestplateCultistRobe, LeggingsCultistRobe,
+				HelmetCultistPlate, ChestplateCultistPlate, LeggingsCultistPlate,
+				HelmetCultistLeaderPlate, ChestplateCultistLeaderPlate, LeggingsCultistLeaderPlate,
+				BootsCultist
+		}
+	}
+}{
+	modid TaintedMagic
+	{
+		match materials
+		{icon 141; ids VOIDFORTRESS, SHADOW2}
+		{icon 151; ids SanguineArmor}
+	}{
+		match items
+		auto off
+
+		{icon 0; ids BootsVoidwalker}
+		{
+			icon 144
+			prefix Crimson
+			suffix Void
+			ids Helm, Chest, Legs, Boots
+
+			{prefix Plate}
+		}{
+			icon 145
+			suffix ShadowFortress
+			ids Helmet, Chest, Legs
+		}
+	}
+}{
+	modid WitchingGadgets
+	prefix WG:
+
+	{icon 146; ids PRIMORDIALARMOR}
+	{icon 150; ids ADVANCEDCLOTH}
+}{
+	modid thaumicadditions
+
+	{icon 147; ids ARAMINITEARMOR}
+	{icon 0; ids MASCOFCRUELTY}
+}{
+	modid ThaumicBases
+	icon 148
+	ids ATHAUMINITE, TBBLOODY
+}{
+	# Flaxbeard's Steam Power
+	modid Steamcraft
+	match materials
+
+	{icon 198; ids exosuit, BRASS}
+	{icon 0; ids MONACLE}
+	{icon 3; ids GILDEDGOLD}
+}{
+	modid TwilightForest
+	{
+		match materials
+		{
+			icon 168
+			ids NAGA_SCALE, FIERY, IRONWOOD
+		}{
+			icon 172
+			ids KNIGHTMETAL, KNIGHTPHANTOM, YETI, ARCTIC
+		}
+	}{
+		match items
+		icon 171
+		auto off
+		prefix item.steeleaf
+		ids Helm, Plate, Legs, Boots
+	}
+}{
+	modid witchery
+	match items
+	auto off
+	{
+		icon 196
+		prefix vampire
+		ids hat, helmet, coat, coat_female, legs, legs_kilt, boots
+	}{
+		icon 197
+		prefix deaths
+		ids cowl, robe, feet
+	}
+}{
+	modid ThaumicExploration
+	match items
+	icon 152
+	prefix boots
+	ids Meteor, Comet
+}{
+	modid RedstoneArsenal
+	match materials
+	icon 65
+	ids RA:FLUXELECTRUM
+}{
+	modid BiomesOPlenty
+	auto group
+	icon 224
+	{
+		match items
+		prefix amethyst
+		ids Helmet, Chestplate, Leggings, Boots
+	}{
+		match materials
+		ids MUD
+	}
+}{
+	modid aether
+	{
+		match materials
+		auto id
+		icon 255
+		ids OBSIDIAN, Aether_Legendary_armor
+	}{
+		auto group
+		icon 252
+		match items
+		ids Helmet, Chestplate, Leggings, Boots
+
+		{prefix phoenix}
+		{prefix zanite}
+		{prefix neptune}
+		{icon 257; prefix gravitite}
+	}
+	{icon 258; ids sentryBoots}
+}{
+	modid orespawn
+	match materials
+
+	{icon 280; ids EMERALD}
+	{
+		icon 280
+		ids EXPERIENCE, PEACOCK, PINK, MOBZILLA,
+			RUBY, MOTHSCALE, LAVAEEL, ROAL,
+			AMETHYST, ULTIMATE, TIGERSEYE, QUEEN, LAPIS
+	}
+}{
+	modid DraconicEvolution
+	match materials
+	icon 308
+	prefix DRACONIUMARMOR_T
+	ids 1, 2
+}{
+	modid RandomThings
+	match materials
+	icon 336
+	ids Spectre
+}{
+	modid magicalcrops
+	icon 364
+	{
+		match materials
+		prefix Infused
+		ids IngotArmor, ArmorEpic, Armor
+	}{
+		match items
+		prefix magicalcrops_infused
+		suffix EpicFlight
+		ids Helmet, Platebody, Leggings, Boots
+	}
+}{
+	modid MekanismTools
+	icon 392
+	match materials
+	ids GLOWSTONE, BRONZE, OBSIDIAN, STEEL, OSMIUM, LAZULI
+}{
+	modid Mekanism
+	auto off
+	match materials
+
+	{icon 398; ids GASMASK, SCUBATANK}
+	{icon 399; ids JETPACK, FRICTIONBOOTS}
+}{
+	modid ProjectE
+	auto group
+	prefix item.pe_
+	ids 0, 1, 2, 3
+	match items
+
+	{icon 112; prefix rm_armor_}
+	{icon 420; prefix gem_armor_}
+	{prefix dm_armor_}
+}
