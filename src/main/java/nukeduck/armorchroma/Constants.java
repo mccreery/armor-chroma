@@ -4,8 +4,6 @@ import java.io.File;
 import java.net.URL;
 
 public class Constants {
-	public static final boolean DEBUG = false;
-
 	public static final String RENDER_GLINT = "renderGlint";
 	public static final String RENDER_GLINT_DESC = "Display enchanted shine";
 	public static final String RENDER_COLOR = "renderColor";

@@ -4,7 +4,7 @@
 			"_comment": "Vanilla",
 			"modid": "minecraft",
 			"materials": [
-				{"name": "CLOTH", "index": 5},
+				{"name": "LEATHER", "index": 0},
 				{"name": "CHAIN", "index": 1},
 				{"name": "IRON", "index": 2},
 				{"name": "GOLD", "index": 3},

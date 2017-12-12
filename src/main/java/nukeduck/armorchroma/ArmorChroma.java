@@ -6,12 +6,9 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -19,11 +16,12 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 
 @Mod(modid = ArmorChroma.MODID, name = "Armor Chroma", version = "${version}")
 public class ArmorChroma {
 	/** Minecraft instance for convenience purposes (don't want to call {@link Minecraft#getMinecraft()} every time). */
-	public static final Minecraft mc = Minecraft.getMinecraft();
+	public static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
 	/** Main instance of the mod */
 	@Instance(ArmorChroma.MODID)
@@ -65,24 +63,14 @@ public class ArmorChroma {
 	public void onRenderOverlay(RenderGameOverlayEvent.Pre e) {
 		if(e.type == ElementType.ARMOR) {
 			e.setCanceled(true); // Don't want anything else rendering on top
-			this.armor.renderArmorBar(e.resolution.getScaledWidth(), e.resolution.getScaledHeight());
-		}
-
-		if(!Constants.DEBUG) return;
-		if(!press && (press = Keyboard.isKeyDown(Keyboard.KEY_Y))) {
-			this.config.reload();
-		} else {
-			press = Keyboard.isKeyDown(Keyboard.KEY_Y);
+			this.armor.renderBar(e.resolution.getScaledWidth(), e.resolution.getScaledHeight());
 		}
 	}
 
 	@SubscribeEvent
-	public void onTooltip(ItemTooltipEvent e) {
-		if(!Constants.DEBUG) return;
-
-		if(e.itemStack.getItem() instanceof ItemArmor) {
-			e.toolTip.add(((ItemArmor) e.itemStack.getItem()).getArmorMaterial().toString());
+	public void onKeyInput(KeyInputEvent e) {
+		if(Keyboard.getEventKeyState() && Keyboard.getEventKey() == Keyboard.KEY_A && Keyboard.isKeyDown(Keyboard.KEY_F3)) {
+			config.reload();
 		}
-		e.toolTip.add(Item.itemRegistry.getNameForObject(e.itemStack.getItem()).toString());
 	}
 }
