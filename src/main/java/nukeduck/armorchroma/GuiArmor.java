@@ -9,7 +9,6 @@ import static org.lwjgl.opengl.GL11.GL_DST_COLOR;
 import static org.lwjgl.opengl.GL11.GL_ENABLE_BIT;
 import static org.lwjgl.opengl.GL11.GL_EQUAL;
 import static org.lwjgl.opengl.GL11.GL_LEQUAL;
-import static org.lwjgl.opengl.GL11.GL_LIGHTING;
 import static org.lwjgl.opengl.GL11.GL_ONE;
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
@@ -19,7 +18,6 @@ import static org.lwjgl.opengl.GL11.GL_TRANSFORM_BIT;
 import static org.lwjgl.opengl.GL11.GL_ZERO;
 import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glDepthFunc;
-import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glMatrixMode;
 import static org.lwjgl.opengl.GL11.glPopAttrib;
@@ -43,7 +41,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.GuiIngameForge;
 import net.minecraftforge.common.ISpecialArmor;
-import java.util.Random;
 
 public class GuiArmor extends Gui {
 	/** {@link ResourceLocation} for item glints (textures/misc/enchanted_item_glint.png)
@@ -57,7 +54,7 @@ public class GuiArmor extends Gui {
 	private static final int ROW_SPACING = 5;
 	private static final int GLINT_COLOR = 0x61309b;
 
-	public static final IconMap ICON_MAP = new IconMap(9, 9);
+	public static final IconAtlas ICON_MAP = new IconAtlas(9, 9);
 
 	/** Renders the full armor bar.
 	 * @param width The width of the scaled GUI, in pixels
@@ -69,6 +66,7 @@ public class GuiArmor extends Gui {
 		GuiIngameForge.left_height -= ROW_SPACING;
 
 		MINECRAFT.getTextureManager().bindTexture(ARMOR_ICONS);
+		glEnable(GL_BLEND);
 
 		// Total points in all rows so far
 		int barPoints = 0;
@@ -95,20 +93,13 @@ public class GuiArmor extends Gui {
 	}
 
 	private void drawBackground(int x, int y, int level) {
-		final int[] colors = {0x3acaff, 0x3be55a, 0xffff00, 0xff9d00, 0xed3200, 0x9120c1};
+		final int[] colors = {0x3acaff, 0x3be55a, 0xffff00, 0xff9d00, 0xed3200, 0x7130c1};
 
 		drawTexturedModalRect(x, y, ICON_MAP.getU(-11), ICON_MAP.getV(-11), 81, 9);
 
 		if(level > 0) {
-			int color;
-
-			if(level <= colors.length) {
-				color = colors[level-1];
-			} else {
-				color = new Random(level).nextInt();
-			}
-
-			drawTexturedColoredModalRect(x-1, y-1, ICON_MAP.getU(-66)-1, ICON_MAP.getV(-66)-1, 83, 11, color);
+			int color = level <= colors.length ? colors[level-1] : colors[colors.length-1];
+			drawTexturedColoredModalRect(x-1, y-1, ICON_MAP.getU(-67)-1, ICON_MAP.getV(-67)-1, 83, 11, color);
 		}
 	}
 
@@ -135,9 +126,9 @@ public class GuiArmor extends Gui {
 	 * @param barPoints The points already in the bar
 	 * @return The number of points filled */
 	private void renderRow(int left, int top, int barPoints, int stackPoints, ItemStack stack) {
-		int iconIndex = ArmorChroma.INSTANCE.config.getIcon(stack);
+		int iconIndex = ArmorChroma.config.getIcon(stack);
 		int color     = stack.getItem().getColorFromItemStack(stack, 0);
-		boolean glint = ArmorChroma.INSTANCE.config.renderGlint && stack.hasEffect();
+		boolean glint = ArmorChroma.config.renderGlint && stack.hasEffect();
 
 		if(glint) zLevel += 2; // Glint rows should appear on top of normal rows
 
@@ -204,9 +195,6 @@ public class GuiArmor extends Gui {
 	 * @param color The color to draw the quad with */
 	public void drawMaskedRect(int x, int y, int u, int v, int maskU, int maskV, int width, int height, int color) {
 		// TODO fix OpenGL bug where first quad cannot be reduced in alpha
-		glDisable(GL_LIGHTING);
-		glEnable(GL_BLEND);
-
 		drawTexturedModalRect(x, y, maskU, maskV, width, height);
 
 		glDepthFunc(GL_EQUAL);
@@ -231,14 +219,10 @@ public class GuiArmor extends Gui {
 	 * @param height The height of the quad to draw, in pixels
 	 * @see ItemRenderer#renderItem(net.minecraft.entity.EntityLivingBase, ItemStack, int, net.minecraftforge.client.IItemRenderer.ItemRenderType) */
 	public void drawTexturedGlintRect(int x, int y, int u, int v, int width, int height) {
-		MINECRAFT.mcProfiler.startSection("glint");
 		// Push bits we modify to restore later on
 		glPushAttrib(GL_GLINT_BITS);
 
 		glDepthFunc(GL_EQUAL);
-		glDisable(GL_LIGHTING);
-		glEnable(GL_BLEND);
-		// Mapped OpenGL constants from [768, 1, 1, 0]
 		OpenGlHelper.glBlendFunc(GL_SRC_COLOR, GL_ONE, GL_ONE, GL_ZERO);
 
 		MINECRAFT.getTextureManager().bindTexture(RES_ITEM_GLINT);
@@ -266,6 +250,5 @@ public class GuiArmor extends Gui {
 		glPopAttrib();
 
 		MINECRAFT.getTextureManager().bindTexture(ARMOR_ICONS);
-		MINECRAFT.mcProfiler.endSection();
 	}
 }

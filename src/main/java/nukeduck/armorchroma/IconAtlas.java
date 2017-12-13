@@ -1,13 +1,13 @@
 package nukeduck.armorchroma;
 
-public class IconMap {
+public class IconAtlas {
 	public final int iconWidth, iconHeight;
 	/** The number of icons that can fit in a row of the texture */
 	private final int span;
 
 	public static int TEXTURE_SIZE = 256;
 
-	public IconMap(int iconWidth, int iconHeight) {
+	public IconAtlas(int iconWidth, int iconHeight) {
 		this.iconWidth = iconWidth;
 		this.iconHeight = iconHeight;
 		this.span = TEXTURE_SIZE / iconWidth;

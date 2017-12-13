@@ -1,0 +1,28 @@
+/* The JSON object below should contain any overrides for icons.
+ * The root is a map from mod IDs to objects,
+ * containing one or both of:
+ *   - A dictionary from item IDs to their icons, called items
+ *   - A dictionary from armor material IDs to their icons, called materials
+ * Both item IDs and armor material IDs can contain wildcards (*).
+ *
+ * Icon indices in this system start in the top left at 0 and wrap onto the
+ * next row when another icon would not fit (after 28 9x9 icons in a row).
+ * An index can be calculated using the formula `i = y*28 + x`.
+ *
+ * Example:
+ *
+ *     {"mycoolmod": {
+ *         "materials": {
+ *             "cool": 3 // Gold icon
+ *         },
+ *         "items": {
+ *             "night_vision_goggles": 2 // Iron icon
+ *         }
+ *     }}
+ *
+ * The default icon configuration can be found in the JAR file under
+ * `/assets/armorchroma/icons.json`. The icon image is stored under
+ * `/assets/armorchroma/textures/gui/icons.png`. You may add icons to this file
+ * using resource packs. */
+
+{}
