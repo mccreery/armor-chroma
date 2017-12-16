@@ -6,80 +6,83 @@
 		"gold": 3,
 		"diamond": 4
 	}
-}, "Botania": {
+}, "botania": {
 	"materials": {
-		"MANASTEEL": 28,
-		"TERRASTEEL": 29,
-		"B_ELEMENTIUM": 30,
-		"MANAWEAVE": 31
+		"manasteel": 28,
+		"terrasteel": 29,
+		"b_elementium": 30,
+		"manaweave": 31
 	}
-}, "ThermalFoundation": {
+}, "thermalfoundation": {
 	"materials": {
-		"TF:COPPER": 56,
-		"TF:TIN": 57,
-		"TF:SILVER": 58,
-		"TF:LEAD": 59,
-		"TF:NICKEL": 60,
-		"TF:ELECTRUM": 61,
-		"TF:INVAR": 62,
-		"TF:BRONZE": 63,
-		"TF:PLATINUM": 64
+		"copper_armor": 56,
+		"tin_armor": 57,
+		"silver_armor": 58,
+		"lead_armor": 59,
+		"nickel_armor": 60,
+		"electrum_armor": 61,
+		"invar_armor": 62,
+		"bronze_armor": 63,
+		"platinum_armor": 64,
+		"constantan_armor": 63
 	}
-}, "IC2": { // IndustrialCraft 2
+}, "ic2": { // IndustrialCraft 2
 	"materials": {
 		"IC2_BRONZE": 86,
 		"IC2_ALLOY": 87
 	},
 	"items": {
-		"itemArmorHazmat*": 84,
-		"itemArmorRubBoots": 84,
-		"itemArmorNano*": 88,
-		"itemArmorQuantum*": 89,
+		"hazmat_*": 84,
+		"rubber_boots": 84,
+		"nano_*": 88,
+		"quantum_*": 89,
 
-		"itemNightvisionGoggles": 85,
-		"itemStaticBoots": 85,
-		"itemArmorBatpack": 90,
-		"itemArmorAdvBatpack": 91
+		"nightvision_goggles": 85,
+		"static_boots": 85,
+		"batpack": 90,
+		"advanced_batpack": 91
 	}
-}, "EMT": { // Electro-Magic Tools
+}, "emt": { // Electro-Magic Tools (not updated)
 	"materials": {"FEATEHRWiNG": 93},
 	"items": {
 		"Electric*": 92,
 		"*Nano*": 88,
 		"*Quantum*": 89
 	}
-}, "AWWayofTime": { // Blood Magic
+}, "bloodmagic": {
 	"items": {
-		"itemBloodPack": 112,
+		"ItemPack*Sacrifice": 112,
 		"bound*Fire": 113,
 		"bound*Water": 114,
 		"bound*Wind": 115,
 		"bound*Earth": 116,
-		"bound*": 112
+		"bound*": 112,
+		"ItemLivingArmour*": 120,
+		"ItemSentientArmour*": 121
 	}
-}, "BloodArsenal": {
+}, "bloodarsenal": {
 	"materials": {
 		"ICHOR": 154,
 		"VampireArmor": 117,
 		"GlassArmor": 118,
-		"ImbuedArmor": 119
+		"ImbuedArmor": 11
 	}
-}, "Thaumcraft": {
+}, "thaumcraft": {
 	"materials": {
-		"THAUMIUM": 140,
-		"VOID": 141,
-		"SPECIAL": 142,
-		"FORTRESS": 143
+		"thaumium": 140,
+		"void": 141,
+		"special": 142,
+		"fortress": 143
 	},
 	"items": {
 		"BootsTraveller": 0,
 		"HoverHarness": 0,
 		"*": 144
 	}
-}, "TaintedMagic": {
+}, "taintedmagic": {
 	"materials": {
-		"VOIDFORTRESS": 141,
-		"SHADOW2": 142,
+		"voidfortress": 141,
+		"shadow2": 142,
 		"SanguineArmor": 151
 	},
 	"items": {
@@ -87,37 +90,37 @@
 		"*ShadowFortress": 145,
 		"*": 144
 	}
-}, "WitchingGadgets": {
+}, "witchinggadgets": {
 	"materials": {
-		"WG:PRIMORDIALARMOR": 146,
-		"WG:ADVANCEDCLOTH": 150
+		"primordialarmor": 146,
+		"advancedcloth": 150
 	}
 }, "thaumicadditions": {
 	"materials": {
-		"ADAMINITEARMOR": 147,
-		"MASCOFCRUELTY": 0
+		"adaminitearmor": 147,
+		"mascofcruelty": 0
 	}
-}, "ThaumicBases": {
+}, "thaumicbases": {
 	"materials": {
-		"ATHAUMINITE": 148,
-		"TBBLOODY": 149
+		"athauminite": 148,
+		"tbbloody": 149
 	}
-}, "Steamcraft": { // Flaxbeard's Steam Power
+}, "steamcraft": { // Flaxbeard's Steam Power
 	"materials": {
-		"MONACLE": 0,
+		"monacle": 0,
 		"exosuit": 198,
-		"GILDEDGOLD": 3,
-		"BRASS": 199
+		"gildedgold": 3,
+		"brass": 199
 	}
-}, "TwilightForest": {
+}, "twilightforest": {
 	"materials": {
-		"NAGA_SCALE": 168,
-		"FIERY": 169,
-		"IRONWOOD": 170,
-		"KNIGHTMETAL": 172,
-		"KNIGHTPHANTOM": 173,
-		"YETI": 174,
-		"ARCTIC": 175
+		"naga_scale": 168,
+		"fiery": 169,
+		"ironwood": 170,
+		"knightmetal": 172,
+		"knightphantom": 173,
+		"yeti": 174,
+		"arctic": 175
 	},
 	"items": {"item.steeleaf*": 171}
 }, "witchery": {
@@ -125,19 +128,24 @@
 		"vampire*": 196,
 		"deaths*": 197
 	}
-}, "ThaumicExploration": {
+}, "thaumicexploration": {
 	"items": {
 		"bootsMeteor": 152,
 		"bootsComet": 153
 	}
-}, "RedstoneArsenal": {
-	"materials": {"RA:FLUXELECTRUM": 65}
-}, "BiomesOPlenty": {
-	"materials": {"MUD": 225},
-	"items": {"amethyst*": 224}
+}, "redstonearsenal": {
+	"materials": {"flux_armor": 65}
+}, "biomesoplenty": {
+	"materials": {"biomesoplenty:mud_armor": 225},
+	"items": {
+		"amethyst*": 224,
+		"wading_boots": 226,
+		"flippers": 227,
+		"*_flower_band": 228
+	}
 }, "aether": {
 	"materials": {
-		"OBSIDIAN": 255,
+		"obsidian": 255,
 		"Aether_Legendary_armor": 256
 	},
 	"items": {
@@ -149,28 +157,33 @@
 	}
 }, "orespawn": {
 	"materials": {
-		"EMERALD": 280,
-		"EXPERIENCE": 280,
-		"PEACOCK": 281,
-		"PINK": 282,
-		"MOBZILLA": 283,
-		"RUBY": 284,
-		"MOTHSCALE": 285,
-		"LAVAEEL": 286,
-		"ROYAL": 287,
-		"AMETHYST": 288,
-		"ULTIMATE": 289,
-		"TIGERSEYE": 290,
-		"QUEEN": 291,
-		"LAPIS": 292
+		"emerald": 280,
+		"experience": 280,
+		"peacock": 281,
+		"pink": 282,
+		"mobzilla": 283,
+		"ruby": 284,
+		"mothscale": 285,
+		"lavaeel": 286,
+		"royal": 287,
+		"amethyst": 288,
+		"ultimate": 289,
+		"tigerseye": 290,
+		"queen": 291,
+		"lapis": 292
 	}
-}, "DraconicEvolution": {
+}, "draconicevolution": {
 	"materials": {
-		"DRACONIUMARMOR_T1": 308,
-		"DRACONIUMARMOR_T2": 309
+		"draconicevolution:wyvern_armor": 308,
+		"draconicevolution:draconic_armor": 309
 	}
-}, "RandomThings": {
-	"materials": {"Spectre": 336}
+}, "randomthings": {
+	"items": {
+		"lavaWader": 336,
+		"waterWalkingBoots": 337,
+		"obsidianWaterWalkingBoots": 338,
+		"magicHood": 339
+	}
 }, "magicalcrops": {
 	"materials": {
 		"InfusedIngotArmor": 364,
@@ -178,23 +191,23 @@
 		"InfusedArmor": 366
 	},
 	"items": {"magicalcrops_infused*EpicFlight": 367}
-}, "MekanismTools": {
-	"materials": {
-		"GLOWSTONE": 392,
-		"BRONZE": 393,
-		"OBSIDIAN": 394,
-		"STEEL": 295,
-		"OSMIUM": 396,
-		"LAZULI": 397
+}, "mekanismtools": {
+	"items": {
+		"Glowstone*": 392,
+		"Bronze*": 393,
+		"Obsidian*": 394,
+		"Steel*": 295,
+		"Osmium*": 396,
+		"LapisLazuli*": 397
 	}
-}, "Mekanism": {
+}, "mekanism": {
 	"materials": {
-		"GASMASK": 398,
-		"SCUBATANK": 398,
-		"JETPACK": 399,
-		"FRICTIONBOOTS": 399
+		"gasmask": 398,
+		"scubatank": 398,
+		"jetpack": 399,
+		"frictionboots": 399
 	}
-}, "ProjectE": {
+}, "projecte": {
 	"items": {
 		"item.pe_rm_armor_*": 112,
 		"item.pe_gem_armor_*": 420,

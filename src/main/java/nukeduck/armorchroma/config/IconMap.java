@@ -99,8 +99,9 @@ public abstract class IconMap implements Map<Object, Integer> {
 		int tOffset, nOffset = 0, cardLength;
 		int wild = template.indexOf('*');
 
-		// Test leading card (if wild == -1 then the region always matches)
-		if(!template.regionMatches(0, name, 0, wild)) {
+		if(wild == -1) { // No wildcards
+			return template.equals(name);
+		} else if(!template.regionMatches(0, name, 0, wild)) { // Test leading card
 			return false;
 		}
 		cardLength = wild;

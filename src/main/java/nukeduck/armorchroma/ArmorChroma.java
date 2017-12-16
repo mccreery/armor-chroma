@@ -1,12 +1,17 @@
 package nukeduck.armorchroma;
 
+import java.io.File;
+
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -29,7 +34,7 @@ public class ArmorChroma {
 	public void preInit(FMLPreInitializationEvent e) {
 		logger = e.getModLog();
 
-		config = new Config(e.getSuggestedConfigurationFile());
+		config = new Config(new File(new File(e.getModConfigurationDirectory(), MODID), MODID + ".cfg"));
 		config.load();
 	}
 
@@ -50,6 +55,14 @@ public class ArmorChroma {
 	public void onKeyInput(KeyInputEvent e) {
 		if(Keyboard.isKeyDown(Keyboard.KEY_F3) && Keyboard.getEventKey() == Keyboard.KEY_I && Keyboard.getEventKeyState()) {
 			config.load();
+		}
+	}
+
+	@SubscribeEvent
+	public void onRenderTooltip(ItemTooltipEvent e) {
+		if(e.isShowAdvancedItemTooltips() && e.getItemStack().getItem() instanceof ItemArmor) {
+			final String material = ((ItemArmor)e.getItemStack().getItem()).getArmorMaterial().getName();
+			e.getToolTip().add(TextFormatting.DARK_GRAY + "Armor Material: " + material);
 		}
 	}
 }
