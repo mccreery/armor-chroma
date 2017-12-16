@@ -1,7 +1,7 @@
 {"minecraft": { // Vanilla
 	"materials": {
 		"leather": 0,
-		"chain": 1,
+		"chainmail": 1,
 		"iron": 2,
 		"gold": 3,
 		"diamond": 4
