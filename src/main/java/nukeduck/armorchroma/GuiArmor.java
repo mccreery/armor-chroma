@@ -56,6 +56,41 @@ public class GuiArmor extends Gui {
 
 	public static final IconAtlas ICON_MAP = new IconAtlas(9, 9);
 
+	/** Searches the player's armor inventory to work out how many points need
+	 * to be shown. Will skip full bars if compress is turned on
+	 * @return The player's armor points to display in the bar, along with
+	 * the number of full bars skipped at index {@code 4} */
+	private int[] getArmorPoints(EntityPlayer player) {
+		int[] points = new int[5]; // 5th slot stores bar levels
+		int i = 0;
+		points[4] = 0;
+
+		// Skip full bars if compressing
+		if(ArmorChroma.config.compressBar) {
+			int ignore = player.getTotalArmorValue() - 1;
+			ignore /= 20; // Number of full bars to ignore
+
+			if(ignore > 0) {
+				points[4] = ignore;
+				ignore *= 20;
+
+				for(; ignore > 0; i++) {
+					ItemStack stack = player.getCurrentArmor(i);
+					ignore -= getArmorValue(player, stack, i);
+				}
+				// Put the overflow back in the bar
+				points[i-1] = -ignore;
+			}
+		}
+
+		// Fill in remaining slots
+		for(; i < 4; i++) {
+			ItemStack stack = player.getCurrentArmor(i);
+			points[i] = getArmorValue(player, stack, i);
+		}
+		return points;
+	}
+
 	/** Renders the full armor bar.
 	 * @param width The width of the scaled GUI, in pixels
 	 * @param height The height of the scaled GUI, in pixels */
@@ -70,19 +105,17 @@ public class GuiArmor extends Gui {
 
 		// Total points in all rows so far
 		int barPoints = 0;
+		int[] armorPoints = getArmorPoints(MINECRAFT.thePlayer);
 
 		zLevel = -6;
 		for(int i = 0; i < MINECRAFT.thePlayer.inventory.armorInventory.length; i++) {
-			ItemStack stack = MINECRAFT.thePlayer.getCurrentArmor(i);
-			int stackPoints = getArmorValue(MINECRAFT.thePlayer, stack, i);
-
-			if(stackPoints > 0) {
+			if(armorPoints[i] > 0) {
 				if(barPoints == 0) { // Draw background
-					drawBackground(left, top, 0);
+					drawBackground(left, top, armorPoints[4]); // levels
 				}
 
-				renderRows(left, top, barPoints, stackPoints, stack);
-				barPoints += stackPoints;
+				renderRows(left, top, barPoints, armorPoints[i], MINECRAFT.thePlayer.getCurrentArmor(i));
+				barPoints += armorPoints[i];
 
 				++zLevel;
 			}
