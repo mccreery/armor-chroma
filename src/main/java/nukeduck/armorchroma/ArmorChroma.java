@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import nukeduck.armorchroma.config.Config;
 
-@Mod(modid = ArmorChroma.MODID, name = "Armor Chroma", version = "1.3")
+@Mod(modid = ArmorChroma.MODID, name = "Armor Chroma", version = "1.3", acceptedMinecraftVersions = "[1.9,1.11)")
 public class ArmorChroma {
 	public static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
