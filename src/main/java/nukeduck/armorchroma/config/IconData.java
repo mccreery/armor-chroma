@@ -12,17 +12,17 @@ import nukeduck.armorchroma.config.IconMap.MaterialIconMap;
 
 @SuppressWarnings("serial")
 public class IconData extends HashMap<String, ModEntry> {
+	/** @return The armor icon corresponding to {@code stack} */
 	public int getIcon(ItemStack stack) {
 		ResourceLocation id = (ResourceLocation)Item.itemRegistry.getNameForObject(stack.getItem());
 		ModEntry mod = get(id.getResourceDomain());
 
-		int iconIndex = mod != null ? mod.getIcon(stack) : ArmorChroma.config.iconDefault;
-
-		return iconIndex;
+		return mod != null ? mod.getIcon(stack) : ArmorChroma.config.iconDefault;
 	}
 
 	@Override
 	public ModEntry put(String key, ModEntry value) {
+		// Combine mod entries if needed
 		if(containsKey(key)) {
 			ModEntry existing = get(key);
 			existing.combine(value);
@@ -32,10 +32,12 @@ public class IconData extends HashMap<String, ModEntry> {
 		}
 	}
 
+	/** Stores icon entries for a single mod */
 	public static class ModEntry {
 		MaterialIconMap materials = new MaterialIconMap();
 		ItemIconMap items = new ItemIconMap();
 
+		/** @return The armor icon corresponding to {@code stack} limited to the mod */
 		public int getIcon(ItemStack stack) {
 			Integer iconIndex = items.get(stack);
 			if(iconIndex != null) return iconIndex;
@@ -44,6 +46,7 @@ public class IconData extends HashMap<String, ModEntry> {
 			return iconIndex != null ? iconIndex : ArmorChroma.config.iconDefault;
 		}
 
+		/** Adds all icons from {@code other} to the entry */
 		public void combine(ModEntry other) {
 			materials.putAll(other.materials);
 			items.putAll(other.items);

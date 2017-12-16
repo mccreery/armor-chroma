@@ -39,16 +39,18 @@ public class Config extends Configuration {
 		return iconData.getIcon(stack);
 	}
 
-	/** @param root The root configuration directory for the mod */
+	@Override
 	public void load() {
 		ArmorChroma.logger.info("Reloading config");
-		super.load();
+		super.load(); // Load file as default
 
+		// Custom properties
 		iconDefault = getInt("iconDefault", CATEGORY_GENERAL, 2, "Default icon index");
 		renderGlint = getBoolean("renderGlint", CATEGORY_GENERAL, true, "Display enchanted shine");
 		alwaysBreak = getBoolean("alwaysBreak", CATEGORY_GENERAL, false, "Always break the bar between adjacent armor pieces");
 		compressBar = getBoolean("compressBar", CATEGORY_GENERAL, false, "Compress the bar into different colored borders when your armor exceeds 20");
 
+		// Load icon data and overrides
 		try {
 			this.iconData = getIconData();
 		} catch(IOException e) {
@@ -61,10 +63,12 @@ public class Config extends Configuration {
 	/** Reads (and copies, if necessary) icons.json to load icon information.
 	 * @return The resultant icon data from file */
 	private IconData getIconData() throws IOException {
+		// Default icons
 		BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/assets/armorchroma/icons.json")));
 		IconData data = new Gson().fromJson(reader, IconData.class);
 		reader.close();
 
+		// Combine default with overrides
 		File overrides = new File(getConfigFile().getParentFile(), "icons.json");
 
 		if(overrides.exists()) {
@@ -74,6 +78,7 @@ public class Config extends Configuration {
 
 			data.putAll(dataOverrides);
 		} else {
+			// First run, or file has been deleted
 			ArmorChroma.logger.warn(overrides.getAbsolutePath() + " did not exist. Loading defaults");
 			FileUtils.copyURLToFile(getClass().getResource("/assets/armorchroma/overrides.json"), overrides);
 		}
@@ -81,7 +86,7 @@ public class Config extends Configuration {
 	}
 
 	/** As {@link #getInt(String, String, int, int, int, String)} but with no limits */
-	public int getInt(String name, String category, int defaultValue, String comment) {
+	private int getInt(String name, String category, int defaultValue, String comment) {
 		Property prop = get(category, name, defaultValue);
 
 		prop.setLanguageKey(name);

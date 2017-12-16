@@ -13,11 +13,15 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+/** Maps properties of {@link ItemStack}s to icon indices */
 public abstract class IconMap implements Map<Object, Integer> {
+	/** Actual name map, must convert {@link ItemStack}s first */
 	private final List<Entry<String, Integer>> entries = new ArrayList<Entry<String, Integer>>();
 
+	/** @return {@code stack} converted into the correct key for the map */
 	protected abstract String getName(ItemStack stack);
 
+	/** @return {@link #getName(ItemStack)} if the key needs to be converted */
 	private String normalizeKey(Object key) {
 		if(key instanceof ItemStack) {
 			return getName((ItemStack)key);
@@ -139,6 +143,7 @@ public abstract class IconMap implements Map<Object, Integer> {
 		return -1;
 	}
 
+	/** Maps the stack's item ID to its icon */
 	public static class ItemIconMap extends IconMap {
 		@Override
 		protected String getName(ItemStack stack) {
@@ -147,6 +152,7 @@ public abstract class IconMap implements Map<Object, Integer> {
 		}
 	}
 
+	/** Maps the stack's armor material to its icon */
 	public static class MaterialIconMap extends IconMap {
 		@Override
 		protected String getName(ItemStack stack) {

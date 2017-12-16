@@ -1,16 +1,20 @@
 package nukeduck.armorchroma;
 
+/** Maps icon indices onto their UV coordinates.<br>
+ * Negative indices are mapped onto the bottom right of the texture
+ * instead of the top left */
 public class IconAtlas {
 	public final int iconWidth, iconHeight;
+
 	/** The number of icons that can fit in a row of the texture */
 	private final int span;
 
-	public static int TEXTURE_SIZE = 256;
+	public static final int TEXTURE_SIZE = 256;
 
 	public IconAtlas(int iconWidth, int iconHeight) {
 		this.iconWidth = iconWidth;
 		this.iconHeight = iconHeight;
-		this.span = TEXTURE_SIZE / iconWidth;
+		span = TEXTURE_SIZE / iconWidth;
 	}
 
 	/** @return The U texture coordinate of the icon at {@code iconIndex} */

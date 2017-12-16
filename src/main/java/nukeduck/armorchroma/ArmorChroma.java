@@ -24,12 +24,7 @@ public class ArmorChroma {
 	public static Logger logger;
 	public static Config config;
 
-	/** Instance of the Gui class for rendering */
-	private final GuiArmor armor;
-
-	public ArmorChroma() {
-		this.armor = new GuiArmor();
-	}
+	private static final GuiArmor GUI = new GuiArmor();
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
@@ -49,7 +44,7 @@ public class ArmorChroma {
 	public void onRenderOverlay(RenderGameOverlayEvent.Pre e) {
 		if(e.type == ElementType.ARMOR) {
 			e.setCanceled(true); // Don't want anything else rendering on top
-			this.armor.renderBar(e.resolution.getScaledWidth(), e.resolution.getScaledHeight());
+			GUI.draw(e.resolution.getScaledWidth(), e.resolution.getScaledHeight());
 		}
 	}
 
