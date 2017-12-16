@@ -2,6 +2,17 @@
 
 Different game version branches will show releases for their respective version.
 
+## [Unreleased]
+### Added
+- New option where multiple rows of armor will collapse, showing a different border
+- Better resource pack support as any mask can be applied for half-icons
+### Changed
+- Rewritten most of the code for efficiency and less redundancy
+- New icon config system (now with 50% less fluff!)
+- Icon config now starts empty and overrides can be specified
+### Fixed
+- Incorrect rendering for enchanted glints
+
 ## [1.2] - 2016-01-14
 ### Added
 - Mod support:

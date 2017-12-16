@@ -2,9 +2,7 @@ package nukeduck.armorchroma.config;
 
 import java.util.HashMap;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import nukeduck.armorchroma.ArmorChroma;
 import nukeduck.armorchroma.config.IconData.ModEntry;
 import nukeduck.armorchroma.config.IconMap.ItemIconMap;
@@ -14,9 +12,7 @@ import nukeduck.armorchroma.config.IconMap.MaterialIconMap;
 public class IconData extends HashMap<String, ModEntry> {
 	/** @return The armor icon corresponding to {@code stack} */
 	public int getIcon(ItemStack stack) {
-		ResourceLocation id = (ResourceLocation)Item.itemRegistry.getNameForObject(stack.getItem());
-		ModEntry mod = get(id.getResourceDomain());
-
+		ModEntry mod = get(stack.getItem().getRegistryName().getResourceDomain());
 		return mod != null ? mod.getIcon(stack) : ArmorChroma.config.iconDefault;
 	}
 

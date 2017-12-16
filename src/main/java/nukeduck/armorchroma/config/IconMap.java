@@ -11,7 +11,6 @@ import java.util.Set;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 /** Maps properties of {@link ItemStack}s to icon indices */
 public abstract class IconMap implements Map<Object, Integer> {
@@ -147,8 +146,7 @@ public abstract class IconMap implements Map<Object, Integer> {
 	public static class ItemIconMap extends IconMap {
 		@Override
 		protected String getName(ItemStack stack) {
-			ResourceLocation id = (ResourceLocation)Item.itemRegistry.getNameForObject(stack.getItem());
-			return id.getResourcePath();
+			return stack.getItem().getRegistryName().getResourcePath();
 		}
 	}
 

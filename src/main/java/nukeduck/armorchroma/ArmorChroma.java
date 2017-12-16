@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -37,14 +36,13 @@ public class ArmorChroma {
 	@EventHandler
 	public void init(FMLInitializationEvent e) {
 		MinecraftForge.EVENT_BUS.register(this);
-		FMLCommonHandler.instance().bus().register(this);
 	}
 
 	@SubscribeEvent
 	public void onRenderOverlay(RenderGameOverlayEvent.Pre e) {
-		if(e.type == ElementType.ARMOR) {
+		if(e.getType() == ElementType.ARMOR) {
 			e.setCanceled(true); // Don't want anything else rendering on top
-			GUI.draw(e.resolution.getScaledWidth(), e.resolution.getScaledHeight());
+			GUI.draw(e.getResolution().getScaledWidth(), e.getResolution().getScaledHeight());
 		}
 	}
 

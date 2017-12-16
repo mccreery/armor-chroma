@@ -87,7 +87,7 @@ public class Config extends Configuration {
 		Property prop = get(category, name, defaultValue);
 
 		prop.setLanguageKey(name);
-		prop.comment = comment + " [default: " + defaultValue + "]";
+		prop.setComment(comment + " [default: " + defaultValue + "]");
 
 		return prop.getInt(defaultValue);
 	}

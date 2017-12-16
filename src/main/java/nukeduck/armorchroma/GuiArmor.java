@@ -11,6 +11,7 @@ import static org.lwjgl.opengl.GL11.GL_EQUAL;
 import static org.lwjgl.opengl.GL11.GL_LEQUAL;
 import static org.lwjgl.opengl.GL11.GL_ONE;
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_COLOR;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE;
@@ -30,9 +31,11 @@ import static org.lwjgl.opengl.GL11.glTranslatef;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -86,7 +89,7 @@ public class GuiArmor extends Gui {
 					++zLevel;
 				}
 
-				drawPiece(left, top, barPoints, armorPoints[i], MINECRAFT.thePlayer.getCurrentArmor(i));
+				drawPiece(left, top, barPoints, armorPoints[i], MINECRAFT.thePlayer.inventory.armorItemInSlot(i));
 				barPoints += armorPoints[i];
 
 				++zLevel; // Make sure blending works with GL_EQUAL
@@ -96,7 +99,7 @@ public class GuiArmor extends Gui {
 		// Let other bars draw in the correct position
 		GuiIngameForge.left_height += (barPoints-1) / 20 * ROW_SPACING + 10;
 
-		MINECRAFT.getTextureManager().bindTexture(icons);
+		MINECRAFT.getTextureManager().bindTexture(ICONS);
 		MINECRAFT.mcProfiler.endSection();
 	}
 
@@ -139,7 +142,7 @@ public class GuiArmor extends Gui {
 	 * @param barPoints The points already in the bar */
 	private void drawPartialRow(int left, int top, int barPoints, int stackPoints, ItemStack stack) {
 		int iconIndex = ArmorChroma.config.getIcon(stack);
-		int color     = stack.getItem().getColorFromItemStack(stack, 0);
+		int color     = ((ItemArmor)stack.getItem()).getColor(stack);
 		boolean glint = ArmorChroma.config.renderGlint && stack.hasEffect();
 
 		if(glint) zLevel += 2; // Glint rows should appear on top of normal rows
@@ -204,7 +207,7 @@ public class GuiArmor extends Gui {
 	/** @return The points gained from a single item in the player's armor
 	 * @see ForgeHooks#getTotalArmorValue() */
 	private static int getArmorPoints(EntityPlayer player, int slot) {
-		ItemStack stack = player.getCurrentArmor(slot);
+		ItemStack stack = player.inventory.armorItemInSlot(slot);
 
 		if(stack != null) {
 			Item item = stack.getItem();
@@ -229,18 +232,22 @@ public class GuiArmor extends Gui {
 	/** Draws a textured and colored quad. Vertex coordinates are pixel-based, texture coordinates are interpolated.<br>
 	 * Use {@link #drawTexturedColoredModalRect(int, int, int, int, int, int, int)} for a more useful interface */
 	public void drawTexturedColoredModalRect(int left, int top, int right, int bottom, float texLeft, float texTop, float texRight, float texBottom, int color) {
+		int r = (color >> 16) & 0xff;
+		int g = (color >> 8)  & 0xff;
+		int b =  color        & 0xff;
+		GlStateManager.color(r / 255f, g / 255f, b / 255f, 1f);
+
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+		VertexBuffer buffer = tessellator.getBuffer();
 
-		worldRenderer.startDrawingQuads();
-		worldRenderer.setColorOpaque_I(color);
-
-		worldRenderer.addVertexWithUV(left,  bottom, zLevel, texLeft,  texBottom);
-		worldRenderer.addVertexWithUV(right, bottom, zLevel, texRight, texBottom);
-		worldRenderer.addVertexWithUV(right, top,    zLevel, texRight, texTop);
-		worldRenderer.addVertexWithUV(left,  top,    zLevel, texLeft,  texTop);
+		buffer.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		buffer.pos(left, bottom, zLevel).tex(texLeft, texBottom).endVertex();
+		buffer.pos(right, bottom, zLevel).tex(texRight, texBottom).endVertex();
+		buffer.pos(right, top, zLevel).tex(texRight, texTop).endVertex();
+		buffer.pos(left, top, zLevel).tex(texLeft, texTop).endVertex();
 
 		tessellator.draw();
+		GlStateManager.color(1f, 1f, 1f, 1f);
 	}
 
 	/** Draws a quad with the specified RGBA mask applied.<br>
