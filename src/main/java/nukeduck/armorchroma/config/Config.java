@@ -27,8 +27,6 @@ public class Config extends Configuration {
 	public int iconDefault;
 	/** Flag to render glint on enchanted pieces */
 	public boolean renderGlint;
-	/** Flag to break between each piece regardless of type */
-	public boolean alwaysBreak;
 	/** Flag to compress the bar into different colored borders */
 	public boolean compressBar;
 
@@ -47,7 +45,6 @@ public class Config extends Configuration {
 		// Custom properties
 		iconDefault = getInt("iconDefault", CATEGORY_GENERAL, 2, "Default icon index");
 		renderGlint = getBoolean("renderGlint", CATEGORY_GENERAL, true, "Display enchanted shine");
-		alwaysBreak = getBoolean("alwaysBreak", CATEGORY_GENERAL, false, "Always break the bar between adjacent armor pieces");
 		compressBar = getBoolean("compressBar", CATEGORY_GENERAL, false, "Compress the bar into different colored borders when your armor exceeds 20");
 
 		// Load icon data and overrides
