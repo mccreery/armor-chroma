@@ -1,22 +1,23 @@
 package nukeduck.armorchroma;
 
-import static nukeduck.armorchroma.ArmorChroma.mc;
+import static nukeduck.armorchroma.ArmorChroma.MINECRAFT;
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_CURRENT_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DST_COLOR;
 import static org.lwjgl.opengl.GL11.GL_ENABLE_BIT;
 import static org.lwjgl.opengl.GL11.GL_EQUAL;
-import static org.lwjgl.opengl.GL11.GL_LIGHTING;
+import static org.lwjgl.opengl.GL11.GL_LEQUAL;
 import static org.lwjgl.opengl.GL11.GL_ONE;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_COLOR;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_BIT;
 import static org.lwjgl.opengl.GL11.GL_TRANSFORM_BIT;
 import static org.lwjgl.opengl.GL11.GL_ZERO;
-import static org.lwjgl.opengl.GL11.glColor4f;
+import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glDepthFunc;
-import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glMatrixMode;
 import static org.lwjgl.opengl.GL11.glPopAttrib;
@@ -27,225 +28,250 @@ import static org.lwjgl.opengl.GL11.glRotatef;
 import static org.lwjgl.opengl.GL11.glScalef;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
-import javax.vecmath.Vector2d;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.init.Items;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.GuiIngameForge;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ISpecialArmor;
 
+/** Renders the armor bar in the HUD */
 public class GuiArmor extends Gui {
-	/** {@link ResourceLocation} for item glints (textures/misc/enchanted_item_glint.png)
-	 * @see #drawTexturedGlintRect(int, int, int, int, int, int) */
-	public static final ResourceLocation RES_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
-
-	/** {@link ResourceLocation} for different armor icons (armorbars:textures/gui/armor_icons.png)
-	 * @see #renderArmorBar(int, int) */
+	/** {@link ResourceLocation} for different armor icons
+	 * @see #draw(int, int) */
 	private static final ResourceLocation ARMOR_ICONS = new ResourceLocation(ArmorChroma.MODID, "textures/gui/armor_icons.png");
 
-	/** Resets the state of the bar. */
-	private void resetState() {
-		this.zLevel = 0;
-		this.last = this.next = 0;
-		this.materialIndex = 0;
-		this.glint = false;
-		this.color = 0xFFFFFF;
-	}
+	/** {@link ResourceLocation} for item glints
+	 * @see #drawTexturedGlintRect(int, int, int, int, int, int) */
+	private static final ResourceLocation GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
 
+	/** A light purple tint used to draw item glints */
+	private static final int GLINT_COLOR = 0x61309b;
+
+	/** The colors used for the border of the bar at different levels
+	 * @see #drawBackground(int, int, int) */
+	private static final int[] BG_COLORS = {0x3acaff, 0x3be55a, 0xffff00, 0xff9d00, 0xed3200, 0x7130c1};
+
+	/** The vertical distance between the top of each row */
 	private static final int ROW_SPACING = 5;
 
-	/** Moves the bar onto the next line and resets the left offset. */
-	private void nextRow() {
-		GuiIngameForge.left_height += ROW_SPACING;
-		this.top = this.height - GuiIngameForge.left_height;
-		this.zLevel--;
+	/** Maps icon indices onto their UV coordinates for armor icons */
+	private static final IconAtlas ATLAS = new IconAtlas(9, 9);
 
-		this.left = 0;
-	}
-
-	/** Holds the current armor material's icon index. */
-	private int materialIndex;
-	/** Holds the current armor color. */
-	private int color;
-	/** Holds the current glint flag. */
-	private boolean glint;
-	/** {@link #last} holds the previous cumulative armor, {@link #next} holds the current cumulative armor. */
-	private int last, next;
-	/** {@link #left} holds the current left offset, {@link top} holds the current top of the bar and {@link height} holds the window height. */
-	private int left, top, height;
-
-	/** Renders the full armor bar.
-	 * @param width The width of the scaled GUI, in pixels
-	 * @param height The height of the scaled GUI, in pixels */
-	public void renderArmorBar(int width, int height) {
-		mc.mcProfiler.startSection("armor");
-		this.resetState();
+	/** Render the bar as a full replacement for {@link GuiIngameForge#renderArmor(int, int)} */
+	public void draw(int width, int height) {
+		MINECRAFT.mcProfiler.startSection("armor");
 		int left = width / 2 - 91;
-		GuiIngameForge.left_height -= ROW_SPACING;
-		this.height = height;
+		int top = height - GuiIngameForge.left_height;
 
-		glPushAttrib(GL_TEXTURE_BIT);
-		mc.getTextureManager().bindTexture(ARMOR_ICONS);
+		MINECRAFT.getTextureManager().bindTexture(ARMOR_ICONS);
+		glEnable(GL_BLEND);
 
-		for(int i = 0; i < mc.thePlayer.inventory.armorInventory.length; i++) {
-			ItemStack stack = mc.thePlayer.inventory.armorInventory[i];
-			if(stack == null || stack.getItem() == null) continue;
+		// Total points in all rows so far
+		int barPoints = 0;
+		int[] armorPoints = getBarPoints(MINECRAFT.thePlayer);
 
-			boolean addBreak = this.setState(stack, i);
-			this.renderArmorBarPart(left, addBreak);
-
-			if(this.last == 0 && this.next > 0) { // First armor, draw the background
-				this.zLevel--;
-				this.drawTexturedModalRect(left, this.top, 175, 247, 82, 9);
-				this.zLevel++;
-			}
-
-			// Move forward in the bar
-			this.last = this.next;
-		}
-		// Draw extra line at the end of the bar if necessary
-		if(last % 2 == 1) {
-			this.drawTexturedModalRect(left + this.left - 4, this.top, 166, 247, 9, 9);
-		}
-
-		glPopAttrib();
-		mc.mcProfiler.endSection();
-	}
-
-	/** Sets the state of the bar based on the given stack.
-	 * @param stack The {@link ItemStack} to read from
-	 * @param slot The armor slot (0=boots, 1=leggings, 2=chestplate, 3=helmet)
-	 * @return {@code true} if a break should be rendered at the start of this piece */
-	public boolean setState(ItemStack stack, int slot) {
-		Item item = stack.getItem();
-		boolean addBreak = ArmorChroma.INSTANCE.config.alwaysBreak ||
-				this.glint != (this.glint = item.hasEffect(stack, 0));
-
-		boolean leather = item instanceof ItemArmor && (item == Items.leather_helmet || item == Items.leather_chestplate || item == Items.leather_leggings || item == Items.leather_boots);
-		if(!ArmorChroma.INSTANCE.config.renderColor && leather) {
-			// Use pre-colored leather
-			addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.iconLeather);
-			addBreak |= this.color != (this.color = 0xFFFFFF);
-		} else {
-			addBreak |= this.materialIndex != (this.materialIndex = ArmorChroma.INSTANCE.config.getIcon(stack));
-			if(leather) {
-				addBreak |= this.color != (this.color = item.getColorFromItemStack(stack, 0));
-			} else {
-				addBreak |= this.color != (this.color = 0xFFFFFF);
-			}
-		}
-
-		this.next = this.last;
-		if(item instanceof ItemArmor) {
-			this.next += ((ItemArmor) item).damageReduceAmount;
-		} else if(item instanceof ISpecialArmor) {
-			this.next += ((ISpecialArmor) item).getArmorDisplay(mc.thePlayer, stack, slot);
-		}
-
-		return addBreak;
-	}
-
-	/** The amount of 9x9 tiles that fit horizontally in the tile sheet. */
-	public static final int SHEET_WIDTH = 28;
-
-	/** Calculates UV coordinates, in pixels, for the current quad.
-	 * @param pos The index in the armor bar, starting at 0 and ending at 19
-	 * @return A vector containing UV pixel coordinates */
-	public Vector2d getUV(int pos) {
-		int offsetX = pos % 2 == 1 ? 4 : 0;
-		return new Vector2d(
-				(this.materialIndex % SHEET_WIDTH) * 9 + offsetX,
-				(this.materialIndex / SHEET_WIDTH) * 9);
-	}
-
-	/** Renders an armor piece of the given width, using the current state.
-	 * @param left The X position to start at
-	 * @param top The Y position to start at
-	 * @param last The previous cumulative armor
-	 * @param next The current cumulative armor
-	 * @param addBreak Whether or not to add a break at the start of the bar part, if necessary */
-	private void renderArmorBarPart(int left, boolean addBreak) {
-		for(int i = this.last; i < this.next; i++, this.left += 4) {
-			if(i % 20 == 0) {
-				this.nextRow();
-			}
-			Vector2d uv = this.getUV(i);
-			this.drawTexturedModalRectWithColor(left + this.left, this.top, (int) uv.x, (int) uv.y, 5, 9);
-
-			if(addBreak) { // Add a break if the state of the bar has changed
-				addBreak = false;
-				if(i % 2 == 1) {
-					this.drawTexturedModalRectWithColor(left + this.left - 4, this.top, 166, 247, 9, 9);
+		zLevel = -7;
+		for(int i = 0; i < MINECRAFT.thePlayer.inventory.armorInventory.length; i++) {
+			if(armorPoints[i] > 0) {
+				if(barPoints == 0) { // Draw background
+					drawBackground(left, top, armorPoints[4]); // levels
+					++zLevel;
 				}
+
+				drawPiece(left, top, barPoints, armorPoints[i], MINECRAFT.thePlayer.getCurrentArmor(i));
+				barPoints += armorPoints[i];
+
+				++zLevel; // Make sure blending works with GL_EQUAL
 			}
-			if(ArmorChroma.INSTANCE.config.renderGlint && glint) { // Draw glint
-				this.drawTexturedGlintRect(left + this.left, this.top, (int) uv.x, (int) uv.y, 5, 9);
-			}
+		}
+
+		// Let other bars draw in the correct position
+		GuiIngameForge.left_height += (barPoints-1) / 20 * ROW_SPACING + 10;
+
+		MINECRAFT.getTextureManager().bindTexture(icons);
+		MINECRAFT.mcProfiler.endSection();
+	}
+
+	/** Draws the armor bar background with a border if {@code level > 0} */
+	private void drawBackground(int x, int y, int level) {
+		// Plain background
+		drawTexturedModalRect(x, y, ATLAS.getU(-11), ATLAS.getV(-11), 81, 9);
+
+		// Colored border
+		if(level > 0) {
+			int color = level <= BG_COLORS.length ? BG_COLORS[level-1] : BG_COLORS[BG_COLORS.length-1];
+			drawTexturedColoredModalRect(x-1, y-1, ATLAS.getU(-67)-1, ATLAS.getV(-67)-1, 83, 11, color);
 		}
 	}
 
-	/** Draws a textured rectangle at the stored z-value.
-	 * @param x X coordinate of the top-left
-	 * @param y Y coordinate of the top-left
-	 * @param u Texture X coordinate, in pixels
-	 * @param v Texture Y coordinate, in pixels
-	 * @param width The width of the quad to draw, in pixels
-	 * @param height The height of the quad to draw, in pixels
-	 * @param renderColor The color to use while rendering */
-	public void drawTexturedModalRectWithColor(int x, int y, int u, int v, int width, int height) {
-		double minU = (double) u / 256.0;
-		double maxU = (double) (u + width) / 256.0;
-		double minV = (double) v / 256.0;
-		double maxV = (double) (v + height) / 256.0;
-		
-		Tessellator tessellator = Tessellator.instance;
-		tessellator.startDrawingQuads();
-		tessellator.setColorOpaque_I(this.color);
-		tessellator.addVertexWithUV(x, y + height, this.zLevel, minU, maxV);
-		tessellator.addVertexWithUV(x + width, y + height, this.zLevel, maxU, maxV);
-		tessellator.addVertexWithUV(x + width, y, this.zLevel, maxU, minV);
-		tessellator.addVertexWithUV(x, y, this.zLevel, minU, minV);
+	/** Draws all the rows needed for a single piece of armor
+	 * @param barPoints The number of points in the bar before this piece */
+	private void drawPiece(int left, int top, int barPoints, int stackPoints, ItemStack stack) {
+		int space;
+		top -= (barPoints / 20) * ROW_SPACING; // Offset to account for full bars
+
+		// Repeatedly fill rows when possible
+		while((space = 20 - (barPoints % 20)) <= stackPoints) {
+			drawPartialRow(left, top, 20 - space, space, stack);
+
+			// Move up a row
+			top -= ROW_SPACING;
+			zLevel -= 6;
+			barPoints += space;
+			stackPoints -= space;
+		}
+
+		// Whatever's left over (doesn't fill the whole row)
+		if(stackPoints > 0) {
+			drawPartialRow(left, top, 20 - space, stackPoints, stack);
+		}
+	}
+
+	/** Renders a partial row of icons, {@code stackPoints} wide
+	 * @param barPoints The points already in the bar */
+	private void drawPartialRow(int left, int top, int barPoints, int stackPoints, ItemStack stack) {
+		int iconIndex = ArmorChroma.config.getIcon(stack);
+		int color     = stack.getItem().getColorFromItemStack(stack, 0);
+		boolean glint = ArmorChroma.config.renderGlint && stack.hasEffect();
+
+		if(glint) zLevel += 2; // Glint rows should appear on top of normal rows
+
+		int u = ATLAS.getU(iconIndex), v = ATLAS.getV(iconIndex);
+		int i = barPoints & 1;
+		int x = left + barPoints * 4;
+
+		// Drawing icons starts here
+
+		if(i == 1) { // leading half icon
+			drawTexturedMaskedModalRect(x - 4, top, u, v, ATLAS.getU(-2), ATLAS.getV(-2), 9, 9, color);
+			x += 4;
+		}
+		for(; i < stackPoints - 1; i += 2, x += 8) { // Main body icons
+			drawTexturedColoredModalRect(x, top, u, v, 9, 9, color);
+		}
+		if(i < stackPoints) { // Trailing half icon
+			drawTexturedMaskedModalRect(x, top, u, v, ATLAS.getU(-1), ATLAS.getV(-1), 9, 9, color);
+		}
+
+		if(glint) { // Draw one glint quad for the whole row
+			this.drawTexturedGlintRect(left + barPoints * 4, top, left, 0, stackPoints*4 + 1, 9);
+			MINECRAFT.getTextureManager().bindTexture(ARMOR_ICONS);
+			zLevel -= 2;
+		}
+	}
+
+	/** Searches the player's armor inventory to work out how many points need
+	 * to be shown. Will skip full bars if compression is turned on
+	 * @return The player's armor points to display in the bar, along with
+	 * the number of full bars skipped at index {@code 4} */
+	private int[] getBarPoints(EntityPlayer player) {
+		int[] points = new int[5]; // 5th slot stores bar levels
+		int i = 0;
+		points[4] = 0;
+
+		// Skip full bars if compressing
+		if(ArmorChroma.config.compressBar) {
+			int ignore = ForgeHooks.getTotalArmorValue(player) - 1;
+			ignore /= 20; // Number of full bars to ignore
+
+			if(ignore > 0) {
+				points[4] = ignore;
+				ignore *= 20;
+
+				for(; ignore > 0; i++) {
+					ignore -= getArmorPoints(player, i);
+				}
+				// Put the overflow back in the bar
+				points[i-1] = -ignore;
+			}
+		}
+
+		// Fill in remaining slots
+		for(; i < 4; i++) {
+			points[i] = getArmorPoints(player, i);
+		}
+		return points;
+	}
+
+	/** @return The points gained from a single item in the player's armor
+	 * @see ForgeHooks#getTotalArmorValue() */
+	private static int getArmorPoints(EntityPlayer player, int slot) {
+		ItemStack stack = player.getCurrentArmor(slot);
+
+		if(stack != null) {
+			Item item = stack.getItem();
+
+			// Allow for custom calculations
+			if(item instanceof ISpecialArmor) {
+				return ((ISpecialArmor)item).getArmorDisplay(player, stack, slot);
+			} else if(item instanceof ItemArmor) {
+				return ((ItemArmor)item).damageReduceAmount;
+			}
+		}
+		return 0;
+	}
+
+	/** As {@link #drawTexturedColoredModalRect(int, int, int, int, float, float, float, float, int)},
+	 * but generates the interpolated texture coordinates and high vertex coordinates */
+	public void drawTexturedColoredModalRect(int x, int y, int u, int v, int width, int height, int color) {
+		final float texUnit = 1f / 256f;
+		drawTexturedColoredModalRect(x, y, x + width, y + height, u * texUnit, v * texUnit, (u + width) * texUnit, (v + height) * texUnit, color);
+	}
+
+	/** Draws a textured and colored quad. Vertex coordinates are pixel-based, texture coordinates are interpolated.<br>
+	 * Use {@link #drawTexturedColoredModalRect(int, int, int, int, int, int, int)} for a more useful interface */
+	public void drawTexturedColoredModalRect(int left, int top, int right, int bottom, float texLeft, float texTop, float texRight, float texBottom, int color) {
+		Tessellator tessellator = Tessellator.getInstance();
+		WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+
+		worldRenderer.startDrawingQuads();
+		worldRenderer.setColorOpaque_I(color);
+
+		worldRenderer.addVertexWithUV(left,  bottom, zLevel, texLeft,  texBottom);
+		worldRenderer.addVertexWithUV(right, bottom, zLevel, texRight, texBottom);
+		worldRenderer.addVertexWithUV(right, top,    zLevel, texRight, texTop);
+		worldRenderer.addVertexWithUV(left,  top,    zLevel, texLeft,  texTop);
+
 		tessellator.draw();
+	}
+
+	/** Draws a quad with the specified RGBA mask applied.<br>
+	 * The same x, y, width and height will be used for both the quad and the mask
+	 * @param maskU The U texture coordinate of the mask
+	 * @param maskV The V texture coordinate of the mask
+	 * @param color The color to draw the quad with */
+	public void drawTexturedMaskedModalRect(int x, int y, int u, int v, int maskU, int maskV, int width, int height, int color) {
+		drawTexturedModalRect(x, y, maskU, maskV, width, height);
+
+		glDepthFunc(GL_EQUAL);
+		glBlendFunc(GL_DST_COLOR, GL_ZERO);
+		drawTexturedColoredModalRect(x, y, u, v, width, height, color);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glDepthFunc(GL_LEQUAL);
 	}
 
 	/** Bits which are modified while rendering item glints, so must be pushed/popped.
 	 * @see #drawTexturedGlintRect(int, int, int, int, int, int) */
-	public static final int GL_GLINT_BITS =
-			GL_ENABLE_BIT | GL_TEXTURE_BIT | GL_TRANSFORM_BIT |
-			GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_CURRENT_BIT;
+	private static final int GL_GLINT_BITS = GL_ENABLE_BIT | GL_TRANSFORM_BIT
+		| GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_CURRENT_BIT;
 
-	/** Render an 'item glint' over the specified quad with the currently bound texture for clipping.
-	 * @param x X coordinate of the top-left
-	 * @param y Y coordinate of the top-left
-	 * @param u Texture X coordinate, in pixels
-	 * @param v Texture Y coordinate, in pixels
-	 * @param width The width of the quad to draw, in pixels
-	 * @param height The height of the quad to draw, in pixels
-	 * @see ItemRenderer#renderItem(net.minecraft.entity.EntityLivingBase, ItemStack, int, net.minecraftforge.client.IItemRenderer.ItemRenderType) */
+	/** Render an item glint over the specified quad, blending with equal depth */
 	public void drawTexturedGlintRect(int x, int y, int u, int v, int width, int height) {
-		mc.mcProfiler.startSection("glint");
 		// Push bits we modify to restore later on
 		glPushAttrib(GL_GLINT_BITS);
 
 		glDepthFunc(GL_EQUAL);
-		glDisable(GL_LIGHTING);
-		glEnable(GL_BLEND);
-		// Mapped OpenGL constants from [768, 1, 1, 0]
 		OpenGlHelper.glBlendFunc(GL_SRC_COLOR, GL_ONE, GL_ONE, GL_ZERO);
-
-		glColor4f(0.38F, 0.19F, 0.608F, 1.0F); // #61309B, light purple tint
-		mc.getTextureManager().bindTexture(RES_ITEM_GLINT);
-
-		glMatrixMode(GL_TEXTURE);
-
+		MINECRAFT.getTextureManager().bindTexture(GLINT);
+		glMatrixMode(GL_TEXTURE); // Scale texture instead of vertex
 		long time = Minecraft.getSystemTime();
 
 		// Rect #1
@@ -253,7 +279,7 @@ public class GuiArmor extends Gui {
 		glScalef(0.125F, 0.125F, 0.125F);
 		glTranslatef((float) (time % 3000L) / 3000.0F * 8.0F, 0.0F, 0.0F);
 		glRotatef(-50.0F, 0.0F, 0.0F, 1.0F);
-		this.drawTexturedModalRect(x, y, u, v, width, height);
+		this.drawTexturedColoredModalRect(x, y, u, v, width, height, GLINT_COLOR);
 		glPopMatrix();
 
 		// Rect #2
@@ -261,10 +287,9 @@ public class GuiArmor extends Gui {
 		glScalef(0.125F, 0.125F, 0.125F);
 		glTranslatef((float) (time % 4873L) / 4873.0F * -8.0F, 0.0F, 0.0F);
 		glRotatef(10.0F, 0.0F, 0.0F, 1.0F);
-		this.drawTexturedModalRect(x, y, u, v, width, height);
+		this.drawTexturedColoredModalRect(x, y, u, v, width, height, GLINT_COLOR);
 		glPopMatrix();
 
 		glPopAttrib();
-		mc.mcProfiler.endSection();
 	}
 }
