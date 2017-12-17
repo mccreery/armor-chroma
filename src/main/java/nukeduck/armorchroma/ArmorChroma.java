@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import nukeduck.armorchroma.config.Config;
 
-@Mod(modid = ArmorChroma.MODID, name = "Armor Chroma", version = "1.3", acceptedMinecraftVersions = "[1.9,1.11)")
+@Mod(modid = ArmorChroma.MODID, name = "Armor Chroma", version = "1.3", acceptedMinecraftVersions = "[1.12,1.13)")
 public class ArmorChroma {
 	public static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
@@ -60,7 +60,7 @@ public class ArmorChroma {
 
 	@SubscribeEvent
 	public void onRenderTooltip(ItemTooltipEvent e) {
-		if(e.isShowAdvancedItemTooltips() && e.getItemStack().getItem() instanceof ItemArmor) {
+		if(e.getFlags().isAdvanced() && e.getItemStack().getItem() instanceof ItemArmor) {
 			final String material = ((ItemArmor)e.getItemStack().getItem()).getArmorMaterial().getName();
 			e.getToolTip().add(TextFormatting.DARK_GRAY + "Armor Material: " + material);
 		}

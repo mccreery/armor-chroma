@@ -31,10 +31,10 @@ import static org.lwjgl.opengl.GL11.glTranslatef;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -79,17 +79,17 @@ public class GuiArmor extends Gui {
 
 		// Total points in all rows so far
 		int barPoints = 0;
-		int[] armorPoints = getBarPoints(MINECRAFT.thePlayer);
+		int[] armorPoints = getBarPoints(MINECRAFT.player);
 
 		zLevel = -7;
-		for(int i = 0; i < MINECRAFT.thePlayer.inventory.armorInventory.length; i++) {
+		for(int i = 0; i < MINECRAFT.player.inventory.armorInventory.size(); i++) {
 			if(armorPoints[i] > 0) {
 				if(barPoints == 0) { // Draw background
 					drawBackground(left, top, armorPoints[4]); // levels
 					++zLevel;
 				}
 
-				drawPiece(left, top, barPoints, armorPoints[i], MINECRAFT.thePlayer.inventory.armorItemInSlot(i));
+				drawPiece(left, top, barPoints, armorPoints[i], MINECRAFT.player.inventory.armorItemInSlot(i));
 				barPoints += armorPoints[i];
 
 				++zLevel; // Make sure blending works with GL_EQUAL
@@ -238,7 +238,7 @@ public class GuiArmor extends Gui {
 		GlStateManager.color(r / 255f, g / 255f, b / 255f, 1f);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuffer();
 
 		buffer.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 		buffer.pos(left, bottom, zLevel).tex(texLeft, texBottom).endVertex();

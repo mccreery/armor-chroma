@@ -4,7 +4,7 @@ buildscript {
 		maven {url = "http://files.minecraftforge.net/maven"}
 	}
 		dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
 	}
 }
 
@@ -15,9 +15,9 @@ group            = "nukeduck.armorchroma"
 archivesBaseName = "armorchroma"
 
 minecraft {
-	version = "1.10.2-12.18.3.2185"
+	version = "1.12.2-14.23.1.2555"
 	runDir  = "run"
-	mappings = "snapshot_20161111"
+	mappings = "snapshot_20171003"
 }
 
 jar.archiveName = archivesBaseName + "-" + project.version + "-" + project.minecraft.version + ".jar"

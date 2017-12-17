@@ -2,7 +2,7 @@
 
 Different game version branches will show releases for their respective version.
 
-## [Unreleased]
+## [1.3] - 2017-12-17
 ### Added
 - New option where multiple rows of armor will collapse, showing a different border
 - Better resource pack support as any mask can be applied for half-icons
