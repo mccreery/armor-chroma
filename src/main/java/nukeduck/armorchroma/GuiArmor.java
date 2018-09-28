@@ -138,11 +138,22 @@ public class GuiArmor extends Gui {
 		}
 	}
 
+	private int getColor(ItemStack stack) {
+		if(stack != null) {
+			Item item = stack.getItem();
+
+			if(item instanceof ItemArmor) {
+				return ((ItemArmor)item).getColor(stack);
+			}
+		}
+		return 0xffffff;
+	}
+
 	/** Renders a partial row of icons, {@code stackPoints} wide
 	 * @param barPoints The points already in the bar */
 	private void drawPartialRow(int left, int top, int barPoints, int stackPoints, ItemStack stack) {
 		int iconIndex = ArmorChroma.config.getIcon(stack);
-		int color     = ((ItemArmor)stack.getItem()).getColor(stack);
+		int color = getColor(stack);
 		boolean glint = ArmorChroma.config.renderGlint && stack.hasEffect();
 
 		if(glint) zLevel += 2; // Glint rows should appear on top of normal rows
