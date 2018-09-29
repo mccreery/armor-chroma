@@ -8,26 +8,28 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import nukeduck.armorchroma.Mergeable;
-import nukeduck.armorchroma.config.IconData.ModEntry;
 
-public class IconData extends MergeMap<String, ModEntry> {
-    public static final long serialVersionUID = 1L;
+public class IconData {
+    private final Map<String, ModEntry> modEntries = new HashMap<String, ModEntry>();
+
     public static final String DEFAULT = "default";
+
+    public Map<String, ModEntry> getModEntries() {
+        return modEntries;
+    }
 
     /** @return The armor icon corresponding to {@code stack} */
 	public int getIcon(ItemStack stack) {
-        ModEntry mod = get(stack);
+        ModEntry mod = getModData(stack);
         return mod != null ? mod.getIcon(this, stack) : getSpecial(DEFAULT);
 	}
 
     public int getSpecial(String key) {
-        ModEntry minecraft = get("minecraft");
+        ModEntry minecraft = modEntries.get("minecraft");
         return minecraft != null ? minecraft.getSpecial(null, key) : 0;
     }
 
-	/** @see #get(Object) */
-	private ModEntry get(ItemStack stack) {
+	private ModEntry getModData(ItemStack stack) {
 		String modid = null;
 
 		if(stack != null) {
@@ -38,19 +40,18 @@ public class IconData extends MergeMap<String, ModEntry> {
 				if(name != null) modid = name.getResourceDomain();
 			}
 		}
-		return get(modid);
+		return modEntries.get(modid);
 	}
 
-    public static class ModEntry implements Mergeable<ModEntry> {
+    public static class ModEntry {
         public final Map<String, Integer> materials = new HashMap<>();
         public final Map<String, Integer> items = new HashMap<>();
         public final Map<String, Integer> special = new HashMap<>();
 
-        public ModEntry merge(ModEntry other) {
+        public void putAll(ModEntry other) {
             materials.putAll(other.materials);
             items.putAll(other.items);
             special.putAll(other.special);
-            return this;
         }
 
         public int getIcon(IconData fallback, ItemStack stack) {

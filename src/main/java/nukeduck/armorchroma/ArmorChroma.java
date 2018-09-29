@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Map;
 
 import com.google.gson.Gson;
 
@@ -53,7 +54,8 @@ public class ArmorChroma {
 
 		((IReloadableResourceManager)Minecraft.getMinecraft().getResourceManager())
 				.registerReloadListener(m -> {
-			iconData.clear();
+			Map<String, ModEntry> modEntries = iconData.getModEntries();
+			modEntries.clear();
 
 			for(String modid : Loader.instance().getIndexedModList().keySet()) {
 				try {
@@ -61,7 +63,11 @@ public class ArmorChroma {
 
 					try(Reader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
 						ModEntry entry = new Gson().fromJson(reader, ModEntry.class);
-						iconData.put(modid, entry);
+
+						modEntries.merge(modid, entry, (a, b) -> {
+							a.putAll(b);
+							return a;
+						});
 					}
 				} catch(FileNotFoundException e) {
 					// Ignore missing files
