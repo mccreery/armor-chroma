@@ -1,0 +1,17 @@
+{
+	"materials": {
+		"IC2_BRONZE": 2,
+		"IC2_ALLOY": 3
+	},
+	"items": {
+		"hazmat_*": 0,
+		"rubber_boots": 0,
+		"nano_*": 4,
+		"quantum_*": 5,
+
+		"nightvision_goggles": 1,
+		"static_boots": 1,
+		"batpack": 6,
+		"advanced_batpack": 7
+	}
+}

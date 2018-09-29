@@ -1,0 +1,13 @@
+{
+	"materials": {
+		"obsidian": 3,
+		"Aether_Legendary_armor": 4
+	},
+	"items": {
+		"phoenix*": 0,
+		"zanite*": 1,
+		"neptune*": 2,
+		"gravitite*": 5,
+		"sentryBoots": 6
+	}
+}
