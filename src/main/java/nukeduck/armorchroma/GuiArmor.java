@@ -51,6 +51,8 @@ public class GuiArmor extends Gui {
 	 * @see #draw(int, int) */
 	private static final ResourceLocation ARMOR_ICONS = new ResourceLocation(ArmorChroma.MODID, "textures/gui/armor_icons.png");
 
+	private static final ResourceLocation BACKGROUND = new ResourceLocation(ArmorChroma.MODID, "textures/gui/background.png");
+
 	/** {@link ResourceLocation} for item glints
 	 * @see #drawTexturedGlintRect(int, int, int, int, int, int) */
 	private static final ResourceLocation GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
@@ -105,13 +107,15 @@ public class GuiArmor extends Gui {
 
 	/** Draws the armor bar background with a border if {@code level > 0} */
 	private void drawBackground(int x, int y, int level) {
+		Minecraft.getMinecraft().getTextureManager().bindTexture(BACKGROUND);
+
 		// Plain background
-		drawTexturedModalRect(x, y, ATLAS.getU(-11), ATLAS.getV(-11), 81, 9);
+		drawTexturedModalRect(x, y, 0, 0, 81, 9);
 
 		// Colored border
 		if(level > 0) {
 			int color = level <= BG_COLORS.length ? BG_COLORS[level-1] : BG_COLORS[BG_COLORS.length-1];
-			drawTexturedColoredModalRect(x-1, y-1, ATLAS.getU(-67)-1, ATLAS.getV(-67)-1, 83, 11, color);
+			drawTexturedColoredModalRect(x-1, y-1, 81, 0, 83, 11, color);
 		}
 	}
 
@@ -163,6 +167,8 @@ public class GuiArmor extends Gui {
 		int x = left + barPoints * 4;
 
 		// Drawing icons starts here
+
+		Minecraft.getMinecraft().getTextureManager().bindTexture(ARMOR_ICONS);
 
 		if(i == 1) { // leading half icon
 			int rmaskIcon = ArmorChroma.iconData.getSpecial("rmask");
