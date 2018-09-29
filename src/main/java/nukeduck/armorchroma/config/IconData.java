@@ -1,51 +1,89 @@
 package nukeduck.armorchroma.config;
 
 import java.util.HashMap;
+import java.util.Map;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import nukeduck.armorchroma.ArmorChroma;
-import nukeduck.armorchroma.config.IconData.ModEntry;
-import nukeduck.armorchroma.config.IconMap.ItemIconMap;
-import nukeduck.armorchroma.config.IconMap.MaterialIconMap;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.util.ResourceLocation;
+import nukeduck.armorchroma.Mergeable;
 
-@SuppressWarnings("serial")
-public class IconData extends HashMap<String, ModEntry> {
-	/** @return The armor icon corresponding to {@code stack} */
+public class IconData extends MergeMap<String, IconData.ModEntry> {
+    public static final long serialVersionUID = 1L;
+    public static final String DEFAULT = "default";
+
+    private final ModEntry minecraftEntry;
+
+    public IconData() {
+        put("minecraft", minecraftEntry = new ModEntry() {
+            @Override
+            public int getSpecial(String key) {
+                return special.getOrDefault(key, 0);
+            }
+        });
+    }
+
+    /** @return The armor icon corresponding to {@code stack} */
 	public int getIcon(ItemStack stack) {
-		ModEntry mod = get(stack.getItem().getRegistryName().getResourceDomain());
-		return mod != null ? mod.getIcon(stack) : ArmorChroma.config.iconDefault;
+        ModEntry mod = get(stack);
+        return mod != null ? mod.getIcon(stack) : getSpecial(DEFAULT);
 	}
 
-	@Override
-	public ModEntry put(String key, ModEntry value) {
-		// Combine mod entries if needed
-		if(containsKey(key)) {
-			ModEntry existing = get(key);
-			existing.combine(value);
-			return existing;
-		} else {
-			return super.put(key, value);
+    public int getSpecial(String key) {
+        return minecraftEntry.getSpecial(key);
+    }
+
+	/** @see #get(Object) */
+	private ModEntry get(ItemStack stack) {
+		String modid = null;
+
+		if(stack != null) {
+			Item item = stack.getItem();
+
+			if(item != null) {
+				ResourceLocation name = item.getRegistryName();
+				if(name != null) modid = name.getResourceDomain();
+			}
 		}
+		return get(modid);
 	}
 
-	/** Stores icon entries for a single mod */
-	public static class ModEntry {
-		MaterialIconMap materials = new MaterialIconMap();
-		ItemIconMap items = new ItemIconMap();
+    protected class ModEntry implements Mergeable<ModEntry> {
+        public final Map<String, Integer> materials = new HashMap<>();
+        public final Map<String, Integer> items = new HashMap<>();
+        public final Map<String, Integer> special = new HashMap<>();
 
-		/** @return The armor icon corresponding to {@code stack} limited to the mod */
-		public int getIcon(ItemStack stack) {
-			Integer iconIndex = items.get(stack);
-			if(iconIndex != null) return iconIndex;
+        public ModEntry merge(ModEntry other) {
+            materials.putAll(other.materials);
+            items.putAll(other.items);
+            special.putAll(other.special);
+            return this;
+        }
 
-			iconIndex = materials.get(stack);
-			return iconIndex != null ? iconIndex : ArmorChroma.config.iconDefault;
-		}
+        public int getIcon(ItemStack stack) {
+            Integer index = null;
 
-		/** Adds all icons from {@code other} to the entry */
-		public void combine(ModEntry other) {
-			materials.putAll(other.materials);
-			items.putAll(other.items);
-		}
-	}
+            if(stack != null) {
+                Item item = stack.getItem();
+
+                // Test armor material
+                if(item instanceof ItemArmor) {
+                    ArmorMaterial material = ((ItemArmor)item).getArmorMaterial();
+                    if(material != null) index = Util.getGlob(materials, material.getName());
+                }
+                // Test item ID
+                if(index == null && item != null) {
+                    ResourceLocation resource = item.getRegistryName();
+                    if(resource != null) index = Util.getGlob(items, resource.getResourcePath());
+                }
+            }
+            return index != null ? index : getSpecial(DEFAULT);
+        }
+
+        public int getSpecial(String key) {
+            return special.getOrDefault(key, IconData.this.getSpecial(key));
+        }
+    }
 }
