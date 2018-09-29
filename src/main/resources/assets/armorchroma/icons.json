@@ -5,6 +5,11 @@
 		"iron": 2,
 		"gold": 3,
 		"diamond": 4
+	},
+	"special": {
+		"default": 0,
+		"lmask": -1,
+		"rmask": -2
 	}
 }, "botania": {
 	"materials": {

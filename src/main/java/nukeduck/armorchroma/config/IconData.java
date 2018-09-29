@@ -5,34 +5,25 @@ import java.util.Map;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import nukeduck.armorchroma.Mergeable;
+import nukeduck.armorchroma.config.IconData.ModEntry;
 
-public class IconData extends MergeMap<String, IconData.ModEntry> {
+public class IconData extends MergeMap<String, ModEntry> {
     public static final long serialVersionUID = 1L;
     public static final String DEFAULT = "default";
-
-    private final ModEntry minecraftEntry;
-
-    public IconData() {
-        put("minecraft", minecraftEntry = new ModEntry() {
-            @Override
-            public int getSpecial(String key) {
-                return special.getOrDefault(key, 0);
-            }
-        });
-    }
 
     /** @return The armor icon corresponding to {@code stack} */
 	public int getIcon(ItemStack stack) {
         ModEntry mod = get(stack);
-        return mod != null ? mod.getIcon(stack) : getSpecial(DEFAULT);
+        return mod != null ? mod.getIcon(this, stack) : getSpecial(DEFAULT);
 	}
 
     public int getSpecial(String key) {
-        return minecraftEntry.getSpecial(key);
+        ModEntry minecraft = get("minecraft");
+        return minecraft != null ? minecraft.getSpecial(null, key) : 0;
     }
 
 	/** @see #get(Object) */
@@ -50,7 +41,7 @@ public class IconData extends MergeMap<String, IconData.ModEntry> {
 		return get(modid);
 	}
 
-    protected class ModEntry implements Mergeable<ModEntry> {
+    public static class ModEntry implements Mergeable<ModEntry> {
         public final Map<String, Integer> materials = new HashMap<>();
         public final Map<String, Integer> items = new HashMap<>();
         public final Map<String, Integer> special = new HashMap<>();
@@ -62,7 +53,7 @@ public class IconData extends MergeMap<String, IconData.ModEntry> {
             return this;
         }
 
-        public int getIcon(ItemStack stack) {
+        public int getIcon(IconData fallback, ItemStack stack) {
             Integer index = null;
 
             if(stack != null) {
@@ -79,11 +70,11 @@ public class IconData extends MergeMap<String, IconData.ModEntry> {
                     if(resource != null) index = Util.getGlob(items, resource.getResourcePath());
                 }
             }
-            return index != null ? index : getSpecial(DEFAULT);
+            return index != null ? index : getSpecial(fallback, DEFAULT);
         }
 
-        public int getSpecial(String key) {
-            return special.getOrDefault(key, IconData.this.getSpecial(key));
+        public int getSpecial(IconData fallback, String key) {
+            return special.getOrDefault(key, fallback != null ? fallback.getSpecial(key) : 0);
         }
     }
 }

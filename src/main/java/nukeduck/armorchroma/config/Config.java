@@ -10,7 +10,6 @@ import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;
 
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import nukeduck.armorchroma.ArmorChroma;
@@ -30,11 +29,8 @@ public class Config extends Configuration {
 	/** Flag to compress the bar into different colored borders */
 	public boolean compressBar;
 
-	/** Returns the icon index of the given {@link ItemStack}.
-	 * @param stack The item stack to look up
-	 * @return The icon index found, or {@link #iconDefault} if none was found. */
-	public int getIcon(ItemStack stack) {
-		return iconData.getIcon(stack);
+	public IconData getIconData() {
+		return iconData;
 	}
 
 	@Override
@@ -49,7 +45,7 @@ public class Config extends Configuration {
 
 		// Load icon data and overrides
 		try {
-			this.iconData = getIconData();
+			this.iconData = loadIconData();
 		} catch(IOException e) {
 			ArmorChroma.logger.error("An error occurred loading icon data");
 			e.printStackTrace();
@@ -59,7 +55,7 @@ public class Config extends Configuration {
 
 	/** Reads (and copies, if necessary) icons.json to load icon information.
 	 * @return The resultant icon data from file */
-	private IconData getIconData() throws IOException {
+	private IconData loadIconData() throws IOException {
 		// Default icons
 		BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/assets/armorchroma/icons.json")));
 		IconData data = new Gson().fromJson(reader, IconData.class);

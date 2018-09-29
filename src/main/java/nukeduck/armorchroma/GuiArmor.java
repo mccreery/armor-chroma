@@ -152,7 +152,7 @@ public class GuiArmor extends Gui {
 	/** Renders a partial row of icons, {@code stackPoints} wide
 	 * @param barPoints The points already in the bar */
 	private void drawPartialRow(int left, int top, int barPoints, int stackPoints, ItemStack stack) {
-		int iconIndex = ArmorChroma.config.getIcon(stack);
+		int iconIndex = ArmorChroma.config.getIconData().getIcon(stack);
 		int color = getColor(stack);
 		boolean glint = ArmorChroma.config.renderGlint && stack.hasEffect();
 
@@ -165,14 +165,16 @@ public class GuiArmor extends Gui {
 		// Drawing icons starts here
 
 		if(i == 1) { // leading half icon
-			drawTexturedMaskedModalRect(x - 4, top, u, v, ATLAS.getU(-2), ATLAS.getV(-2), 9, 9, color);
+			int rmaskIcon = ArmorChroma.config.getIconData().getSpecial("rmask");
+			drawTexturedMaskedModalRect(x - 4, top, u, v, ATLAS.getU(rmaskIcon), ATLAS.getV(rmaskIcon), 9, 9, color);
 			x += 4;
 		}
 		for(; i < stackPoints - 1; i += 2, x += 8) { // Main body icons
 			drawTexturedColoredModalRect(x, top, u, v, 9, 9, color);
 		}
 		if(i < stackPoints) { // Trailing half icon
-			drawTexturedMaskedModalRect(x, top, u, v, ATLAS.getU(-1), ATLAS.getV(-1), 9, 9, color);
+			int lmaskIcon = ArmorChroma.config.getIconData().getSpecial("lmask");
+			drawTexturedMaskedModalRect(x, top, u, v, ATLAS.getU(lmaskIcon), ATLAS.getV(lmaskIcon), 9, 9, color);
 		}
 
 		if(glint) { // Draw one glint quad for the whole row
