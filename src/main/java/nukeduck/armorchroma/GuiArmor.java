@@ -151,14 +151,14 @@ public class GuiArmor extends Gui {
 		// Drawing icons starts here
 
 		if(i == 1) { // leading half icon
-			drawMaskedIcon(x - 4, top, icon, ArmorChroma.getIconData().getSpecial(Util.getModid(stack), "rmask"));
+			drawMaskedIcon(x - 4, top, icon, ArmorChroma.getIconData().getSpecial(Util.getModid(stack), "leadingMask"));
 			x += 4;
 		}
 		for(; i < stackPoints - 1; i += 2, x += 8) { // Main body icons
 			icon.draw(this, x, top);
 		}
 		if(i < stackPoints) { // Trailing half icon
-			drawMaskedIcon(x, top, icon, ArmorChroma.getIconData().getSpecial(Util.getModid(stack), "lmask"));
+			drawMaskedIcon(x, top, icon, ArmorChroma.getIconData().getSpecial(Util.getModid(stack), "trailingMask"));
 		}
 
 		if(glint) { // Draw one glint quad for the whole row

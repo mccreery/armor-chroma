@@ -8,7 +8,7 @@
     },
     "special": {
         "default": 2,
-        "lmask": -2,
-        "rmask": -1
+        "leadingMask": -1,
+        "trailingMask": -2
     }
 }
