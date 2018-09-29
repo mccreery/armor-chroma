@@ -152,7 +152,7 @@ public class GuiArmor extends Gui {
 	/** Renders a partial row of icons, {@code stackPoints} wide
 	 * @param barPoints The points already in the bar */
 	private void drawPartialRow(int left, int top, int barPoints, int stackPoints, ItemStack stack) {
-		int iconIndex = ArmorChroma.config.getIconData().getIcon(stack);
+		int iconIndex = ArmorChroma.iconData.getIcon(stack);
 		int color = getColor(stack);
 		boolean glint = ArmorChroma.config.renderGlint && stack.hasEffect();
 
@@ -165,15 +165,16 @@ public class GuiArmor extends Gui {
 		// Drawing icons starts here
 
 		if(i == 1) { // leading half icon
-			int rmaskIcon = ArmorChroma.config.getIconData().getSpecial("rmask");
+			int rmaskIcon = ArmorChroma.iconData.getSpecial("rmask");
 			drawTexturedMaskedModalRect(x - 4, top, u, v, ATLAS.getU(rmaskIcon), ATLAS.getV(rmaskIcon), 9, 9, color);
 			x += 4;
 		}
 		for(; i < stackPoints - 1; i += 2, x += 8) { // Main body icons
+			Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(stack.getItem().getRegistryName().getResourceDomain(), "textures/gui/armor_chroma.png"));
 			drawTexturedColoredModalRect(x, top, u, v, 9, 9, color);
 		}
 		if(i < stackPoints) { // Trailing half icon
-			int lmaskIcon = ArmorChroma.config.getIconData().getSpecial("lmask");
+			int lmaskIcon = ArmorChroma.iconData.getSpecial("lmask");
 			drawTexturedMaskedModalRect(x, top, u, v, ATLAS.getU(lmaskIcon), ATLAS.getV(lmaskIcon), 9, 9, color);
 		}
 

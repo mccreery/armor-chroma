@@ -1,0 +1,14 @@
+{
+    "materials": {
+        "leather": 0,
+        "chainmail": 1,
+        "iron": 2,
+        "gold": 3,
+        "diamond": 4
+    },
+    "special": {
+        "default": 2,
+        "lmask": -2,
+        "rmask": -1
+    }
+}
