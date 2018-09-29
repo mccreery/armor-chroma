@@ -75,6 +75,6 @@ public class IconData {
         }
 
         Integer i = mod.getSpecialIndex(key);
-        return i != null ? new ArmorIcon(modid, i) : FALLBACK_ICON;
+        return i != null ? new ArmorIcon(modid, i) : getSpecial(MINECRAFT, key);
     }
 }
