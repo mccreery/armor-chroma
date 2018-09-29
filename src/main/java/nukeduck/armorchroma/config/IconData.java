@@ -1,81 +1,80 @@
 package nukeduck.armorchroma.config;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
+import com.google.gson.Gson;
+
+import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
+import nukeduck.armorchroma.ArmorChroma;
 
 public class IconData {
-    private final Map<String, ModEntry> modEntries = new HashMap<String, ModEntry>();
+    private final Map<String, IconTable> mods = new HashMap<>();
 
+    private static final ArmorIcon FALLBACK_ICON = new ArmorIcon(0);
     public static final String DEFAULT = "default";
 
-    public Map<String, ModEntry> getModEntries() {
-        return modEntries;
+    public static final String MINECRAFT = "minecraft";
+
+    public void reload(IResourceManager manager) {
+        mods.clear();
+
+        for(String modid : Loader.instance().getIndexedModList().keySet()) {
+            try {
+                for(IResource resource : manager.getAllResources(new ResourceLocation(modid, "textures/gui/armor_chroma.json"))) {
+                    try(Reader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
+                        IconTable mod = new Gson().fromJson(reader, IconTable.class);
+
+                        mods.merge(modid, mod, (a, b) -> {
+                            a.putAll(b);
+                            return a;
+                        });
+                    }
+                }
+            } catch(IOException e) {
+                ArmorChroma.getLogger().error("Unable to load icons for modid " + modid, e);
+            }
+        }
     }
 
     /** @return The armor icon corresponding to {@code stack} */
-	public int getIcon(ItemStack stack) {
-        ModEntry mod = getModData(stack);
-        return mod != null ? mod.getIcon(this, stack) : getSpecial(DEFAULT);
-	}
+	public ArmorIcon getIcon(ItemStack stack) {
+        String modid = Util.getModid(stack);
+        IconTable mod = mods.get(modid);
 
-    public int getSpecial(String key) {
-        ModEntry minecraft = modEntries.get("minecraft");
-        return minecraft != null ? minecraft.getSpecial(null, key) : 0;
-    }
+        Integer i = null;
 
-	private ModEntry getModData(ItemStack stack) {
-		String modid = null;
+        if(mod != null) {
+            i = mod.getIconIndex(stack);
 
-		if(stack != null) {
-			Item item = stack.getItem();
-
-			if(item != null) {
-				ResourceLocation name = item.getRegistryName();
-				if(name != null) modid = name.getResourceDomain();
-			}
-		}
-		return modEntries.get(modid);
-	}
-
-    public static class ModEntry {
-        public final Map<String, Integer> materials = new HashMap<>();
-        public final Map<String, Integer> items = new HashMap<>();
-        public final Map<String, Integer> special = new HashMap<>();
-
-        public void putAll(ModEntry other) {
-            materials.putAll(other.materials);
-            items.putAll(other.items);
-            special.putAll(other.special);
-        }
-
-        public int getIcon(IconData fallback, ItemStack stack) {
-            Integer index = null;
-
-            if(stack != null) {
-                Item item = stack.getItem();
-
-                // Test armor material
-                if(item instanceof ItemArmor) {
-                    ArmorMaterial material = ((ItemArmor)item).getArmorMaterial();
-                    if(material != null) index = Util.getGlob(materials, material.getName());
-                }
-                // Test item ID
-                if(index == null && item != null) {
-                    ResourceLocation resource = item.getRegistryName();
-                    if(resource != null) index = Util.getGlob(items, resource.getResourcePath());
-                }
+            if(i != null) {
+                return new ArmorIcon(modid, i, Util.getColor(stack));
+            } else {
+                return getSpecial(modid, DEFAULT);
             }
-            return index != null ? index : getSpecial(fallback, DEFAULT);
+        }
+        return getSpecial(MINECRAFT, DEFAULT);
+	}
+
+    public ArmorIcon getSpecial(String modid, String key) {
+        IconTable mod = mods.get(modid);
+
+        if(mod == null) {
+            modid = MINECRAFT;
+            mod = mods.get(modid);
+
+            if(mod == null) return FALLBACK_ICON;
         }
 
-        public int getSpecial(IconData fallback, String key) {
-            return special.getOrDefault(key, fallback != null ? fallback.getSpecial(key) : 0);
-        }
+        Integer i = mod.getSpecialIndex(key);
+        return i != null ? new ArmorIcon(modid, i) : FALLBACK_ICON;
     }
 }

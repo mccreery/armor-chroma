@@ -3,7 +3,34 @@ package nukeduck.armorchroma.config;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+
 public class Util {
+	public static int getColor(ItemStack stack) {
+		if(stack != null) {
+			Item item = stack.getItem();
+
+			if(item instanceof ItemArmor) {
+				return ((ItemArmor)item).getColor(stack);
+			}
+		}
+		return 0xffffff;
+	}
+
+	public static void setColor(int color) {
+		int r = (color >> 16) & 0xff;
+		int g = (color >> 8) & 0xff;
+		int b = color & 0xff;
+		GlStateManager.color(r / 255f, g / 255f, b / 255f, 1);
+	}
+
+	public static String getModid(ItemStack stack) {
+        return stack != null ? stack.getItem().getRegistryName().getResourceDomain() : null;
+	}
+
 	public static <V> V getGlob(Map<String, V> map, String string) {
 		if(map == null) return null;
 
