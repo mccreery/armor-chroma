@@ -154,7 +154,7 @@ public class GuiArmor extends Gui {
 	private void drawPartialRow(int left, int top, int barPoints, int stackPoints, ItemStack stack) {
 		int iconIndex = ArmorChroma.iconData.getIcon(stack);
 		int color = getColor(stack);
-		boolean glint = ArmorChroma.config.renderGlint && stack.hasEffect();
+		boolean glint = ArmorChroma.CONFIG.renderGlint && stack.hasEffect();
 
 		if(glint) zLevel += 2; // Glint rows should appear on top of normal rows
 
@@ -195,7 +195,7 @@ public class GuiArmor extends Gui {
 		points[4] = 0;
 
 		// Skip full bars if compressing
-		if(ArmorChroma.config.compressBar) {
+		if(ArmorChroma.CONFIG.compressBar) {
 			int ignore = ForgeHooks.getTotalArmorValue(player) - 1;
 			ignore /= 20; // Number of full bars to ignore
 
