@@ -1,0 +1,221 @@
+{"minecraft": { // Vanilla
+	"materials": {
+		"leather": 0,
+		"chainmail": 1,
+		"iron": 2,
+		"gold": 3,
+		"diamond": 4
+	},
+	"special": {
+		"default": 0,
+		"lmask": -1,
+		"rmask": -2
+	}
+}, "botania": {
+	"materials": {
+		"manasteel": 28,
+		"terrasteel": 29,
+		"b_elementium": 30,
+		"manaweave": 31
+	}
+}, "thermalfoundation": {
+	"materials": {
+		"copper_armor": 56,
+		"tin_armor": 57,
+		"silver_armor": 58,
+		"lead_armor": 59,
+		"nickel_armor": 60,
+		"electrum_armor": 61,
+		"invar_armor": 62,
+		"bronze_armor": 63,
+		"platinum_armor": 64,
+		"constantan_armor": 63
+	}
+}, "ic2": { // IndustrialCraft 2
+	"materials": {
+		"IC2_BRONZE": 86,
+		"IC2_ALLOY": 87
+	},
+	"items": {
+		"hazmat_*": 84,
+		"rubber_boots": 84,
+		"nano_*": 88,
+		"quantum_*": 89,
+
+		"nightvision_goggles": 85,
+		"static_boots": 85,
+		"batpack": 90,
+		"advanced_batpack": 91
+	}
+}, "emt": { // Electro-Magic Tools (not updated)
+	"materials": {"FEATEHRWiNG": 93},
+	"items": {
+		"Electric*": 92,
+		"*Nano*": 88,
+		"*Quantum*": 89
+	}
+}, "bloodmagic": {
+	"items": {
+		"ItemPack*Sacrifice": 112,
+		"bound*Fire": 113,
+		"bound*Water": 114,
+		"bound*Wind": 115,
+		"bound*Earth": 116,
+		"bound*": 112,
+		"ItemLivingArmour*": 120,
+		"ItemSentientArmour*": 121
+	}
+}, "bloodarsenal": {
+	"materials": {
+		"ICHOR": 154,
+		"VampireArmor": 117,
+		"GlassArmor": 118,
+		"ImbuedArmor": 11
+	}
+}, "thaumcraft": {
+	"materials": {
+		"thaumium": 140,
+		"void": 141,
+		"special": 142,
+		"fortress": 143
+	},
+	"items": {
+		"BootsTraveller": 0,
+		"HoverHarness": 0,
+		"*": 144
+	}
+}, "taintedmagic": {
+	"materials": {
+		"voidfortress": 141,
+		"shadow2": 142,
+		"SanguineArmor": 151
+	},
+	"items": {
+		"BootsVoidwalker": 0,
+		"*ShadowFortress": 145,
+		"*": 144
+	}
+}, "witchinggadgets": {
+	"materials": {
+		"primordialarmor": 146,
+		"advancedcloth": 150
+	}
+}, "thaumicadditions": {
+	"materials": {
+		"adaminitearmor": 147,
+		"mascofcruelty": 0
+	}
+}, "thaumicbases": {
+	"materials": {
+		"athauminite": 148,
+		"tbbloody": 149
+	}
+}, "steamcraft": { // Flaxbeard's Steam Power
+	"materials": {
+		"monacle": 0,
+		"exosuit": 198,
+		"gildedgold": 3,
+		"brass": 199
+	}
+}, "twilightforest": {
+	"materials": {
+		"naga_scale": 168,
+		"fiery": 169,
+		"ironwood": 170,
+		"knightmetal": 172,
+		"knightphantom": 173,
+		"yeti": 174,
+		"arctic": 175
+	},
+	"items": {"item.steeleaf*": 171}
+}, "witchery": {
+	"items": {
+		"vampire*": 196,
+		"deaths*": 197
+	}
+}, "thaumicexploration": {
+	"items": {
+		"bootsMeteor": 152,
+		"bootsComet": 153
+	}
+}, "redstonearsenal": {
+	"materials": {"flux_armor": 65}
+}, "biomesoplenty": {
+	"materials": {"biomesoplenty:mud_armor": 225},
+	"items": {
+		"amethyst*": 224,
+		"wading_boots": 226,
+		"flippers": 227,
+		"*_flower_band": 228
+	}
+}, "aether": {
+	"materials": {
+		"obsidian": 255,
+		"Aether_Legendary_armor": 256
+	},
+	"items": {
+		"phoenix*": 252,
+		"zanite*": 253,
+		"neptune*": 254,
+		"gravitite*": 257,
+		"sentryBoots": 258
+	}
+}, "orespawn": {
+	"materials": {
+		"emerald": 280,
+		"experience": 280,
+		"peacock": 281,
+		"pink": 282,
+		"mobzilla": 283,
+		"ruby": 284,
+		"mothscale": 285,
+		"lavaeel": 286,
+		"royal": 287,
+		"amethyst": 288,
+		"ultimate": 289,
+		"tigerseye": 290,
+		"queen": 291,
+		"lapis": 292
+	}
+}, "draconicevolution": {
+	"materials": {
+		"draconicevolution:wyvern_armor": 308,
+		"draconicevolution:draconic_armor": 309
+	}
+}, "randomthings": {
+	"items": {
+		"lavaWader": 336,
+		"waterWalkingBoots": 337,
+		"obsidianWaterWalkingBoots": 338,
+		"magicHood": 339
+	}
+}, "magicalcrops": {
+	"materials": {
+		"InfusedIngotArmor": 364,
+		"InfusedArmorEpic": 365,
+		"InfusedArmor": 366
+	},
+	"items": {"magicalcrops_infused*EpicFlight": 367}
+}, "mekanismtools": {
+	"items": {
+		"Glowstone*": 392,
+		"Bronze*": 393,
+		"Obsidian*": 394,
+		"Steel*": 295,
+		"Osmium*": 396,
+		"LapisLazuli*": 397
+	}
+}, "mekanism": {
+	"materials": {
+		"gasmask": 398,
+		"scubatank": 398,
+		"jetpack": 399,
+		"frictionboots": 399
+	}
+}, "projecte": {
+	"items": {
+		"item.pe_rm_armor_*": 112,
+		"item.pe_gem_armor_*": 420,
+		"item.pe_dm_armor_*": 421
+	}
+}}
