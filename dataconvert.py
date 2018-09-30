@@ -26,8 +26,8 @@ for modid, mod in data.items():
     j = -1
     collapse = {}
 
-    for group in mod.values():
-        for key, value in group.items():
+    for _, group in sorted(mod.items()):
+        for key, value in sorted(group.items()):
             if value not in collapse:
                 if value >= 0:
                     mapped = i
@@ -46,5 +46,5 @@ for modid, mod in data.items():
 
     modsheet.save(os.path.join(mod_root, "armor_chroma.png"))
     with open(os.path.join(mod_root, "armor_chroma.json"), "w") as f:
-        json.dump(mod, f, indent=4)
+        json.dump(mod, f, indent=4, sort_keys=True)
         print(file=f) # Add newline
