@@ -16,21 +16,28 @@ def get_icon(i):
         v = i // SPAN * 9
     else:
         u = 256 - ((-i - 1) % SPAN) * 9 - 9
-        v = 256 + ((i+1) / SPAN - 1) * 9
+        v = 256 + ((i+1) // SPAN - 1) * 9
 
     return (u, v, u+9, v+9)
 
 for modid, mod in data.items():
     modsheet = Image.new("RGBA", (256, 256), (0, 0, 0, 0))
     i = 0
+    j = -1
     collapse = {}
 
     for group in mod.values():
         for key, value in group.items():
             if value not in collapse:
-                modsheet.paste(fullsheet.crop(get_icon(value)), get_icon(i))
-                collapse[value] = i
-                i += 1
+                if value >= 0:
+                    mapped = i
+                    i += 1
+                else:
+                    mapped = j
+                    j -= 1
+
+                modsheet.paste(fullsheet.crop(get_icon(value)), get_icon(mapped))
+                collapse[value] = mapped
 
             group[key] = collapse[value]
 
