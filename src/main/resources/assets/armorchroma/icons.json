@@ -1,4 +1,4 @@
-{"minecraft": { // Vanilla
+{"minecraft": {
 	"materials": {
 		"leather": 0,
 		"chainmail": 1,
@@ -31,7 +31,7 @@
 		"platinum_armor": 64,
 		"constantan_armor": 63
 	}
-}, "ic2": { // IndustrialCraft 2
+}, "ic2": {
 	"materials": {
 		"IC2_BRONZE": 86,
 		"IC2_ALLOY": 87
@@ -47,7 +47,7 @@
 		"batpack": 90,
 		"advanced_batpack": 91
 	}
-}, "emt": { // Electro-Magic Tools (not updated)
+}, "emt": {
 	"materials": {"FEATEHRWiNG": 93},
 	"items": {
 		"Electric*": 92,
@@ -110,7 +110,7 @@
 		"athauminite": 148,
 		"tbbloody": 149
 	}
-}, "steamcraft": { // Flaxbeard's Steam Power
+}, "steamcraft": {
 	"materials": {
 		"monacle": 0,
 		"exosuit": 198,
