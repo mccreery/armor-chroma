@@ -8,8 +8,8 @@
 	},
 	"special": {
 		"default": 0,
-		"lmask": -1,
-		"rmask": -2
+		"leadingMask": -2,
+		"trailingMask": -1
 	}
 }, "botania": {
 	"materials": {
