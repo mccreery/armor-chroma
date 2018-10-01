@@ -1,0 +1,8 @@
+{
+    "materials": {
+        "b_elementium": 0,
+        "manasteel": 1,
+        "manaweave": 2,
+        "terrasteel": 3
+    }
+}

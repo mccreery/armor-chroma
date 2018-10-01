@@ -1,0 +1,8 @@
+{
+    "materials": {
+        "brass": 0,
+        "exosuit": 1,
+        "gildedgold": 2,
+        "monacle": 3
+    }
+}

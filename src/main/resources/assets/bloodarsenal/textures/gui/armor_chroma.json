@@ -1,0 +1,8 @@
+{
+    "materials": {
+        "GlassArmor": 0,
+        "ICHOR": 1,
+        "ImbuedArmor": 2,
+        "VampireArmor": 3
+    }
+}

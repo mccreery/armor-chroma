@@ -1,0 +1,12 @@
+{
+    "items": {
+        "*": 0,
+        "*ShadowFortress": 1,
+        "BootsVoidwalker": 2
+    },
+    "materials": {
+        "SanguineArmor": 3,
+        "shadow2": 4,
+        "voidfortress": 5
+    }
+}

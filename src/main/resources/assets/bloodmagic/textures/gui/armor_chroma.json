@@ -1,0 +1,12 @@
+{
+    "items": {
+        "ItemLivingArmour*": 0,
+        "ItemPack*Sacrifice": 1,
+        "ItemSentientArmour*": 2,
+        "bound*": 1,
+        "bound*Earth": 3,
+        "bound*Fire": 4,
+        "bound*Water": 5,
+        "bound*Wind": 6
+    }
+}

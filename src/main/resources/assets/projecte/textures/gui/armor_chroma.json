@@ -1,0 +1,7 @@
+{
+    "items": {
+        "item.pe_dm_armor_*": 0,
+        "item.pe_gem_armor_*": 1,
+        "item.pe_rm_armor_*": 2
+    }
+}

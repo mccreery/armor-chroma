@@ -1,0 +1,16 @@
+{
+    "items": {
+        "advanced_batpack": 0,
+        "batpack": 1,
+        "hazmat_*": 2,
+        "nano_*": 3,
+        "nightvision_goggles": 4,
+        "quantum_*": 5,
+        "rubber_boots": 2,
+        "static_boots": 4
+    },
+    "materials": {
+        "IC2_ALLOY": 6,
+        "IC2_BRONZE": 7
+    }
+}
