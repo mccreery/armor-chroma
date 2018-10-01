@@ -31,8 +31,13 @@ public class ArmorIcon {
     public ArmorIcon(String modid, int i, int color) {
         texture = new ResourceLocation(modid, TEXTURE_PATH);
 
-        u = Math.floorMod(i, SPAN) * ICON_SIZE;
-        v = Math.floorMod(Math.floorDiv(i, SPAN), SPAN) * ICON_SIZE;
+        if(i >= 0) {
+            u = (i % SPAN) * ICON_SIZE;
+            v = (i / SPAN) * ICON_SIZE;
+        } else {
+            u = TEXTURE_SIZE + (i % SPAN) * ICON_SIZE;
+            v = TEXTURE_SIZE + ((i+1) / SPAN - 1) * ICON_SIZE;
+        }
         this.color = color;
     }
 
