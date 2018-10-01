@@ -16,7 +16,7 @@ def get_icon(i):
         v = i // SPAN * 9
     else:
         u = 256 - ((-i - 1) % SPAN) * 9 - 9
-        v = 256 + ((i+1) // SPAN - 1) * 9
+        v = 256 + (int((i+1) / SPAN) - 1) * 9
 
     return (u, v, u+9, v+9)
 
