@@ -1,8 +1,10 @@
 {
-	"materials": {
-		"InfusedIngotArmor": 0,
-		"InfusedArmorEpic": 1,
-		"InfusedArmor": 2
-	},
-	"items": {"magicalcrops_infused*EpicFlight": 3}
+    "items": {
+        "magicalcrops_infused*EpicFlight": 0
+    },
+    "materials": {
+        "InfusedArmor": 1,
+        "InfusedArmorEpic": 2,
+        "InfusedIngotArmor": 3
+    }
 }

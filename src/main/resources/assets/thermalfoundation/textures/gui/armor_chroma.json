@@ -1,0 +1,14 @@
+{
+    "materials": {
+        "bronze_armor": 0,
+        "constantan_armor": 0,
+        "copper_armor": 1,
+        "electrum_armor": 2,
+        "invar_armor": 3,
+        "lead_armor": 4,
+        "nickel_armor": 5,
+        "platinum_armor": 6,
+        "silver_armor": 7,
+        "tin_armor": 8
+    }
+}

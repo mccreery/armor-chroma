@@ -1,17 +1,16 @@
 {
-	"materials": {
-		"IC2_BRONZE": 2,
-		"IC2_ALLOY": 3
-	},
-	"items": {
-		"hazmat_*": 0,
-		"rubber_boots": 0,
-		"nano_*": 4,
-		"quantum_*": 5,
-
-		"nightvision_goggles": 1,
-		"static_boots": 1,
-		"batpack": 6,
-		"advanced_batpack": 7
-	}
+    "items": {
+        "advanced_batpack": 0,
+        "batpack": 1,
+        "hazmat_*": 2,
+        "nano_*": 3,
+        "nightvision_goggles": 4,
+        "quantum_*": 5,
+        "rubber_boots": 2,
+        "static_boots": 4
+    },
+    "materials": {
+        "IC2_ALLOY": 6,
+        "IC2_BRONZE": 7
+    }
 }

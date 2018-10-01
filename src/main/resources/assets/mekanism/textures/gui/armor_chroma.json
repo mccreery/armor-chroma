@@ -1,8 +1,8 @@
 {
-	"materials": {
-		"gasmask": 6,
-		"scubatank": 6,
-		"jetpack": 7,
-		"frictionboots": 7
-	}
+    "materials": {
+        "frictionboots": 0,
+        "gasmask": 1,
+        "jetpack": 0,
+        "scubatank": 1
+    }
 }

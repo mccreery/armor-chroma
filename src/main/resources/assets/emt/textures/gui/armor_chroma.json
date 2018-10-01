@@ -1,0 +1,10 @@
+{
+    "items": {
+        "*Nano*": 0,
+        "*Quantum*": 1,
+        "Electric*": 2
+    },
+    "materials": {
+        "FEATEHRWiNG": 3
+    }
+}

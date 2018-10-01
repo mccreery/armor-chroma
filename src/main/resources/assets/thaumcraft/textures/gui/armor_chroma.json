@@ -1,0 +1,13 @@
+{
+    "items": {
+        "*": 0,
+        "BootsTraveller": 1,
+        "HoverHarness": 1
+    },
+    "materials": {
+        "fortress": 2,
+        "special": 3,
+        "thaumium": 4,
+        "void": 5
+    }
+}

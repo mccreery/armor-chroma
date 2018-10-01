@@ -1,0 +1,14 @@
+{
+    "items": {
+        "item.steeleaf*": 0
+    },
+    "materials": {
+        "arctic": 1,
+        "fiery": 2,
+        "ironwood": 3,
+        "knightmetal": 4,
+        "knightphantom": 5,
+        "naga_scale": 6,
+        "yeti": 7
+    }
+}

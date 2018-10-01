@@ -1,0 +1,18 @@
+{
+    "materials": {
+        "amethyst": 0,
+        "emerald": 1,
+        "experience": 1,
+        "lapis": 2,
+        "lavaeel": 3,
+        "mobzilla": 4,
+        "mothscale": 5,
+        "peacock": 6,
+        "pink": 7,
+        "queen": 8,
+        "royal": 9,
+        "ruby": 10,
+        "tigerseye": 11,
+        "ultimate": 12
+    }
+}

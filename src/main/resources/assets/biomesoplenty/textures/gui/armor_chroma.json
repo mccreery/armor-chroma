@@ -1,9 +1,11 @@
 {
-	"materials": {"biomesoplenty:mud_armor": 1},
-	"items": {
-		"amethyst*": 0,
-		"wading_boots": 2,
-		"flippers": 3,
-		"*_flower_band": 4
-	}
+    "items": {
+        "*_flower_band": 0,
+        "amethyst*": 1,
+        "flippers": 2,
+        "wading_boots": 3
+    },
+    "materials": {
+        "biomesoplenty:mud_armor": 4
+    }
 }

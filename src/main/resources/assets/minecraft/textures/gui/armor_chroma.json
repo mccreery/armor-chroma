@@ -1,13 +1,13 @@
 {
     "materials": {
-        "leather": 0,
-        "chainmail": 1,
-        "iron": 2,
-        "gold": 3,
-        "diamond": 4
+        "chainmail": 0,
+        "diamond": 1,
+        "gold": 2,
+        "iron": 3,
+        "leather": 4
     },
     "special": {
-        "default": 2,
+        "default": 3,
         "leadingMask": -1,
         "trailingMask": -2
     }
