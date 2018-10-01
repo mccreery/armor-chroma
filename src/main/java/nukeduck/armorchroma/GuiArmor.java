@@ -28,17 +28,22 @@ import static org.lwjgl.opengl.GL11.glRotatef;
 import static org.lwjgl.opengl.GL11.glScalef;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Map.Entry;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeMap;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.GuiIngameForge;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ISpecialArmor;
 import nukeduck.armorchroma.config.ArmorChromaConfig;
 import nukeduck.armorchroma.config.ArmorIcon;
@@ -72,21 +77,20 @@ public class GuiArmor extends Gui {
 
 		// Total points in all rows so far
 		int barPoints = 0;
-		int[] armorPoints = getBarPoints(MINECRAFT.player);
 
+		Map<EntityEquipmentSlot, Integer> pointsMap = getArmorPoints(MINECRAFT.player);
+
+		// TODO remove zLevel magic number
 		zLevel = -7;
-		for(int i = 0; i < MINECRAFT.player.inventory.armorInventory.size(); i++) {
-			if(armorPoints[i] > 0) {
-				if(barPoints == 0) { // Draw background
-					drawBackground(left, top, armorPoints[4]); // levels
-					++zLevel;
-				}
+		// TODO compression
+		drawBackground(left, top, 0/*armorPoints[4]*/); // levels
+		++zLevel;
 
-				drawPiece(left, top, barPoints, armorPoints[i], MINECRAFT.player.inventory.armorItemInSlot(i));
-				barPoints += armorPoints[i];
+		for(Entry<EntityEquipmentSlot, Integer> entry : pointsMap.entrySet()) {
+			drawPiece(left, top, barPoints, entry.getValue(), MINECRAFT.player.getItemStackFromSlot(entry.getKey()));
+			barPoints += entry.getValue();
 
-				++zLevel; // Make sure blending works with GL_EQUAL
-			}
+			++zLevel; // Make sure blending works with GL_EQUAL
 		}
 
 		// Let other bars draw in the correct position
@@ -171,51 +175,30 @@ public class GuiArmor extends Gui {
 	 * to be shown. Will skip full bars if compression is turned on
 	 * @return The player's armor points to display in the bar, along with
 	 * the number of full bars skipped at index {@code 4} */
-	private int[] getBarPoints(EntityPlayer player) {
-		int[] points = new int[5]; // 5th slot stores bar levels
-		int i = 0;
-		points[4] = 0;
+	private Map<EntityEquipmentSlot, Integer> getArmorPoints(EntityPlayer player) {
+		// TODO compression
+		Map<EntityEquipmentSlot, Integer> pointsMap = new TreeMap<>();
 
-		// Skip full bars if compressing
-		if(ArmorChromaConfig.compressBar) {
-			int ignore = ForgeHooks.getTotalArmorValue(player) - 1;
-			ignore /= 20; // Number of full bars to ignore
+		AttributeMap attributes = new AttributeMap();
+		IAttributeInstance armor = attributes.registerAttribute(SharedMonsterAttributes.ARMOR);
 
-			if(ignore > 0) {
-				points[4] = ignore;
-				ignore *= 20;
+		int attrLast = (int)armor.getAttributeValue();
 
-				for(; ignore > 0; i++) {
-					ignore -= getArmorPoints(player, i);
-				}
-				// Put the overflow back in the bar
-				points[i-1] = -ignore;
+		for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+			ItemStack stack = player.getItemStackFromSlot(slot);
+			attributes.applyAttributeModifiers(stack.getAttributeModifiers(slot));
+
+			int attrNext = (int)armor.getAttributeValue();
+			int points = attrNext - attrLast;
+			attrLast = attrNext;
+
+			if(slot.getSlotType() == EntityEquipmentSlot.Type.ARMOR && stack.getItem() instanceof ISpecialArmor) {
+				points += ((ISpecialArmor)stack.getItem()).getArmorDisplay(player, stack, slot.getIndex());
 			}
+
+			if(points > 0) pointsMap.put(slot, points);
 		}
-
-		// Fill in remaining slots
-		for(; i < 4; i++) {
-			points[i] = getArmorPoints(player, i);
-		}
-		return points;
-	}
-
-	/** @return The points gained from a single item in the player's armor
-	 * @see ForgeHooks#getTotalArmorValue() */
-	private static int getArmorPoints(EntityPlayer player, int slot) {
-		ItemStack stack = player.inventory.armorItemInSlot(slot);
-
-		if(stack != null) {
-			Item item = stack.getItem();
-
-			// Allow for custom calculations
-			if(item instanceof ISpecialArmor) {
-				return ((ISpecialArmor)item).getArmorDisplay(player, stack, slot);
-			} else if(item instanceof ItemArmor) {
-				return ((ItemArmor)item).damageReduceAmount;
-			}
-		}
-		return 0;
+		return pointsMap;
 	}
 
 	public void drawMaskedIcon(int x, int y, ArmorIcon icon, ArmorIcon mask) {
