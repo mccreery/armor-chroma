@@ -1,6 +1,7 @@
 package nukeduck.armorchroma.config;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -37,12 +38,35 @@ public class IconData {
                             a.putAll(b);
                             return a;
                         });
+                    } catch(IOException e) {
+                        // If an error is caught here, continue to read the other files
+                        ArmorChroma.getLogger().error("Loading modid {}", modid, e);
                     }
                 }
+            } catch(FileNotFoundException e) {
+                // Thrown when the file is missing from all resource packs
+                if(MINECRAFT.equals(modid)) {
+                    throw new RuntimeException("Missing fallback icons. The mod is damaged", e);
+                }
             } catch(IOException e) {
-                ArmorChroma.getLogger().error("Unable to load icons for modid " + modid, e);
+                // If an error is caught here, no files can be read
+                ArmorChroma.getLogger().error("Loading modid {}", modid, e);
+            }
+
+            if(MINECRAFT.equals(modid)) {
+                IconTable mod = mods.get(modid);
+
+                if(mod == null ||
+                        mod.getSpecialIndex("default") == null ||
+                        mod.getSpecialIndex("leadingMask") == null ||
+                        mod.getSpecialIndex("trailingMask") == null) {
+                    // This should never happen unless the mod has been edited
+                    throw new RuntimeException("Missing fallback icons. The mod is damaged");
+                }
             }
         }
+        // Ignore modid minecraft
+        ArmorChroma.getLogger().info("Loaded {} mods", mods.size() - 1);
     }
 
     /** @return The armor icon corresponding to {@code stack} */
