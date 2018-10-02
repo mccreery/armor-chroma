@@ -28,8 +28,9 @@ import static org.lwjgl.opengl.GL11.glRotatef;
 import static org.lwjgl.opengl.GL11.glScalef;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
@@ -78,12 +79,13 @@ public class GuiArmor extends Gui {
 		// Total points in all rows so far
 		int barPoints = 0;
 
-		Map<EntityEquipmentSlot, Integer> pointsMap = getArmorPoints(MINECRAFT.player);
+		Map<EntityEquipmentSlot, Integer> pointsMap = new LinkedHashMap<>();
+		int totalPoints = getArmorPoints(MINECRAFT.player, pointsMap);
+		int compressedRows = ArmorChromaConfig.compressBar ? compressRows(pointsMap, totalPoints) : 0;
 
 		// TODO remove zLevel magic number
 		zLevel = -7;
-		// TODO compression
-		drawBackground(left, top, 0/*armorPoints[4]*/); // levels
+		drawBackground(left, top, compressedRows);
 		++zLevel;
 
 		for(Entry<EntityEquipmentSlot, Integer> entry : pointsMap.entrySet()) {
@@ -171,14 +173,12 @@ public class GuiArmor extends Gui {
 		}
 	}
 
-	/** Searches the player's armor inventory to work out how many points need
-	 * to be shown. Will skip full bars if compression is turned on
-	 * @return The player's armor points to display in the bar, along with
-	 * the number of full bars skipped at index {@code 4} */
-	private Map<EntityEquipmentSlot, Integer> getArmorPoints(EntityPlayer player) {
-		// TODO compression
-		Map<EntityEquipmentSlot, Integer> pointsMap = new TreeMap<>();
-
+	/** Finds all items in the player's equipment slots that provide armor
+	 *
+	 * @param player The player holding the items
+	 * @param pointsMap The map of each slot's points
+	 * @return The total number of armor points the player has */
+	private int getArmorPoints(EntityPlayer player, Map<EntityEquipmentSlot, Integer> pointsMap) {
 		AttributeMap attributes = new AttributeMap();
 		IAttributeInstance armor = attributes.registerAttribute(SharedMonsterAttributes.ARMOR);
 
@@ -198,7 +198,29 @@ public class GuiArmor extends Gui {
 
 			if(points > 0) pointsMap.put(slot, points);
 		}
-		return pointsMap;
+		return attrLast;
+	}
+
+	/** Removes leading full rows from the points map
+	 * @param pointsMap The map of slots to points, traversed in entrySet order
+	 * @return The number of compressed rows */
+	private int compressRows(Map<EntityEquipmentSlot, Integer> pointsMap, int totalPoints) {
+		int compressedRows = (totalPoints - 1) / 20;
+		int compressedPoints = compressedRows * 20;
+		Iterator<Entry<EntityEquipmentSlot, Integer>> it = pointsMap.entrySet().iterator();
+
+		for(int i = 0; i < compressedPoints;) {
+			Entry<EntityEquipmentSlot, Integer> entry = it.next();
+			int d = Math.min(compressedPoints - i, entry.getValue());
+
+			if(d == entry.getValue()) {
+				it.remove();
+			} else {
+				entry.setValue(entry.getValue() - d);
+			}
+			i += d;
+		}
+		return compressedRows;
 	}
 
 	public void drawMaskedIcon(int x, int y, ArmorIcon icon, ArmorIcon mask) {
