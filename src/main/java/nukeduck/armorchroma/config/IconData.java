@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
@@ -38,7 +40,7 @@ public class IconData {
                             a.putAll(b);
                             return a;
                         });
-                    } catch(IOException e) {
+                    } catch(JsonSyntaxException | JsonIOException | IOException e) {
                         // If an error is caught here, continue to read the other files
                         ArmorChroma.getLogger().error("Loading modid {}", modid, e);
                     }
