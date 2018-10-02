@@ -43,28 +43,26 @@ public class IconData {
                         ArmorChroma.getLogger().error("Loading modid {}", modid, e);
                     }
                 }
-            } catch(FileNotFoundException e) {
-                // Thrown when the file is missing from all resource packs
-                if(MINECRAFT.equals(modid)) {
-                    throw new RuntimeException("Missing fallback icons. The mod is damaged", e);
-                }
             } catch(IOException e) {
-                // If an error is caught here, no files can be read
-                ArmorChroma.getLogger().error("Loading modid {}", modid, e);
-            }
-
-            if(MINECRAFT.equals(modid)) {
-                IconTable mod = mods.get(modid);
-
-                if(mod == null ||
-                        mod.getSpecialIndex("default") == null ||
-                        mod.getSpecialIndex("leadingMask") == null ||
-                        mod.getSpecialIndex("trailingMask") == null) {
-                    // This should never happen unless the mod has been edited
-                    throw new RuntimeException("Missing fallback icons. The mod is damaged");
+                // Mod is either not present (FileNotFoundException) or failed
+                if(MINECRAFT.equals(modid)) {
+                    // As below, but with extra information
+                    throw new RuntimeException("Missing fallback icons. The mod is damaged", e);
+                } else if(!(e instanceof FileNotFoundException)) {
+                    ArmorChroma.getLogger().error("Loading modid {}", modid, e);
                 }
             }
         }
+
+        IconTable minecraft = mods.get(MINECRAFT);
+        if(minecraft == null ||
+                minecraft.getSpecialIndex("default") == null ||
+                minecraft.getSpecialIndex("leadingMask") == null ||
+                minecraft.getSpecialIndex("trailingMask") == null) {
+            // This should never happen unless the mod has been edited
+            throw new RuntimeException("Missing fallback icons. The mod is damaged");
+        }
+
         // Ignore modid minecraft
         ArmorChroma.getLogger().info("Loaded {} mods", mods.size() - 1);
     }
