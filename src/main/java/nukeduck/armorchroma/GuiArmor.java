@@ -83,17 +83,15 @@ public class GuiArmor extends Gui {
 		int totalPoints = getArmorPoints(MINECRAFT.player, pointsMap);
 		int compressedRows = ArmorChromaConfig.compressBar ? compressRows(pointsMap, totalPoints) : 0;
 
-		// TODO remove zLevel magic number
-		zLevel = -7;
-		drawBackground(left, top, compressedRows);
-		++zLevel;
+		// Accounts for the +2 glint rect offset
+		zLevel = -2;
 
 		for(Entry<EntityEquipmentSlot, Integer> entry : pointsMap.entrySet()) {
 			drawPiece(left, top, barPoints, entry.getValue(), MINECRAFT.player.getItemStackFromSlot(entry.getKey()));
 			barPoints += entry.getValue();
-
-			++zLevel; // Make sure blending works with GL_EQUAL
 		}
+		// Most negative zLevel here
+		drawBackground(left, top, compressedRows);
 
 		// Let other bars draw in the correct position
 		GuiIngameForge.left_height += (barPoints-1) / 20 * ROW_SPACING + 10;
@@ -127,10 +125,10 @@ public class GuiArmor extends Gui {
 		// Repeatedly fill rows when possible
 		while((space = 20 - (barPoints % 20)) <= stackPoints) {
 			drawPartialRow(left, top, 20 - space, space, stack);
+			zLevel -= 3; // Move out of range of glint offset
 
 			// Move up a row
 			top -= ROW_SPACING;
-			zLevel -= 6;
 			barPoints += space;
 			stackPoints -= space;
 		}
@@ -138,6 +136,7 @@ public class GuiArmor extends Gui {
 		// Whatever's left over (doesn't fill the whole row)
 		if(stackPoints > 0) {
 			drawPartialRow(left, top, 20 - space, stackPoints, stack);
+			--zLevel;
 		}
 	}
 
