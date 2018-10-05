@@ -2,6 +2,16 @@
 
 Different game version branches will show releases for their respective version.
 
+## [1.4]
+### Added
+- Resource pack support
+- Forge config menu support
+### Changed
+- Move icon data to a per-mod file
+- Missing icons fall back to iron
+### FIxed
+- Armor attributes (including main and offhand)
+
 ## [1.3] - 2017-12-17
 ### Added
 - New option where multiple rows of armor will collapse, showing a different border
