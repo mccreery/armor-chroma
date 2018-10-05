@@ -10,7 +10,7 @@ buildscript {
 
 apply plugin: "net.minecraftforge.gradle.forge"
 
-version          = "1.3"
+version          = "1.4-beta"
 group            = "nukeduck.armorchroma"
 archivesBaseName = "armorchroma"
 

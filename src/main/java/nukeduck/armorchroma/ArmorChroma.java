@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import nukeduck.armorchroma.config.IconData;
 
-@Mod(modid = ArmorChroma.MODID, name = "Armor Chroma", version = "1.3", acceptedMinecraftVersions = "[1.12,1.13)")
+@Mod(modid = ArmorChroma.MODID, name = "Armor Chroma", version = "1.4-beta", acceptedMinecraftVersions = "[1.12,1.13)")
 public class ArmorChroma {
 	public static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
