@@ -1,34 +1,48 @@
 buildscript {
-	repositories {
-		jcenter()
-		maven {url = "http://files.minecraftforge.net/maven"}
-	}
-		dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-	}
+    repositories {
+        jcenter()
+        maven { url = 'http://files.minecraftforge.net/maven' }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
 }
 
-apply plugin: "net.minecraftforge.gradle.forge"
+apply plugin: 'net.minecraftforge.gradle.forge'
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
-version          = "1.4-beta"
-group            = "nukeduck.armorchroma"
-archivesBaseName = "armorchroma"
+// Version information
+ext {
+    mcVersion = '1.12.2'
+    forgeVersion = '14.23.4.2710'
+    modVersion = '1.4'
+    mcpMappings = 'snapshot_20171003'
+}
+
+// JAR filenames and Maven coordinates
+archivesBaseName = 'armorchroma'
+group = 'nukeduck.armorchroma'
+version = "${project.ext.mcVersion}-${project.ext.modVersion}"
 
 minecraft {
-	version = "1.12.2-14.23.1.2555"
-	runDir  = "run"
-	mappings = "snapshot_20171003"
+    version = "${project.ext.mcVersion}-${project.ext.forgeVersion}"
+    mappings = project.ext.mcpMappings
+    runDir = 'run'
 }
 
-jar.archiveName = archivesBaseName + "-" + project.version + "-" + project.minecraft.version + ".jar"
-
 processResources {
-	inputs.property "version", project.version
-	inputs.property "mcversion", project.minecraft.version
+    // this will ensure that this task is redone when the versions change.
+    inputs.property 'modVersion', project.version
+    inputs.property 'mcVersion', project.minecraft.version
 
-	from(sourceSets.main.resources.srcDirs) {
-		include "mcmod.info"
-		expand "version": project.version, "mcversion": project.minecraft.version
-	}
-	from(sourceSets.main.resources.srcDirs) {exclude "mcmod.info"}
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand project.ext.properties
+    }
+
+    // copy everything else except the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
 }
