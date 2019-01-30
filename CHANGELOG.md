@@ -2,7 +2,10 @@
 
 Different game version branches will show releases for their respective version.
 
-## [1.4]
+## [1.4] - 2019-01-29
+This release is a full release version of the previous release and does not have any changes.
+
+## [1.4-beta] - 2018-10-05
 ### Added
 - Resource pack support
 - Forge config menu support
