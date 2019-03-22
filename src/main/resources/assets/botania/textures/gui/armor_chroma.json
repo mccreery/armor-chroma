@@ -1,8 +1,8 @@
 {
     "materials": {
-        "b_elementium": 0,
-        "manasteel": 1,
-        "manaweave": 2,
-        "terrasteel": 3
+        "manasteel": 0,
+        "terrasteel": 1,
+        "b_elementium": 2,
+        "manaweave": 3
     }
 }
