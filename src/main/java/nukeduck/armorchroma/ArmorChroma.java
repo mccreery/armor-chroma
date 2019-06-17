@@ -3,6 +3,7 @@ package nukeduck.armorchroma;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.util.text.TextFormatting;
@@ -50,7 +51,11 @@ public class ArmorChroma {
 	public void onRenderOverlay(RenderGameOverlayEvent.Pre e) {
 		if(e.getType() == ElementType.ARMOR) {
 			e.setCanceled(true); // Don't want anything else rendering on top
-			GUI.draw(e.getResolution().getScaledWidth(), e.getResolution().getScaledHeight());
+			//GUI.draw(e.getResolution().getScaledWidth(), e.getResolution().getScaledHeight());
+
+			Minecraft.getMinecraft().getTextureManager().bindTexture(IconManager.getInstance().getTexture());
+			Minecraft.getMinecraft().ingameGUI.drawTexturedModalRect(0, 0, 0, 0, 256, 256);
+			Minecraft.getMinecraft().getTextureManager().bindTexture(Gui.ICONS);
 		}
 	}
 
