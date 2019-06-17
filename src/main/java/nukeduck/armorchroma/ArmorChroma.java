@@ -4,7 +4,6 @@ import org.apache.logging.log4j.Logger;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -40,12 +39,11 @@ public class ArmorChroma {
 	public void init(FMLInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(this);
 
-		IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
-		if(manager instanceof IReloadableResourceManager) {
-			((IReloadableResourceManager)manager).registerReloadListener(ICON_DATA::reload);
-		} else {
-			logger.error("Unable to register icon loader");
-		}
+		IReloadableResourceManager resourceManager = (IReloadableResourceManager)
+				Minecraft.getMinecraft().getResourceManager();
+
+		resourceManager.registerReloadListener(ICON_DATA::reload);
+		resourceManager.registerReloadListener(IconManager.getInstance());
 	}
 
 	@SubscribeEvent
