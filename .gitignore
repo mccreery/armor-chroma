@@ -1,6 +1,28 @@
+# Gradle
 .gradle/
+build/
+out/
+classes/
+
+# Eclipse
+*.launch
+
+# Idea
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VSCode
+.settings/
+.vscode/*
+!.vscode/tasks.json
+bin/
 .classpath
 .project
-.settings/
-bin/
-build/
+
+# MacOS
+*.DS_Store
+
+# Fabric
+run/

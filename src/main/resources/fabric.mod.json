@@ -1,0 +1,24 @@
+{
+    "schemaVersion": 1,
+
+    "id": "armorchroma",
+    "version": "${version}",
+
+    "name": "Armor Chroma",
+    "description": "Adds colors, including leather dye, and enchanted sheen to the in-game armor bar.",
+    "icon": "assets/armorchroma/icon.png",
+    "authors": ["jobicade", "Neecko (port)"],
+    "contact": {
+        "homepage": "https://github.com/A5b84/armorchroma",
+        "issues": "https://github.com/A5b84/armorchroma/issues",
+        "sources": "https://github.com/A5b84/armorchroma"
+    },
+    "license": "LGPL-3.0-or-later",
+
+    "environment": "client",
+    "mixins": ["armorchroma.mixins.json"],
+
+    "entrypoints": {
+        "client": ["nukeduck.armorchroma.ArmorChroma"]
+    }
+}

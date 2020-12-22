@@ -3,18 +3,23 @@ package nukeduck.armorchroma.config;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
+import com.mojang.blaze3d.platform.GlStateManager;
 
-public class Util {
+import net.minecraft.item.DyeableItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.registry.Registry;
+
+public final class Util {
+
+	private Util() {}
+
 	public static int getColor(ItemStack stack) {
 		if(stack != null) {
 			Item item = stack.getItem();
 
-			if(item instanceof ItemArmor) {
-				return ((ItemArmor)item).getColor(stack);
+			if(item instanceof DyeableItem) {
+				return ((DyeableItem) item).getColor(stack);
 			}
 		}
 		return 0xffffff;
@@ -24,11 +29,13 @@ public class Util {
 		int r = (color >> 16) & 0xff;
 		int g = (color >> 8) & 0xff;
 		int b = color & 0xff;
-		GlStateManager.color(r / 255f, g / 255f, b / 255f, 1);
+		GlStateManager.color4f(r / 255f, g / 255f, b / 255f, 1);
 	}
 
 	public static String getModid(ItemStack stack) {
-        return stack != null ? stack.getItem().getRegistryName().getResourceDomain() : null;
+		return stack != null
+			? Registry.ITEM.getId(stack.getItem()).getNamespace()
+			: null;
 	}
 
 	public static <V> V getGlob(Map<String, V> map, String string) {

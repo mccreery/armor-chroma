@@ -1,8 +1,9 @@
 package nukeduck.armorchroma.config;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Identifier;
 
 public class ArmorIcon {
     private static final int TEXTURE_SIZE = 256;
@@ -12,7 +13,7 @@ public class ArmorIcon {
 
     private static final String TEXTURE_PATH = "textures/gui/armor_chroma.png";
 
-    public final ResourceLocation texture;
+    public final Identifier texture;
     public final int u, v;
     public final int color;
 
@@ -29,7 +30,7 @@ public class ArmorIcon {
     }
 
     public ArmorIcon(String modid, int i, int color) {
-        texture = new ResourceLocation(modid, TEXTURE_PATH);
+        texture = new Identifier(modid, TEXTURE_PATH);
 
         if(i >= 0) {
             u = (i % SPAN) * ICON_SIZE;
@@ -41,9 +42,9 @@ public class ArmorIcon {
         this.color = color;
     }
 
-    public void draw(Gui gui, int x, int y) {
-        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+    public void draw(MatrixStack matrices, DrawableHelper gui, int x, int y) {
+        MinecraftClient.getInstance().getTextureManager().bindTexture(texture);
         Util.setColor(color);
-        gui.drawTexturedModalRect(x, y, u, v, ICON_SIZE, ICON_SIZE);
+        gui.drawTexture(matrices, x, y, u, v, ICON_SIZE, ICON_SIZE);
     }
 }

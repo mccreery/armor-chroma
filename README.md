@@ -1,5 +1,3 @@
 # Armor Chroma
 
-![Minecraft version](https://img.shields.io/badge/minecraft-1.12.2-69C12E.svg) ![GitHub release](https://img.shields.io/github/release/mccreery/armor-chroma.svg)
-
-A Forge-based Minecraft mod to improve on vanilla's default armor bar.
+Fabric port of [jobicade](https://www.curseforge.com/members/jobicade/projects)'s [Armor Chroma](https://github.com/mccreery/armor-chroma) Minecraft mod to improve on vanilla's default armor bar.
