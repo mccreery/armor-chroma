@@ -19,6 +19,7 @@
     "mixins": ["armorchroma.mixins.json"],
 
     "entrypoints": {
-        "client": ["nukeduck.armorchroma.ArmorChroma"]
+        "client": ["nukeduck.armorchroma.ArmorChroma"],
+        "modmenu": ["nukeduck.armorchroma.config.ModMenuIntegration"]
     }
 }

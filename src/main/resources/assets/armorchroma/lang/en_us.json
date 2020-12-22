@@ -1,5 +1,10 @@
 {
-    "armorchroma.config.renderGlint": "Render Glint",
-    "armorchroma.config.compressBar": "Compress Bar",
+    "text.autoconfig.armorchroma.title": "Armor Chroma Config",
+    "text.autoconfig.armorchroma.option.enabled": "Enable mod",
+    "text.autoconfig.armorchroma.option.renderGlint": "Render Glint",
+    "text.autoconfig.armorchroma.option.renderGlint.@Tooltip": "Display enchanted glint",
+    "text.autoconfig.armorchroma.option.compressBar": "Compress Bar",
+    "text.autoconfig.armorchroma.option.compressBar.@Tooltip": "Compress the bar into different colored borders when your armor exceeds 20",
+
     "armorchroma.tooltip.material": "Armor Material: %s"
 }

@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.player.PlayerEntity;
 import nukeduck.armorchroma.ArmorChroma;
 
 @Mixin(InGameHud.class)
@@ -41,33 +42,46 @@ public abstract class InGameHudMixin {
      */
     @Redirect(method = "renderStatusBars",
         at = @At(value = "INVOKE", target = DRAW_TEXTURE_DESCRIPTOR, ordinal = 0))
-    private void drawTextureProxy0(InGameHud hud, MatrixStack matrices, int x, int y, int u, int v, int w, int h) {
-        top = y;
+    private void drawTextureProxy0(InGameHud hud, MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
+        if (ArmorChroma.config.enabled) {
+            top = y;
+        } else {
+            // Comportement vanilla
+            hud.drawTexture(matrices, x, y, u, v, width, height);
+        }
     }
 
     /** @see #drawTextureProxy0 */
     @Redirect(method = "renderStatusBars",
         at = @At(value = "INVOKE", target = DRAW_TEXTURE_DESCRIPTOR, ordinal = 1))
-    private void drawTextureProxy1(InGameHud hud, MatrixStack matrices, int x, int y, int u, int v, int w, int h) {
-        drawTextureProxy0(hud, matrices, x, y, u, v, w, h);
+    private void drawTextureProxy1(InGameHud hud, MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
+        drawTextureProxy0(hud, matrices, x, y, u, v, width, height);
     }
 
     /** @see #drawTextureProxy0 */
     @Redirect(method = "renderStatusBars",
         at = @At(value = "INVOKE", target = DRAW_TEXTURE_DESCRIPTOR, ordinal = 2))
-    private void drawTextureProxy2(InGameHud hud, MatrixStack matrices, int x, int y, int u, int v, int w, int h) {
-        drawTextureProxy0(hud, matrices, x, y, u, v, w, h);
+    private void drawTextureProxy2(InGameHud hud, MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
+        drawTextureProxy0(hud, matrices, x, y, u, v, width, height);
     }
 
     /** Affiche les trucs d'armure en couleur et tout */
     @Inject(method = "renderStatusBars",
         at = @At(value = "INVOKE", target = "net/minecraft/util/profiler/Profiler.swap(Ljava/lang/String;)V", ordinal = 0))
     private void renderArmor(MatrixStack matrices, CallbackInfo info) {
-        ArmorChroma.GUI.draw(
-            matrices,
-            client.getWindow().getScaledWidth(),
-            top
-        );
+        if (ArmorChroma.config.enabled && getCameraPlayer().getArmor() > 0) {
+            ArmorChroma.GUI.draw(
+                matrices,
+                client.getWindow().getScaledWidth(),
+                top
+            );
+        }
+    }
+
+
+
+    @Shadow private PlayerEntity getCameraPlayer() {
+       return null;
     }
 
 }

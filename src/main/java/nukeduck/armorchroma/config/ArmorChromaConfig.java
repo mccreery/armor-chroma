@@ -1,20 +1,18 @@
 package nukeduck.armorchroma.config;
 
-// @Config(modid = ArmorChroma.MODID)
-// @EventBusSubscriber
-public class ArmorChromaConfig {
-	// @Comment("Display enchanted glint")
-	// @LangKey("armorchroma.config.renderGlint")
-	public static boolean renderGlint = true;
+import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
+import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
+import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry.Gui.Tooltip;
+import nukeduck.armorchroma.ArmorChroma;
 
-	// @Comment("Compress the bar into different colored borders when your armor exceeds 20")
-	// @LangKey("armorchroma.config.compressBar")
-	public static boolean compressBar;
+@Config(name = ArmorChroma.MODID)
+public class ArmorChromaConfig implements ConfigData {
 
-	// @SubscribeEvent
-	// public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-	// 	if(event.getModID().equals(ArmorChroma.MODID)) {
-	// 		ConfigManager.sync(ArmorChroma.MODID, Config.Type.INSTANCE);
-	// 	}
-	// }
+	public boolean enabled = true;
+
+	@Tooltip
+	public boolean renderGlint = true;
+
+	@Tooltip
+	public boolean compressBar = false;
 }

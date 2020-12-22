@@ -1,0 +1,10 @@
+{
+    "text.autoconfig.armorchroma.title": "Configuration de Armor Chroma",
+    "text.autoconfig.armorchroma.option.enabled": "Activer le mod",
+    "text.autoconfig.armorchroma.option.renderGlint": "Afficher le scintillement",
+    "text.autoconfig.armorchroma.option.renderGlint.@Tooltip": "Afficher un scintillement pour les morceaux d'armure enchentés",
+    "text.autoconfig.armorchroma.option.compressBar": "Compresser la barre",
+    "text.autoconfig.armorchroma.option.compressBar.@Tooltip": "Compresse la barre en ajoutant une bordure colorée quand l'armure dépasse 20 points",
+
+    "armorchroma.tooltip.material": "Matériau de l'armure: %s"
+}

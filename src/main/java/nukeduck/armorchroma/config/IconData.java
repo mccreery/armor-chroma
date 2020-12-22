@@ -28,8 +28,8 @@ public class IconData implements SimpleResourceReloadListener<Void> {
     private final Map<String, IconTable> mods = new HashMap<>();
 
     private static final ArmorIcon FALLBACK_ICON = new ArmorIcon(0);
-    public static final String DEFAULT = "default";
-    public static final String MINECRAFT = "minecraft";
+    private static final String DEFAULT = "default";
+    private static final String MINECRAFT = "minecraft";
     private static final Identifier ID = new Identifier(ArmorChroma.MODID, "icondata");
 
     @Override

@@ -1,7 +1,31 @@
 package nukeduck.armorchroma;
 
-import static nukeduck.armorchroma.ArmorChroma.MINECRAFT;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_BLEND;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_CURRENT_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DST_COLOR;
+import static org.lwjgl.opengl.GL11.GL_ENABLE_BIT;
+import static org.lwjgl.opengl.GL11.GL_EQUAL;
+import static org.lwjgl.opengl.GL11.GL_LEQUAL;
+import static org.lwjgl.opengl.GL11.GL_ONE;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_SRC_COLOR;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE;
+import static org.lwjgl.opengl.GL11.GL_TRANSFORM_BIT;
+import static org.lwjgl.opengl.GL11.GL_ZERO;
+import static org.lwjgl.opengl.GL11.glBlendFunc;
+import static org.lwjgl.opengl.GL11.glDepthFunc;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glMatrixMode;
+import static org.lwjgl.opengl.GL11.glPopAttrib;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushAttrib;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glRotatef;
+import static org.lwjgl.opengl.GL11.glScalef;
+import static org.lwjgl.opengl.GL11.glTranslatef;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -21,12 +45,12 @@ import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import nukeduck.armorchroma.config.ArmorChromaConfig;
 import nukeduck.armorchroma.config.ArmorIcon;
 import nukeduck.armorchroma.config.Util;
 
 /** Renders the armor bar in the HUD */
 public class GuiArmor extends DrawableHelper {
+
 	private static final Identifier BACKGROUND = new Identifier(ArmorChroma.MODID, "textures/gui/background.png");
 
 	/** {@link ResourceLocation} for item glints
@@ -43,10 +67,12 @@ public class GuiArmor extends DrawableHelper {
 	/** The vertical distance between the top of each row */
 	private static final int ROW_SPACING = 5;
 
+	private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+
 	private static final DefaultAttributeContainer DEFAULT_ATTRIBUTES = DefaultAttributeContainer.builder()
 	.add(EntityAttributes.GENERIC_ARMOR).build();
 
-	/** Render the bar as a full replacement for {@link GuiIngameForge#renderArmor(int, int)} */
+	/** Render the bar as a full replacement for vanilla */
 	public void draw(MatrixStack matrices, int width, int top) {
 		int left = width / 2 - 91;
 
@@ -56,26 +82,26 @@ public class GuiArmor extends DrawableHelper {
 		int barPoints = 0;
 
 		Map<EquipmentSlot, Integer> pointsMap = new LinkedHashMap<>();
-		int totalPoints = getArmorPoints(MINECRAFT.player, pointsMap);
-		int compressedRows = ArmorChromaConfig.compressBar ? compressRows(pointsMap, totalPoints) : 0;
+		int totalPoints = getArmorPoints(CLIENT.player, pointsMap);
+		int compressedRows = ArmorChroma.config.compressBar ? compressRows(pointsMap, totalPoints) : 0;
 
 		// Accounts for the +2 glint rect offset
 		setZOffset(-2);
 
 		for(Entry<EquipmentSlot, Integer> entry : pointsMap.entrySet()) {
-			drawPiece(matrices, left, top, barPoints, entry.getValue(), MINECRAFT.player.getEquippedStack(entry.getKey()));
+			drawPiece(matrices, left, top, barPoints, entry.getValue(), CLIENT.player.getEquippedStack(entry.getKey()));
 			barPoints += entry.getValue();
 		}
 		// Most negative zOffset here
 		drawBackground(matrices, left, top, compressedRows);
 
-		MINECRAFT.getTextureManager().bindTexture(GUI_ICONS_TEXTURE);
+		CLIENT.getTextureManager().bindTexture(GUI_ICONS_TEXTURE);
 		GlStateManager.color4f(1, 1, 1, 1);
 	}
 
 	/** Draws the armor bar background with a border if {@code level > 0} */
 	private void drawBackground(MatrixStack matrices, int x, int y, int level) {
-		MinecraftClient.getInstance().getTextureManager().bindTexture(BACKGROUND);
+		CLIENT.getTextureManager().bindTexture(BACKGROUND);
 
 		// Plain background
 		drawTexture(matrices, x, y, 0, 0, 81, 9);
@@ -116,9 +142,9 @@ public class GuiArmor extends DrawableHelper {
 	 * @param barPoints The points already in the bar */
 	private void drawPartialRow(MatrixStack matrices, int left, int top, int barPoints, int stackPoints, ItemStack stack) {
 		ArmorIcon icon = ArmorChroma.getIconData().getIcon(stack);
-		MinecraftClient.getInstance().getTextureManager().bindTexture(icon.texture);
+		CLIENT.getTextureManager().bindTexture(icon.texture);
 
-		boolean glint = ArmorChromaConfig.renderGlint && stack.hasGlint();
+		boolean glint = ArmorChroma.config.renderGlint && stack.hasGlint();
 
 		if(glint) moveZOffset(2); // Glint rows should appear on top of normal rows
 
@@ -212,7 +238,7 @@ public class GuiArmor extends DrawableHelper {
 
 		glDepthFunc(GL_EQUAL);
 		GlStateManager.blendFuncSeparate(GL_SRC_COLOR, GL_ONE, GL_ONE, GL_ZERO);
-		MINECRAFT.getTextureManager().bindTexture(GLINT);
+		CLIENT.getTextureManager().bindTexture(GLINT);
 		glMatrixMode(GL_TEXTURE); // Scale texture instead of vertex
 		long time = System.currentTimeMillis(); // TODO vérifier qu'y a pas mieux
 
