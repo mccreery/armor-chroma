@@ -12,7 +12,7 @@
         {
             "label": "Build + copie",
             "type": "shell",
-            "command": "./gradlew.bat build; cp ./build/libs/armorchroma-1.0.0+1.4.jar $HOME/AppData/Roaming/.minecraft/mods/",
+            "command": "./gradlew.bat build; cp ./build/libs/armorchroma-1.0.0-1.4.jar $HOME/AppData/Roaming/.minecraft/mods/",
             "group": {
                 "kind": "build",
                 "isDefault": true
