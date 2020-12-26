@@ -69,7 +69,7 @@ public abstract class InGameHudMixin {
     @Inject(method = "renderStatusBars",
         at = @At(value = "INVOKE", target = "net/minecraft/util/profiler/Profiler.swap(Ljava/lang/String;)V", ordinal = 0))
     private void renderArmor(MatrixStack matrices, CallbackInfo info) {
-        if (ArmorChroma.config.enabled && getCameraPlayer().getArmor() > 0) {
+        if (ArmorChroma.config.enabled) {
             ArmorChroma.GUI.draw(
                 matrices,
                 client.getWindow().getScaledWidth(),

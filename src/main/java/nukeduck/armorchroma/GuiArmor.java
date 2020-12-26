@@ -74,6 +74,10 @@ public class GuiArmor extends DrawableHelper {
 
 	/** Render the bar as a full replacement for vanilla */
 	public void draw(MatrixStack matrices, int width, int top) {
+		Map<EquipmentSlot, Integer> pointsMap = new LinkedHashMap<>();
+		int totalPoints = getArmorPoints(CLIENT.player, pointsMap);
+		if (totalPoints <= 0) return;
+
 		int left = width / 2 - 91;
 
 		glEnable(GL_BLEND);
@@ -81,8 +85,6 @@ public class GuiArmor extends DrawableHelper {
 		// Total points in all rows so far
 		int barPoints = 0;
 
-		Map<EquipmentSlot, Integer> pointsMap = new LinkedHashMap<>();
-		int totalPoints = getArmorPoints(CLIENT.player, pointsMap);
 		int compressedRows = ArmorChroma.config.compressBar ? compressRows(pointsMap, totalPoints) : 0;
 
 		// Accounts for the +2 glint rect offset
