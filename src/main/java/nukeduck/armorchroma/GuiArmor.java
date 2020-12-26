@@ -179,13 +179,13 @@ public class GuiArmor extends DrawableHelper {
 		AttributeContainer attributes = new AttributeContainer(DEFAULT_ATTRIBUTES);
 		EntityAttributeInstance armor = attributes.getCustomInstance(EntityAttributes.GENERIC_ARMOR);
 
-		int attrLast = (int) armor.getValue();
+		int attrLast = (int) ((UnclampedEntityAttribute) armor).getUnclampedValue();
 
 		for(EquipmentSlot slot : EquipmentSlot.values()) {
 			ItemStack stack = player.getEquippedStack(slot);
 			attributes.addTemporaryModifiers(stack.getAttributeModifiers(slot));
 
-			int attrNext = (int) armor.getValue();
+			int attrNext = (int) ((UnclampedEntityAttribute) armor).getUnclampedValue();
 			int points = attrNext - attrLast;
 			attrLast = attrNext;
 

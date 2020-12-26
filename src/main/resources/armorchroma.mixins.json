@@ -4,6 +4,7 @@
     "package": "nukeduck.armorchroma.mixin",
     "compatibilityLevel": "JAVA_8",
     "client": [
+        "EntityAttributeInstanceMixin",
         "InGameHudMixin",
         "ItemStackMixin"
     ],
