@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.client.MinecraftClient;
@@ -15,34 +16,24 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import nukeduck.armorchroma.ArmorChroma;
 
+/** Replaces the vanilla armor rendering with the mod's */
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
 
-    @Unique private static final String DRAW_TEXTURE_DESCRIPTOR = "net/minecraft/client/gui/hud/InGameHud.drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V";
+    @Unique private static final String PROFILER_SWAP_DESCRIPTOR = "net/minecraft/util/profiler/Profiler.swap(Ljava/lang/String;)V";
     @Shadow private @Final MinecraftClient client;
 
     @Unique private int top;
 
 
 
-    /**
-     * Empêche le jeu d'afficher l'armure en faisant comme si le
-     * joueur en avait pas
-     * @see InGameHud#renderStatusBars
-     */
-    // @Redirect(method = "renderStatusBars",
-    //     at = @At(value = "INVOKE", target = "net/minecraft/entity/player/PlayerEntity.getArmor()I"))
-    // private int getArmorProxy(PlayerEntity player) {
-    //     return 0;
-    // }
-
-    /**
-     * Annule l'affichage vanilla de l'armure et stocke la position des icônes
-     * @see InGameHud#renderStatusBars
-     */
+    /** Cancels the vanilla armor rendering and stores the bar location
+     * @see InGameHud#renderStatusBars */
     @Redirect(method = "renderStatusBars",
-        at = @At(value = "INVOKE", target = DRAW_TEXTURE_DESCRIPTOR, ordinal = 0))
-    private void drawTextureProxy0(InGameHud hud, MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
+        at = @At(value = "INVOKE", target = "net/minecraft/client/gui/hud/InGameHud.drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"),
+        slice = @Slice(to = @At(value = "INVOKE", target = PROFILER_SWAP_DESCRIPTOR))
+    )
+    private void drawTextureProxy(InGameHud hud, MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
         if (ArmorChroma.config.enabled) {
             top = y;
         } else {
@@ -51,23 +42,10 @@ public abstract class InGameHudMixin {
         }
     }
 
-    /** @see #drawTextureProxy0 */
-    @Redirect(method = "renderStatusBars",
-        at = @At(value = "INVOKE", target = DRAW_TEXTURE_DESCRIPTOR, ordinal = 1))
-    private void drawTextureProxy1(InGameHud hud, MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
-        drawTextureProxy0(hud, matrices, x, y, u, v, width, height);
-    }
-
-    /** @see #drawTextureProxy0 */
-    @Redirect(method = "renderStatusBars",
-        at = @At(value = "INVOKE", target = DRAW_TEXTURE_DESCRIPTOR, ordinal = 2))
-    private void drawTextureProxy2(InGameHud hud, MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
-        drawTextureProxy0(hud, matrices, x, y, u, v, width, height);
-    }
-
-    /** Affiche les trucs d'armure en couleur et tout */
+    /** Renders the bar
+     * @see InGameHud#renderStatusBars */
     @Inject(method = "renderStatusBars",
-        at = @At(value = "INVOKE", target = "net/minecraft/util/profiler/Profiler.swap(Ljava/lang/String;)V", ordinal = 0))
+        at = @At(value = "INVOKE", target = PROFILER_SWAP_DESCRIPTOR, ordinal = 0))
     private void renderArmor(MatrixStack matrices, CallbackInfo info) {
         if (ArmorChroma.config.enabled) {
             ArmorChroma.GUI.draw(

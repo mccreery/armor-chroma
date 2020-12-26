@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import nukeduck.armorchroma.UnclampedEntityAttribute;
 
+/** Exposes the unclamped value of the attribute */
 @Mixin(EntityAttributeInstance.class)
 public abstract class EntityAttributeInstanceMixin implements UnclampedEntityAttribute {
 
@@ -18,6 +19,7 @@ public abstract class EntityAttributeInstanceMixin implements UnclampedEntityAtt
 
 
 
+    /** Stores the unclamped value */
     @Inject(method = "computeValue",
         at = @At(value = "INVOKE", target = "net/minecraft/entity/attribute/EntityAttribute.clamp(D)D"),
         locals = LocalCapture.CAPTURE_FAILHARD)
@@ -27,7 +29,7 @@ public abstract class EntityAttributeInstanceMixin implements UnclampedEntityAtt
 
     @Override
     public double getUnclampedValue() {
-        getValue(); // Recalcule la valeur si nécessaire
+        getValue(); // Compute the unclamped value again if needed
         return unclampedValue;
     }
 

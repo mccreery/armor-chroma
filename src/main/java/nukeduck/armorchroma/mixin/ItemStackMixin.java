@@ -22,7 +22,7 @@ import net.minecraft.util.Formatting;
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
 
-    /** Ajoute le matériau de l'item au tooltip
+    /** Adds the item material to the tooltip
      * @see ItemStack#getTooltip */
     @Inject(method = "getTooltip", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILSOFT)
     private void onGetTooltip(

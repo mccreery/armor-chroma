@@ -8,11 +8,11 @@ import nukeduck.armorchroma.ArmorChroma;
 @Config(name = ArmorChroma.MODID)
 public class ArmorChromaConfig implements ConfigData {
 
-	public boolean enabled = true;
+    public boolean enabled = true;
 
-	@Tooltip
-	public boolean renderGlint = true;
+    @Tooltip
+    public boolean renderGlint = true;
 
-	@Tooltip
-	public boolean compressBar = false;
+    @Tooltip
+    public boolean compressBar = false;
 }

@@ -29,9 +29,9 @@ This release is a full release version of the previous release and does not have
 ## [1.2] - 2016-01-14
 ### Added
 - Mod support:
-	- Mekanism
-	- Mekanism Tools
-	- ProjectE
+    - Mekanism
+    - Mekanism Tools
+    - ProjectE
 ### Fixed
 - Small change in config file parsing
 
@@ -43,25 +43,25 @@ This release is a full release version of the previous release and does not have
 ### Added
 - JSON format icon configuration
 - Mod support:
-	- Biomes O' Plenty
-	- Aether II
-	- OreSpawn
-	- Draconic Evolution
-	- Random Things
-	- Magical Crops
+    - Biomes O' Plenty
+    - Aether II
+    - OreSpawn
+    - Draconic Evolution
+    - Random Things
+    - Magical Crops
 
 ## [1.0.1] - 2015-12-06
 ### Added
 - Mod support:
-	- Botania
-	- Thermal Foundation
-	- IC2
-	- Blood Magic
-	- Blood Arsenal
-	- Thaumcraft
-	- Twilight Forest
-	- Witchery
-	- FSP
+    - Botania
+    - Thermal Foundation
+    - IC2
+    - Blood Magic
+    - Blood Arsenal
+    - Thaumcraft
+    - Twilight Forest
+    - Witchery
+    - FSP
 ### Fixed
 - Config file missing comma
 

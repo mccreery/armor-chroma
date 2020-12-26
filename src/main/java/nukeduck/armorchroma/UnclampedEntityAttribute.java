@@ -1,7 +1,7 @@
 package nukeduck.armorchroma;
 
-/** Permet de récupérer la valeur d'un attribut avant qu'elle soit relimitée
- * (pour {@link nukeduck.armorchroma.mixin.EntityAttributeInstanceMixin EntityAttributeInstanceMixin}) */
+/** Gets the unclamped value of an attribute (for use with
+ * {@link nukeduck.armorchroma.mixin.EntityAttributeInstanceMixin EntityAttributeInstanceMixin}) */
 public interface UnclampedEntityAttribute {
 
     public double getUnclampedValue();
