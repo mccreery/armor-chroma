@@ -1,14 +1,13 @@
 package nukeduck.armorchroma.config;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
-import com.mojang.blaze3d.platform.GlStateManager;
-
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.item.DyeableItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.registry.Registry;
+
+import java.util.Map;
+import java.util.Map.Entry;
 
 public final class Util {
 
@@ -29,7 +28,8 @@ public final class Util {
         int r = (color >> 16) & 0xff;
         int g = (color >> 8) & 0xff;
         int b = color & 0xff;
-        GlStateManager.color4f(r / 255f, g / 255f, b / 255f, 1);
+        //noinspection deprecation
+        RenderSystem.color4f(r / 255f, g / 255f, b / 255f, 1);
     }
 
     public static String getModid(ItemStack stack) {

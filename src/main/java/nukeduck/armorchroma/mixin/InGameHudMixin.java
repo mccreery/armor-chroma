@@ -28,13 +28,13 @@ public abstract class InGameHudMixin {
     /** Cancels the vanilla armor rendering and stores the bar location */
     @Redirect(method = "renderStatusBars",
         at = @At(value = "INVOKE", target = "net/minecraft/client/gui/hud/InGameHud.drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"),
-        slice = @Slice(to = @At(value = "INVOKE", target = PROFILER_SWAP_DESCRIPTOR))
+        slice = @Slice(to = @At(value = "INVOKE", target = PROFILER_SWAP_DESCRIPTOR, ordinal = 0))
     )
     private void drawTextureProxy(InGameHud hud, MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
         if (ArmorChroma.config.isEnabled()) {
             top = y;
         } else {
-            // Comportement vanilla
+            // Vanilla behavior
             hud.drawTexture(matrices, x, y, u, v, width, height);
         }
     }
@@ -44,11 +44,7 @@ public abstract class InGameHudMixin {
         at = @At(value = "INVOKE", target = PROFILER_SWAP_DESCRIPTOR, ordinal = 0))
     private void renderArmor(MatrixStack matrices, CallbackInfo info) {
         if (ArmorChroma.config.isEnabled()) {
-            ArmorChroma.GUI.draw(
-                matrices,
-                client.getWindow().getScaledWidth(),
-                top
-            );
+            ArmorChroma.GUI.draw(matrices, client.getWindow().getScaledWidth(), top);
         }
     }
 

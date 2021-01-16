@@ -1,6 +1,6 @@
 package nukeduck.armorchroma;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -20,7 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static org.lwjgl.opengl.GL11.GL_BLEND;
+import static net.minecraft.client.render.item.ItemRenderer.ENCHANTED_ITEM_GLINT;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_CURRENT_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
@@ -35,10 +35,6 @@ import static org.lwjgl.opengl.GL11.GL_SRC_COLOR;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE;
 import static org.lwjgl.opengl.GL11.GL_TRANSFORM_BIT;
 import static org.lwjgl.opengl.GL11.GL_ZERO;
-import static org.lwjgl.opengl.GL11.glBlendFunc;
-import static org.lwjgl.opengl.GL11.glDepthFunc;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glMatrixMode;
 import static org.lwjgl.opengl.GL11.glPopAttrib;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
 import static org.lwjgl.opengl.GL11.glPushAttrib;
@@ -52,10 +48,6 @@ public class GuiArmor extends DrawableHelper {
 
     private static final Identifier BACKGROUND = new Identifier(ArmorChroma.MODID, "textures/gui/background.png");
 
-    /** {@link Identifier} for item glints
-     * @see #drawTexturedGlintRect(MatrixStack, int, int, int, int, int, int) */
-    private static final Identifier GLINT = new Identifier("textures/misc/enchanted_item_glint.png");
-
     /** A light purple tint used to draw item glints */
     private static final int GLINT_COLOR = 0x61309b;
 
@@ -66,10 +58,11 @@ public class GuiArmor extends DrawableHelper {
     /** The vertical distance between the top of each row */
     private static final int ROW_SPACING = 5;
 
-    private final MinecraftClient client = MinecraftClient.getInstance();
-
-    private static final DefaultAttributeContainer DEFAULT_ATTRIBUTES = DefaultAttributeContainer.builder()
+    /** Fallback attributes required when getting the player's armor */
+    private static final DefaultAttributeContainer FALLBACK_ATTRIBUTES = DefaultAttributeContainer.builder()
     .add(EntityAttributes.GENERIC_ARMOR).build();
+
+    private final MinecraftClient client = MinecraftClient.getInstance();
 
     /** Render the bar as a full replacement for vanilla */
     public void draw(MatrixStack matrices, int width, int top) {
@@ -79,7 +72,7 @@ public class GuiArmor extends DrawableHelper {
 
         int left = width / 2 - 91;
 
-        glEnable(GL_BLEND);
+        RenderSystem.enableBlend();
 
         // Total points in all rows so far
         int barPoints = 0;
@@ -99,7 +92,7 @@ public class GuiArmor extends DrawableHelper {
 
         client.getTextureManager().bindTexture(GUI_ICONS_TEXTURE);
         //noinspection deprecation
-        GlStateManager.color4f(1, 1, 1, 1);
+        RenderSystem.color4f(1, 1, 1, 1);
     }
 
     /** Draws the armor bar background with a border if {@code level > 0} */
@@ -107,7 +100,7 @@ public class GuiArmor extends DrawableHelper {
         client.getTextureManager().bindTexture(BACKGROUND);
 
         // Plain background
-        drawTexture(matrices, x, y, 0, 0, 81, 9);
+        // drawTexture(matrices, x, y, 0, 0, 81, 9);
 
         // Colored border
         if(level > 0) {
@@ -179,7 +172,7 @@ public class GuiArmor extends DrawableHelper {
      * @param pointsMap The map of each slot's points
      * @return The total number of armor points the player has */
     private int getArmorPoints(ClientPlayerEntity player, Map<EquipmentSlot, Integer> pointsMap) {
-        AttributeContainer attributes = new AttributeContainer(DEFAULT_ATTRIBUTES);
+        AttributeContainer attributes = new AttributeContainer(FALLBACK_ATTRIBUTES);
         EntityAttributeInstance armor = attributes.getCustomInstance(EntityAttributes.GENERIC_ARMOR);
         if (armor == null) return 0;
 
@@ -222,12 +215,11 @@ public class GuiArmor extends DrawableHelper {
 
     public void drawMaskedIcon(MatrixStack matrices, int x, int y, ArmorIcon icon, ArmorIcon mask) {
         mask.draw(matrices, this, x, y);
-
-        glDepthFunc(GL_EQUAL);
-        glBlendFunc(GL_DST_COLOR, GL_ZERO);
+        RenderSystem.depthFunc(GL_EQUAL);
+        RenderSystem.blendFunc(GL_DST_COLOR, GL_ZERO);
         icon.draw(matrices, this, x, y);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glDepthFunc(GL_LEQUAL);
+        RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        RenderSystem.depthFunc(GL_LEQUAL);
     }
 
     /** Bits which are modified while rendering item glints, so must be pushed/popped.
@@ -240,10 +232,11 @@ public class GuiArmor extends DrawableHelper {
         // Push bits we modify to restore later on
         glPushAttrib(GL_GLINT_BITS);
 
-        glDepthFunc(GL_EQUAL);
-        GlStateManager.blendFuncSeparate(GL_SRC_COLOR, GL_ONE, GL_ONE, GL_ZERO);
-        client.getTextureManager().bindTexture(GLINT);
-        glMatrixMode(GL_TEXTURE); // Scale texture instead of vertex
+        RenderSystem.depthFunc(GL_EQUAL);
+        RenderSystem.blendFuncSeparate(GL_SRC_COLOR, GL_ONE, GL_ONE, GL_ZERO);
+        client.getTextureManager().bindTexture(ENCHANTED_ITEM_GLINT);
+        //noinspection deprecation
+        RenderSystem.matrixMode(GL_TEXTURE); // Scale texture instead of vertex
         long time = System.currentTimeMillis();
 
         Util.setColor(GLINT_COLOR);
@@ -265,6 +258,16 @@ public class GuiArmor extends DrawableHelper {
         glPopMatrix();
 
         glPopAttrib();
+    }
+
+    @Override
+    public void setZOffset(int zOffset) {
+        super.setZOffset(zOffset);
+    }
+
+    @Override
+    public int getZOffset() {
+        return super.getZOffset();
     }
 
     private void moveZOffset(int z) {
