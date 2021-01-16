@@ -1,5 +1,7 @@
 package nukeduck.armorchroma.mixin;
 
+import net.minecraft.entity.attribute.EntityAttributeInstance;
+import nukeduck.armorchroma.EntityAttributeInstanceAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -8,12 +10,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import nukeduck.armorchroma.UnclampedEntityAttribute;
-
 /** Exposes the unclamped value of the attribute */
 @Mixin(EntityAttributeInstance.class)
-public abstract class EntityAttributeInstanceMixin implements UnclampedEntityAttribute {
+public abstract class EntityAttributeInstanceMixin implements EntityAttributeInstanceAccess {
+
+    @Shadow public abstract double getValue();
 
     @Unique private double unclampedValue;
 
@@ -31,13 +32,6 @@ public abstract class EntityAttributeInstanceMixin implements UnclampedEntityAtt
     public double getUnclampedValue() {
         getValue(); // Compute the unclamped value again if needed
         return unclampedValue;
-    }
-
-
-
-    @Shadow
-    public double getValue() {
-        return 0;
     }
 
 }

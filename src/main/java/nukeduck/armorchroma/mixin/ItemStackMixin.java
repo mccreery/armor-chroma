@@ -1,15 +1,5 @@
 package nukeduck.armorchroma.mixin;
 
-import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
@@ -18,12 +8,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
+import java.util.List;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
 
-    /** Adds the item material to the tooltip
-     * @see ItemStack#getTooltip */
+    @Shadow public abstract Item getItem();
+
+    /** Adds the item material to the tooltip */
     @Inject(method = "getTooltip", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILSOFT)
     private void onGetTooltip(
         @Nullable PlayerEntity player, TooltipContext context,
@@ -39,10 +39,6 @@ public abstract class ItemStackMixin {
                 );
             }
         }
-    }
-
-    @Shadow public Item getItem() {
-        return null;
     }
 
 }

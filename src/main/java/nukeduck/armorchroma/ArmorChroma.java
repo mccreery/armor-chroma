@@ -1,8 +1,5 @@
 package nukeduck.armorchroma;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
 import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
@@ -10,6 +7,8 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.resource.ResourceType;
 import nukeduck.armorchroma.config.ArmorChromaConfig;
 import nukeduck.armorchroma.config.IconData;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ArmorChroma implements ClientModInitializer {
 
