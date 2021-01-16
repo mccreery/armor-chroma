@@ -52,21 +52,21 @@ public class GuiArmor extends DrawableHelper {
 
     private static final Identifier BACKGROUND = new Identifier(ArmorChroma.MODID, "textures/gui/background.png");
 
-    /** {@link ResourceLocation} for item glints
-     * @see #drawTexturedGlintRect(int, int, int, int, int, int) */
+    /** {@link Identifier} for item glints
+     * @see #drawTexturedGlintRect(MatrixStack, int, int, int, int, int, int) */
     private static final Identifier GLINT = new Identifier("textures/misc/enchanted_item_glint.png");
 
     /** A light purple tint used to draw item glints */
     private static final int GLINT_COLOR = 0x61309b;
 
     /** The colors used for the border of the bar at different levels
-     * @see #drawBackground(int, int, int) */
+     * @see #drawBackground(MatrixStack, int, int, int) */
     private static final int[] BG_COLORS = {0x3acaff, 0x3be55a, 0xffff00, 0xff9d00, 0xed3200, 0x7130c1};
 
     /** The vertical distance between the top of each row */
     private static final int ROW_SPACING = 5;
 
-    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+    private final MinecraftClient client = MinecraftClient.getInstance();
 
     private static final DefaultAttributeContainer DEFAULT_ATTRIBUTES = DefaultAttributeContainer.builder()
     .add(EntityAttributes.GENERIC_ARMOR).build();
@@ -74,7 +74,7 @@ public class GuiArmor extends DrawableHelper {
     /** Render the bar as a full replacement for vanilla */
     public void draw(MatrixStack matrices, int width, int top) {
         Map<EquipmentSlot, Integer> pointsMap = new LinkedHashMap<>();
-        int totalPoints = getArmorPoints(CLIENT.player, pointsMap);
+        int totalPoints = getArmorPoints(client.player, pointsMap);
         if (totalPoints <= 0) return;
 
         int left = width / 2 - 91;
@@ -90,19 +90,20 @@ public class GuiArmor extends DrawableHelper {
         setZOffset(-2);
 
         for(Entry<EquipmentSlot, Integer> entry : pointsMap.entrySet()) {
-            drawPiece(matrices, left, top, barPoints, entry.getValue(), CLIENT.player.getEquippedStack(entry.getKey()));
+            drawPiece(matrices, left, top, barPoints, entry.getValue(), client.player.getEquippedStack(entry.getKey()));
             barPoints += entry.getValue();
         }
         // Most negative zOffset here
         drawBackground(matrices, left, top, compressedRows);
 
-        CLIENT.getTextureManager().bindTexture(GUI_ICONS_TEXTURE);
+        client.getTextureManager().bindTexture(GUI_ICONS_TEXTURE);
+        //noinspection deprecation
         GlStateManager.color4f(1, 1, 1, 1);
     }
 
     /** Draws the armor bar background with a border if {@code level > 0} */
     private void drawBackground(MatrixStack matrices, int x, int y, int level) {
-        CLIENT.getTextureManager().bindTexture(BACKGROUND);
+        client.getTextureManager().bindTexture(BACKGROUND);
 
         // Plain background
         drawTexture(matrices, x, y, 0, 0, 81, 9);
@@ -143,7 +144,7 @@ public class GuiArmor extends DrawableHelper {
      * @param barPoints The points already in the bar */
     private void drawPartialRow(MatrixStack matrices, int left, int top, int barPoints, int stackPoints, ItemStack stack) {
         ArmorIcon icon = ArmorChroma.getIconData().getIcon(stack);
-        CLIENT.getTextureManager().bindTexture(icon.texture);
+        client.getTextureManager().bindTexture(icon.texture);
 
         boolean glint = ArmorChroma.config.renderGlint && stack.hasGlint();
 
@@ -180,13 +181,13 @@ public class GuiArmor extends DrawableHelper {
         AttributeContainer attributes = new AttributeContainer(DEFAULT_ATTRIBUTES);
         EntityAttributeInstance armor = attributes.getCustomInstance(EntityAttributes.GENERIC_ARMOR);
 
-        int attrLast = (int) ((UnclampedEntityAttribute) armor).getUnclampedValue();
+        int attrLast = (int) ((EntityAttributeInstanceAccess) armor).getUnclampedValue();
 
         for(EquipmentSlot slot : EquipmentSlot.values()) {
             ItemStack stack = player.getEquippedStack(slot);
             attributes.addTemporaryModifiers(stack.getAttributeModifiers(slot));
 
-            int attrNext = (int) ((UnclampedEntityAttribute) armor).getUnclampedValue();
+            int attrNext = (int) ((EntityAttributeInstanceAccess) armor).getUnclampedValue();
             int points = attrNext - attrLast;
             attrLast = attrNext;
 
@@ -228,7 +229,7 @@ public class GuiArmor extends DrawableHelper {
     }
 
     /** Bits which are modified while rendering item glints, so must be pushed/popped.
-     * @see #drawTexturedGlintRect(int, int, int, int, int, int) */
+     * @see #drawTexturedGlintRect(MatrixStack, int, int, int, int, int, int) */
     private static final int GL_GLINT_BITS = GL_ENABLE_BIT | GL_TRANSFORM_BIT
         | GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_CURRENT_BIT;
 
@@ -239,7 +240,7 @@ public class GuiArmor extends DrawableHelper {
 
         glDepthFunc(GL_EQUAL);
         GlStateManager.blendFuncSeparate(GL_SRC_COLOR, GL_ONE, GL_ONE, GL_ZERO);
-        CLIENT.getTextureManager().bindTexture(GLINT);
+        client.getTextureManager().bindTexture(GLINT);
         glMatrixMode(GL_TEXTURE); // Scale texture instead of vertex
         long time = System.currentTimeMillis();
 
