@@ -5,14 +5,25 @@ import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
 import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry.Gui.Tooltip;
 import nukeduck.armorchroma.ArmorChroma;
 
-@Config(name = ArmorChroma.MODID)
-public class ArmorChromaConfig implements ConfigData {
+public class ArmorChromaConfig {
 
-    public boolean enabled = true;
+    public boolean isEnabled() { return true; }
+    public boolean renderGlint() { return true; }
+    public boolean compressBar() { return false; }
 
-    @Tooltip
-    public boolean renderGlint = true;
+    /** Config class requiring AutoConfig */
+    @SuppressWarnings({"unused", "FieldMayBeFinal"})
+    @Config(name = ArmorChroma.MODID)
+    public static class ArmorChromaAutoConfig extends ArmorChromaConfig implements ConfigData {
 
-    @Tooltip
-    public boolean compressBar = false;
+        private boolean enabled = super.isEnabled();
+        @Tooltip private boolean renderGlint = super.renderGlint();
+        @Tooltip private boolean compressBar = super.compressBar();
+
+        @Override public boolean isEnabled() { return enabled; }
+        @Override public boolean renderGlint() { return renderGlint; }
+        @Override public boolean compressBar() { return compressBar; }
+
+    }
+
 }

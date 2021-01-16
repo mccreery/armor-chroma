@@ -84,12 +84,13 @@ public class GuiArmor extends DrawableHelper {
         // Total points in all rows so far
         int barPoints = 0;
 
-        int compressedRows = ArmorChroma.config.compressBar ? compressRows(pointsMap, totalPoints) : 0;
+        int compressedRows = ArmorChroma.config.compressBar() ? compressRows(pointsMap, totalPoints) : 0;
 
         // Accounts for the +2 glint rect offset
         setZOffset(-2);
 
         for(Entry<EquipmentSlot, Integer> entry : pointsMap.entrySet()) {
+            //noinspection ConstantConditions (nullable stuff)
             drawPiece(matrices, left, top, barPoints, entry.getValue(), client.player.getEquippedStack(entry.getKey()));
             barPoints += entry.getValue();
         }
@@ -143,10 +144,10 @@ public class GuiArmor extends DrawableHelper {
     /** Renders a partial row of icons, {@code stackPoints} wide
      * @param barPoints The points already in the bar */
     private void drawPartialRow(MatrixStack matrices, int left, int top, int barPoints, int stackPoints, ItemStack stack) {
-        ArmorIcon icon = ArmorChroma.getIconData().getIcon(stack);
+        ArmorIcon icon = ArmorChroma.ICON_DATA.getIcon(stack);
         client.getTextureManager().bindTexture(icon.texture);
 
-        boolean glint = ArmorChroma.config.renderGlint && stack.hasGlint();
+        boolean glint = ArmorChroma.config.renderGlint() && stack.hasGlint();
 
         if(glint) moveZOffset(2); // Glint rows should appear on top of normal rows
 
@@ -156,14 +157,14 @@ public class GuiArmor extends DrawableHelper {
         // Drawing icons starts here
 
         if(i == 1) { // leading half icon
-            drawMaskedIcon(matrices, x - 4, top, icon, ArmorChroma.getIconData().getSpecial(Util.getModid(stack), "leadingMask"));
+            drawMaskedIcon(matrices, x - 4, top, icon, ArmorChroma.ICON_DATA.getSpecial(Util.getModid(stack), "leadingMask"));
             x += 4;
         }
         for(; i < stackPoints - 1; i += 2, x += 8) { // Main body icons
             icon.draw(matrices, this, x, top);
         }
         if(i < stackPoints) { // Trailing half icon
-            drawMaskedIcon(matrices, x, top, icon, ArmorChroma.getIconData().getSpecial(Util.getModid(stack), "trailingMask"));
+            drawMaskedIcon(matrices, x, top, icon, ArmorChroma.ICON_DATA.getSpecial(Util.getModid(stack), "trailingMask"));
         }
 
         if(glint) { // Draw one glint quad for the whole row
@@ -180,6 +181,7 @@ public class GuiArmor extends DrawableHelper {
     private int getArmorPoints(ClientPlayerEntity player, Map<EquipmentSlot, Integer> pointsMap) {
         AttributeContainer attributes = new AttributeContainer(DEFAULT_ATTRIBUTES);
         EntityAttributeInstance armor = attributes.getCustomInstance(EntityAttributes.GENERIC_ARMOR);
+        if (armor == null) return 0;
 
         int attrLast = (int) ((EntityAttributeInstanceAccess) armor).getUnclampedValue();
 

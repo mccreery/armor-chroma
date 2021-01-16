@@ -31,7 +31,7 @@ public abstract class InGameHudMixin {
         slice = @Slice(to = @At(value = "INVOKE", target = PROFILER_SWAP_DESCRIPTOR))
     )
     private void drawTextureProxy(InGameHud hud, MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
-        if (ArmorChroma.config.enabled) {
+        if (ArmorChroma.config.isEnabled()) {
             top = y;
         } else {
             // Comportement vanilla
@@ -39,11 +39,11 @@ public abstract class InGameHudMixin {
         }
     }
 
-    /** Renders the modded aarmor bar */
+    /** Renders the modded armor bar */
     @Inject(method = "renderStatusBars",
         at = @At(value = "INVOKE", target = PROFILER_SWAP_DESCRIPTOR, ordinal = 0))
     private void renderArmor(MatrixStack matrices, CallbackInfo info) {
-        if (ArmorChroma.config.enabled) {
+        if (ArmorChroma.config.isEnabled()) {
             ArmorChroma.GUI.draw(
                 matrices,
                 client.getWindow().getScaledWidth(),
