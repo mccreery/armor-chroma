@@ -28,6 +28,7 @@ import static org.lwjgl.opengl.GL11.GL_DST_COLOR;
 import static org.lwjgl.opengl.GL11.GL_ENABLE_BIT;
 import static org.lwjgl.opengl.GL11.GL_EQUAL;
 import static org.lwjgl.opengl.GL11.GL_LEQUAL;
+import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
 import static org.lwjgl.opengl.GL11.GL_ONE;
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
@@ -256,6 +257,11 @@ public class GuiArmor extends DrawableHelper {
         glRotatef(10.0F, 0.0F, 0.0F, 1.0F);
         drawTexture(matrices, x, y, u, v, width, height);
         glPopMatrix();
+
+        RenderSystem.depthFunc(GL_LEQUAL);
+        RenderSystem.defaultBlendFunc();
+        //noinspection deprecation
+        RenderSystem.matrixMode(GL_MODELVIEW);
 
         glPopAttrib();
     }
