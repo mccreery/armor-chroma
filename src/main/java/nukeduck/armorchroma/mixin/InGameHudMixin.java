@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class InGameHudMixin {
 
     @Unique private static final String PROFILER_SWAP_DESCRIPTOR = "net/minecraft/util/profiler/Profiler.swap(Ljava/lang/String;)V";
-    @Unique private int top = -32; // Renders outside of the screen before initialized
+    @Unique private int top = -32; // Renders outside of the screen before initialization
 
     @Shadow @Final private MinecraftClient client;
 

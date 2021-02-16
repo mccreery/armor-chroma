@@ -101,7 +101,9 @@ public class GuiArmor extends DrawableHelper {
         client.getTextureManager().bindTexture(BACKGROUND);
 
         // Plain background
-        // drawTexture(matrices, x, y, 0, 0, 81, 9);
+        if (ArmorChroma.config.renderBackground()) {
+            drawTexture(matrices, x, y, 0, 0, 81, 9);
+        }
 
         // Colored border
         if(level > 0) {
