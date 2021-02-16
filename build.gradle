@@ -12,19 +12,25 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
-// group = project.maven_group
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}" // Fabric Loader
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}" // Fabric API
-    modImplementation "io.github.prospector:modmenu:${project.modmenu_version}" // Mod Menu
+    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}" // Mod Menu
     modApi("me.shedaniel.cloth:config-2:${project.cloth_version}") { // Cloth Config
         exclude(group: "net.fabricmc.fabric-api")
     }
     modApi("me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig1u_version}") { // Auto Config Updated
         exclude(group: "net.fabricmc.fabric-api")
+    }
+}
+
+repositories {
+    maven {
+        name = 'TerraformersMC'
+        url = 'http://maven.terraformersmc.com/'
     }
 }
 
@@ -64,24 +70,3 @@ jar {
         rename { "${it}_${project.archivesBaseName}"}
     }
 }
-
-// configure the maven publication
-// publishing {
-//     publications {
-//         mavenJava(MavenPublication) {
-//             // add all the jars that should be included when publishing to maven
-//             artifact(remapJar) {
-//                 builtBy remapJar
-//             }
-//             artifact(sourcesJar) {
-//                 builtBy remapSourcesJar
-//             }
-//         }
-//     }
-//
-//     // Select the repositories you want to publish to
-//     // To publish to maven local, no extra repositories are necessary. Just use the task `publishToMavenLocal`.
-//     repositories {
-//         // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-//     }
-// }
