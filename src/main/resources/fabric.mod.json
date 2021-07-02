@@ -1,29 +1,29 @@
 {
-    "schemaVersion": 1,
+  "schemaVersion": 1,
+  "id": "armorchroma",
+  "version": "${version}",
 
-    "id": "armorchroma",
-    "version": "${version}",
+  "name": "Armor Chroma",
+  "description": "Adds colors, including leather dye, and enchanted sheen to the in-game armor bar.",
+  "authors": ["jobicade", "Neecko5b84 (port)"],
+  "contact": {
+    "homepage": "https://github.com/A5b84/armor-chroma-fabric",
+    "issues": "https://github.com/A5b84/armor-chroma-fabric/issues",
+    "sources": "https://github.com/A5b84/armor-chroma-fabric"
+  },
 
-    "name": "Armor Chroma",
-    "description": "Adds colors, including leather dye, and enchanted sheen to the in-game armor bar.",
-    "icon": "assets/armorchroma/logo.png",
-    "authors": ["jobicade", "Neecko (port)"],
-    "contact": {
-        "homepage": "https://github.com/A5b84/armor-chroma-fabric",
-        "issues": "https://github.com/A5b84/armor-chroma-fabric/issues",
-        "sources": "https://github.com/A5b84/armor-chroma-fabric"
-    },
-    "license": "GPL-3.0-only",
+  "license": "GPL-3.0-only",
+  "icon": "assets/armorchroma/logo.png",
 
-    "environment": "client",
-    "mixins": ["armorchroma.mixins.json"],
+  "environment": "client",
+  "entrypoints": {
+    "client": ["nukeduck.armorchroma.ArmorChroma"],
+    "modmenu": ["nukeduck.armorchroma.config.ModMenuIntegration"]
+  },
+  "mixins": ["armorchroma.mixins.json"],
 
-    "entrypoints": {
-        "client": ["nukeduck.armorchroma.ArmorChroma"],
-        "modmenu": ["nukeduck.armorchroma.config.ModMenuIntegration"]
-    },
-    "suggests": {
-        "cloth-config2": "*",
-        "autoconfig1u": "*"
-    }
+  "suggests": {
+    "modmenu": "*",
+    "cloth-config2": "*"
+  }
 }
