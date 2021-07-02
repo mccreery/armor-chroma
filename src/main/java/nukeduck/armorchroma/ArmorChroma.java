@@ -1,7 +1,7 @@
 package nukeduck.armorchroma;
 
-import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
-import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.FabricLoader;
@@ -17,6 +17,7 @@ public class ArmorChroma implements ClientModInitializer {
     public static final String MODID = "armorchroma";
     public static final GuiArmor GUI = new GuiArmor();
     public static final Logger LOGGER = LogManager.getLogger();
+    public static final boolean USE_AUTO_CONFIG = FabricLoader.getInstance().isModLoaded("cloth-config2");
     public static ArmorChromaConfig config;
 
     public static final IconData ICON_DATA = new IconData();
@@ -26,7 +27,7 @@ public class ArmorChroma implements ClientModInitializer {
         ResourceManagerHelper manager = ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES);
         manager.registerReloadListener(ICON_DATA);
 
-        if (FabricLoader.getInstance().isModLoaded("autoconfig1u")) {
+        if (USE_AUTO_CONFIG) {
             AutoConfig.register(ArmorChromaAutoConfig.class, GsonConfigSerializer::new);
             config = AutoConfig.getConfigHolder(ArmorChromaAutoConfig.class).getConfig();
         } else {

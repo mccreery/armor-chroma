@@ -28,8 +28,7 @@ public final class Util {
         int r = (color >> 16) & 0xff;
         int g = (color >> 8) & 0xff;
         int b = color & 0xff;
-        //noinspection deprecation
-        RenderSystem.color4f(r / 255f, g / 255f, b / 255f, 1);
+        RenderSystem.setShaderColor(r / 255f, g / 255f, b / 255f, 1);
     }
 
     public static String getModid(ItemStack stack) {

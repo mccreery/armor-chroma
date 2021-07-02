@@ -91,14 +91,13 @@ public class GuiArmor extends DrawableHelper {
         // Most negative zOffset here
         drawBackground(matrices, left, top, compressedRows);
 
-        client.getTextureManager().bindTexture(GUI_ICONS_TEXTURE);
-        //noinspection deprecation
-        RenderSystem.color4f(1, 1, 1, 1);
+        RenderSystem.setShaderTexture(0, GUI_ICONS_TEXTURE);
+        RenderSystem.setShaderColor(1, 1, 1, 1);
     }
 
     /** Draws the armor bar background with a border if {@code level > 0} */
     private void drawBackground(MatrixStack matrices, int x, int y, int level) {
-        client.getTextureManager().bindTexture(BACKGROUND);
+        RenderSystem.setShaderTexture(0, BACKGROUND);
 
         // Plain background
         if (ArmorChroma.config.renderBackground()) {
@@ -141,7 +140,7 @@ public class GuiArmor extends DrawableHelper {
      * @param barPoints The points already in the bar */
     private void drawPartialRow(MatrixStack matrices, int left, int top, int barPoints, int stackPoints, ItemStack stack) {
         ArmorIcon icon = ArmorChroma.ICON_DATA.getIcon(stack);
-        client.getTextureManager().bindTexture(icon.texture);
+        RenderSystem.setShaderTexture(0, icon.texture);
 
         boolean glint = ArmorChroma.config.renderGlint() && stack.hasGlint();
 
@@ -237,7 +236,7 @@ public class GuiArmor extends DrawableHelper {
 
         RenderSystem.depthFunc(GL_EQUAL);
         RenderSystem.blendFuncSeparate(GL_SRC_COLOR, GL_ONE, GL_ONE, GL_ZERO);
-        client.getTextureManager().bindTexture(ENCHANTED_ITEM_GLINT);
+        RenderSystem.setShaderTexture(0, ENCHANTED_ITEM_GLINT);
         //noinspection deprecation
         RenderSystem.matrixMode(GL_TEXTURE); // Scale texture instead of vertex
         long time = System.currentTimeMillis();

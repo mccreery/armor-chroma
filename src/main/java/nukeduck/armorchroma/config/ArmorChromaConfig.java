@@ -1,8 +1,8 @@
 package nukeduck.armorchroma.config;
 
-import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
-import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
-import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry.Gui.Tooltip;
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip;
 import nukeduck.armorchroma.ArmorChroma;
 
 public class ArmorChromaConfig {
@@ -13,7 +13,7 @@ public class ArmorChromaConfig {
     public boolean compressBar() { return false; }
 
     /** Config class requiring AutoConfig */
-    @SuppressWarnings({"unused", "FieldMayBeFinal"})
+    @SuppressWarnings("FieldMayBeFinal")
     @Config(name = ArmorChroma.MODID)
     public static class ArmorChromaAutoConfig extends ArmorChromaConfig implements ConfigData {
 

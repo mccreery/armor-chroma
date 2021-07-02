@@ -1,6 +1,6 @@
 package nukeduck.armorchroma.config;
 
-import net.minecraft.client.MinecraftClient;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
@@ -43,7 +43,7 @@ public class ArmorIcon {
     }
 
     public void draw(MatrixStack matrices, DrawableHelper gui, int x, int y) {
-        MinecraftClient.getInstance().getTextureManager().bindTexture(texture);
+        RenderSystem.setShaderTexture(0, texture);
         Util.setColor(color);
         gui.drawTexture(matrices, x, y, u, v, ICON_SIZE, ICON_SIZE);
     }
