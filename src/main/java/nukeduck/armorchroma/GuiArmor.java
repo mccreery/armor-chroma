@@ -21,36 +21,23 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import static net.minecraft.client.render.item.ItemRenderer.ENCHANTED_ITEM_GLINT;
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_CURRENT_BIT;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DST_COLOR;
-import static org.lwjgl.opengl.GL11.GL_ENABLE_BIT;
 import static org.lwjgl.opengl.GL11.GL_EQUAL;
 import static org.lwjgl.opengl.GL11.GL_LEQUAL;
-import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
 import static org.lwjgl.opengl.GL11.GL_ONE;
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_COLOR;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE;
-import static org.lwjgl.opengl.GL11.GL_TRANSFORM_BIT;
 import static org.lwjgl.opengl.GL11.GL_ZERO;
-import static org.lwjgl.opengl.GL11.glPopAttrib;
-import static org.lwjgl.opengl.GL11.glPopMatrix;
-import static org.lwjgl.opengl.GL11.glPushAttrib;
-import static org.lwjgl.opengl.GL11.glPushMatrix;
-import static org.lwjgl.opengl.GL11.glRotatef;
-import static org.lwjgl.opengl.GL11.glScalef;
-import static org.lwjgl.opengl.GL11.glTranslatef;
 
 /** Renders the armor bar in the HUD */
 public class GuiArmor extends DrawableHelper {
 
     private static final Identifier BACKGROUND = new Identifier(ArmorChroma.MODID, "textures/gui/background.png");
 
-    /** A light purple tint used to draw item glints */
-    private static final int GLINT_COLOR = 0x61309b;
+    /** Speed of the enchanted glint texture */
+    private static final double GLINT_U_SPEED = Math.cos(Math.PI / 3) / 16,
+                                GLINT_V_SPEED = Math.sin(Math.PI / 3) / 16;
 
     /** The colors used for the border of the bar at different levels
      * @see #drawBackground(MatrixStack, int, int, int) */
@@ -224,47 +211,23 @@ public class GuiArmor extends DrawableHelper {
         RenderSystem.depthFunc(GL_LEQUAL);
     }
 
-    /** Bits which are modified while rendering item glints, so must be pushed/popped.
-     * @see #drawTexturedGlintRect(MatrixStack, int, int, int, int, int, int) */
-    private static final int GL_GLINT_BITS = GL_ENABLE_BIT | GL_TRANSFORM_BIT
-        | GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_CURRENT_BIT;
-
     /** Render an item glint over the specified quad, blending with equal depth */
     public void drawTexturedGlintRect(MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
-        // Push bits we modify to restore later on
-        glPushAttrib(GL_GLINT_BITS);
-
         RenderSystem.depthFunc(GL_EQUAL);
         RenderSystem.blendFuncSeparate(GL_SRC_COLOR, GL_ONE, GL_ONE, GL_ZERO);
         RenderSystem.setShaderTexture(0, ENCHANTED_ITEM_GLINT);
-        //noinspection deprecation
-        RenderSystem.matrixMode(GL_TEXTURE); // Scale texture instead of vertex
+        RenderSystem.setShaderColor(.75f, .75f, .75f, 1);
+
         long time = System.currentTimeMillis();
-
-        Util.setColor(GLINT_COLOR);
-
-        // Rect #1
-        glPushMatrix();
-        glScalef(0.125F, 0.125F, 0.125F);
-        glTranslatef((float) (time % 3000L) / 3000.0F * 8.0F, 0.0F, 0.0F);
-        glRotatef(-50.0F, 0.0F, 0.0F, 1.0F);
+        // Casting to long then int because casting directly from double to
+        // int doesn't cause an overflow and returns Integer.MAX_VALUE instead
+        u = (u - (int) (long) (time * GLINT_U_SPEED)) % 256;
+        v = (v + (int) (long) (time * GLINT_V_SPEED)) % 256;
         drawTexture(matrices, x, y, u, v, width, height);
-        glPopMatrix();
-
-        // Rect #2
-        glPushMatrix();
-        glScalef(0.125F, 0.125F, 0.125F);
-        glTranslatef((float) (time % 4873L) / 4873.0F * -8.0F, 0.0F, 0.0F);
-        glRotatef(10.0F, 0.0F, 0.0F, 1.0F);
-        drawTexture(matrices, x, y, u, v, width, height);
-        glPopMatrix();
 
         RenderSystem.depthFunc(GL_LEQUAL);
         RenderSystem.defaultBlendFunc();
-        //noinspection deprecation
-        RenderSystem.matrixMode(GL_MODELVIEW);
-
-        glPopAttrib();
+        RenderSystem.setShaderColor(1, 1, 1, 1);
     }
 
     @Override
@@ -272,12 +235,8 @@ public class GuiArmor extends DrawableHelper {
         super.setZOffset(zOffset);
     }
 
-    @Override
-    public int getZOffset() {
-        return super.getZOffset();
-    }
-
     private void moveZOffset(int z) {
         setZOffset(getZOffset() + z);
     }
+
 }
