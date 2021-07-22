@@ -61,6 +61,7 @@ public class GuiArmor extends DrawableHelper {
         int left = width / 2 - 91;
 
         RenderSystem.enableBlend();
+        RenderSystem.enableDepthTest();
 
         // Total points in all rows so far
         int barPoints = 0;
@@ -228,11 +229,6 @@ public class GuiArmor extends DrawableHelper {
         RenderSystem.depthFunc(GL_LEQUAL);
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderColor(1, 1, 1, 1);
-    }
-
-    @Override
-    public void setZOffset(int zOffset) {
-        super.setZOffset(zOffset);
     }
 
     private void moveZOffset(int z) {
