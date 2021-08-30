@@ -35,10 +35,6 @@ public class GuiArmor extends DrawableHelper {
 
     private static final Identifier BACKGROUND = new Identifier(ArmorChroma.MODID, "textures/gui/background.png");
 
-    /** Speed of the enchanted glint texture */
-    private static final double GLINT_U_SPEED = Math.cos(Math.PI / 3) / 16,
-                                GLINT_V_SPEED = Math.sin(Math.PI / 3) / 16;
-
     /** The colors used for the border of the bar at different levels
      * @see #drawBackground(MatrixStack, int, int, int) */
     private static final int[] BG_COLORS = {0x3acaff, 0x3be55a, 0xffff00, 0xff9d00, 0xed3200, 0x7130c1};
@@ -219,11 +215,10 @@ public class GuiArmor extends DrawableHelper {
         RenderSystem.setShaderTexture(0, ENCHANTED_ITEM_GLINT);
         RenderSystem.setShaderColor(.75f, .75f, .75f, 1);
 
-        long time = System.currentTimeMillis();
-        // Casting to long then int because casting directly from double to
-        // int doesn't cause an overflow and returns Integer.MAX_VALUE instead
-        u = (u - (int) (long) (time * GLINT_U_SPEED)) % 256;
-        v = (v + (int) (long) (time * GLINT_V_SPEED)) % 256;
+        // Values taken from RenderPhase#setupGlintTexturing
+        long time = net.minecraft.util.Util.getMeasuringTimeMs() * 16;
+        u += -(time % 110000) * 256 / 110000 + x; // Adding x/y to keep the
+        v += (time % 30000) * 256 / 30000 + y; // rows in sync
         drawTexture(matrices, x, y, u, v, width, height);
 
         RenderSystem.depthFunc(GL_LEQUAL);
