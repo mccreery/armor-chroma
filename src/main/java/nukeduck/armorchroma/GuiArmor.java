@@ -85,6 +85,7 @@ public class GuiArmor extends DrawableHelper {
 
         // Plain background
         if (ArmorChroma.config.renderBackground()) {
+            RenderSystem.setShaderColor(1, 1, 1, 1);
             drawTexture(matrices, x, y, 0, 0, 81, 9);
         }
 
