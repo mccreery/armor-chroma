@@ -4,8 +4,11 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.resource.ResourceType;
+import net.minecraft.util.Identifier;
 import nukeduck.armorchroma.config.ArmorChromaConfig;
 import nukeduck.armorchroma.config.ArmorChromaConfig.ArmorChromaAutoConfig;
 import nukeduck.armorchroma.config.IconData;
@@ -26,6 +29,9 @@ public class ArmorChroma implements ClientModInitializer {
     public void onInitializeClient() {
         ResourceManagerHelper manager = ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES);
         manager.registerReloadListener(ICON_DATA);
+
+        ModContainer container = FabricLoader.getInstance().getModContainer(MODID).orElseThrow();
+        ResourceManagerHelper.registerBuiltinResourcePack(new Identifier(MODID, "alternative-icons"), container, ResourcePackActivationType.NORMAL);
 
         if (USE_AUTO_CONFIG) {
             AutoConfig.register(ArmorChromaAutoConfig.class, GsonConfigSerializer::new);
