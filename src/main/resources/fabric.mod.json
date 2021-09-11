@@ -6,7 +6,7 @@
   "name": "Armor Chroma",
   "description": "Adds colors, including leather dye, and enchanted sheen to the in-game armor bar.",
   "authors": ["jobicade", "Neecko5b84 (port)"],
-  "contributors": ["Andrew6rant"],
+  "contributors": ["Andrew Grant", "pkb"],
   "contact": {
     "homepage": "https://github.com/A5b84/armor-chroma-fabric",
     "issues": "https://github.com/A5b84/armor-chroma-fabric/issues",
