@@ -42,6 +42,9 @@ public class GuiArmor extends DrawableHelper {
     /** The vertical distance between the top of each row */
     private static final int ROW_SPACING = 5;
 
+    /** The number of armor points per row in the armor bar */
+    private static final int ARMOR_PER_ROW = 20;
+
     /** Fallback attributes required when getting the player's armor */
     private static final DefaultAttributeContainer FALLBACK_ATTRIBUTES = DefaultAttributeContainer.builder()
     .add(EntityAttributes.GENERIC_ARMOR).build();
@@ -79,18 +82,23 @@ public class GuiArmor extends DrawableHelper {
         RenderSystem.setShaderColor(1, 1, 1, 1);
     }
 
-    /** Draws the armor bar background with a border if {@code level > 0} */
+    /**
+     * Draws the armor bar background and, if {@code level > 0}, with a border
+     * @param level The colored border level where a level is one full row
+     *              ({@link #ARMOR_PER_ROW} armor points)
+     */
     private void drawBackground(MatrixStack matrices, int x, int y, int level) {
         RenderSystem.setShaderTexture(0, BACKGROUND);
+        boolean drawBorder = level > 0;
 
         // Plain background
-        if (ArmorChroma.config.renderBackground()) {
+        if (ArmorChroma.config.renderBackground() || drawBorder) {
             RenderSystem.setShaderColor(1, 1, 1, 1);
             drawTexture(matrices, x, y, 0, 0, 81, 9);
         }
 
         // Colored border
-        if(level > 0) {
+        if (drawBorder) {
             int color = level <= BG_COLORS.length ? BG_COLORS[level-1] : BG_COLORS[BG_COLORS.length-1];
             Util.setColor(color);
             drawTexture(matrices, x-1, y-1, 81, 0, 83, 11);
@@ -101,11 +109,11 @@ public class GuiArmor extends DrawableHelper {
      * @param barPoints The number of points in the bar before this piece */
     private void drawPiece(MatrixStack matrices, int left, int top, int barPoints, int stackPoints, ItemStack stack) {
         int space;
-        top -= (barPoints / 20) * ROW_SPACING; // Offset to account for full bars
+        top -= (barPoints / ARMOR_PER_ROW) * ROW_SPACING; // Offset to account for full bars
 
         // Repeatedly fill rows when possible
-        while((space = 20 - (barPoints % 20)) <= stackPoints) {
-            drawPartialRow(matrices, left, top, 20 - space, space, stack);
+        while((space = ARMOR_PER_ROW - (barPoints % ARMOR_PER_ROW)) <= stackPoints) {
+            drawPartialRow(matrices, left, top, ARMOR_PER_ROW - space, space, stack);
             moveZOffset(-3); // Move out of range of glint offset
 
             // Move up a row
@@ -116,7 +124,7 @@ public class GuiArmor extends DrawableHelper {
 
         // Whatever's left over (doesn't fill the whole row)
         if(stackPoints > 0) {
-            drawPartialRow(matrices, left, top, 20 - space, stackPoints, stack);
+            drawPartialRow(matrices, left, top, ARMOR_PER_ROW - space, stackPoints, stack);
             moveZOffset(-1);
         }
     }
@@ -182,8 +190,8 @@ public class GuiArmor extends DrawableHelper {
      * @param pointsMap The map of slots to points, traversed in entrySet order
      * @return The number of compressed rows */
     private int compressRows(Map<EquipmentSlot, Integer> pointsMap, int totalPoints) {
-        int compressedRows = (totalPoints - 1) / 20;
-        int compressedPoints = compressedRows * 20;
+        int compressedRows = (totalPoints - 1) / ARMOR_PER_ROW;
+        int compressedPoints = compressedRows * ARMOR_PER_ROW;
         Iterator<Entry<EquipmentSlot, Integer>> it = pointsMap.entrySet().iterator();
 
         for(int i = 0; i < compressedPoints;) {
