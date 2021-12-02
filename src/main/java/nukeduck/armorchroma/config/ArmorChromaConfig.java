@@ -11,6 +11,7 @@ public class ArmorChromaConfig {
     public boolean renderGlint() { return true; }
     public boolean renderBackground() { return true; }
     public boolean compressBar() { return false; }
+    public boolean reverse() { return false; }
 
     /** Config class requiring AutoConfig */
     @SuppressWarnings("FieldMayBeFinal")
@@ -21,12 +22,13 @@ public class ArmorChromaConfig {
         @Tooltip private boolean renderGlint = super.renderGlint();
         @Tooltip private boolean renderBackground = super.renderBackground();
         @Tooltip private boolean compressBar = super.compressBar();
+        private boolean reverse = super.reverse();
 
         @Override public boolean isEnabled() { return enabled; }
         @Override public boolean renderGlint() { return renderGlint; }
         @Override public boolean renderBackground() { return renderBackground; }
         @Override public boolean compressBar() { return compressBar; }
-
+        @Override public boolean reverse() { return reverse; }
     }
 
 }

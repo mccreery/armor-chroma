@@ -7,6 +7,7 @@
     "text.autoconfig.armorchroma.option.renderBackground.@Tooltip": "Display empty armor icons when your armor is less than 20",
     "text.autoconfig.armorchroma.option.compressBar": "Compress Bar",
     "text.autoconfig.armorchroma.option.compressBar.@Tooltip": "Compress the bar into different colored borders when your armor exceeds 20",
+    "text.autoconfig.armorchroma.option.reverse": "Reverse the armor order",
 
     "armorchroma.tooltip.material": "Armor Material: %s"
 }

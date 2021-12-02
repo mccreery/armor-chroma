@@ -171,7 +171,12 @@ public class GuiArmor extends DrawableHelper {
 
         int attrLast = (int) ((EntityAttributeInstanceAccess) armor).getUnclampedValue();
 
-        for(EquipmentSlot slot : EquipmentSlot.values()) {
+        EquipmentSlot[] slots = EquipmentSlot.values();
+        if (ArmorChroma.config.reverse()) {
+            Util.reverse(slots);
+        }
+
+        for(EquipmentSlot slot : slots) {
             ItemStack stack = player.getEquippedStack(slot);
             attributes.addTemporaryModifiers(stack.getAttributeModifiers(slot));
 

@@ -96,4 +96,14 @@ public final class Util {
         }
         return -1;
     }
+
+    /** Reverses {@code array} in place */
+    public static <T> void reverse(T[] array) {
+        for (int start = 0, end = array.length - 1; start < end; start++, end--) {
+            T tmp = array[start];
+            array[start] = array[end];
+            array[end] = tmp;
+        }
+    }
+
 }
