@@ -14,7 +14,7 @@ Features include:
 - Original mod by [jobicade], [original suggestion](https://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/requests-ideas-for-mods/2566774) by [badhaloninja](https://www.minecraftforum.net/members/badhaloninja)
 - Alternative icons by [Andrew Grant]
 - `ko_kr` translation by [pkb](https://github.com/XxPKBxX)
-- Armor order reversal suggested by [robotkoer](https://www.curseforge.com/members/robotkoer/projects)
+- Option to reverse the armor order suggested by [robotkoer](https://www.curseforge.com/members/robotkoer/projects)
 
 [jobicade]: https://www.curseforge.com/members/jobicade/projects
 [Andrew Grant]: https://github.com/Andrew6rant
