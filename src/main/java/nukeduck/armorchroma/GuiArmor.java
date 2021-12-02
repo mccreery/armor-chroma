@@ -52,12 +52,10 @@ public class GuiArmor extends DrawableHelper {
     private final MinecraftClient client = MinecraftClient.getInstance();
 
     /** Render the bar as a full replacement for vanilla */
-    public void draw(MatrixStack matrices, int width, int top) {
+    public void draw(MatrixStack matrices, int left, int top) {
         Map<EquipmentSlot, Integer> pointsMap = new LinkedHashMap<>();
         int totalPoints = getArmorPoints(client.player, pointsMap);
         if (totalPoints <= 0) return;
-
-        int left = width / 2 - 91;
 
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();

@@ -1,50 +1,36 @@
 package nukeduck.armorchroma.mixin;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.player.HungerManager;
+import net.minecraft.entity.player.PlayerEntity;
 import nukeduck.armorchroma.ArmorChroma;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 /** Replaces the vanilla armor rendering with the mod's */
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
 
-    @Unique private static final String PROFILER_SWAP_DESCRIPTOR = "net/minecraft/util/profiler/Profiler.swap(Ljava/lang/String;)V";
-    @Unique private int top = -32; // Renders outside the screen before initialization
-
-    @Shadow @Final private MinecraftClient client;
-
-
-
-    /** Cancels the vanilla armor rendering and stores the bar location */
-    @Redirect(method = "renderStatusBars",
-        at = @At(value = "INVOKE", target = "net/minecraft/client/gui/hud/InGameHud.drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"),
-        slice = @Slice(to = @At(value = "INVOKE", target = PROFILER_SWAP_DESCRIPTOR, ordinal = 0))
-    )
-    private void drawTextureProxy(InGameHud hud, MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
-        if (ArmorChroma.config.isEnabled()) {
-            top = y;
-        } else {
-            // Vanilla behavior
-            hud.drawTexture(matrices, x, y, u, v, width, height);
-        }
+    /* Removes the vanilla armor bar */
+    @ModifyVariable(method = "renderStatusBars",
+            at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/player/PlayerEntity;getArmor()I"),
+            ordinal = 11)
+    private int modifyArmor(int armor) {
+        return ArmorChroma.config.isEnabled() ? 0 : armor;
     }
 
     /** Renders the modded armor bar */
     @Inject(method = "renderStatusBars",
-        at = @At(value = "INVOKE", target = PROFILER_SWAP_DESCRIPTOR, ordinal = 0))
-    private void renderArmor(MatrixStack matrices, CallbackInfo info) {
+            at = @At(value = "INVOKE", target = "net/minecraft/util/profiler/Profiler.swap(Ljava/lang/String;)V", ordinal = 0),
+            locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    private void renderArmor(MatrixStack matrices, CallbackInfo info, PlayerEntity player, int i, boolean bl, long l, int j, HungerManager hungerManager, int k, int left, int n, int o, float f, int p, int q, int r, int top) {
         if (ArmorChroma.config.isEnabled()) {
-            ArmorChroma.GUI.draw(matrices, client.getWindow().getScaledWidth(), top);
+            ArmorChroma.GUI.draw(matrices, left, top);
         }
     }
 

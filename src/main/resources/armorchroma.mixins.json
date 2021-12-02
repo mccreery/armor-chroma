@@ -6,7 +6,8 @@
   "client": [
     "EntityAttributeInstanceMixin",
     "InGameHudMixin",
-    "ItemStackMixin"
+    "ItemStackMixin",
+    "compat.extendedarmorbars.ConfigMixin"
   ],
   "injectors": {
     "defaultRequire": 1
