@@ -24,7 +24,8 @@
   "mixins": ["armorchroma.mixins.json"],
 
   "depends": {
-    "minecraft": ">=1.17-"
+    "minecraft": ">=1.17-",
+    "fabric": "*"
   },
   "suggests": {
     "modmenu": "*",
