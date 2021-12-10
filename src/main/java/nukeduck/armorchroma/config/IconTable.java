@@ -6,6 +6,7 @@ import java.util.Map;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.registry.Registry;
 
 public class IconTable {
     public final Map<String, Integer> materials = new HashMap<>();
@@ -28,7 +29,7 @@ public class IconTable {
             i = Util.getGlob(materials, ((ArmorItem)item).getMaterial().getName());
         }
         if(i == null) {
-            i = Util.getGlob(items, Util.getModid(stack));
+            i = Util.getGlob(items, Registry.ITEM.getId(item).getPath());
         }
         return i;
     }
