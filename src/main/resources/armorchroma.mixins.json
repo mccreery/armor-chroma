@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "nukeduck.armorchroma.mixin",
+  "plugin": "nukeduck.armorchroma.mixin.MixinPlugin",
   "compatibilityLevel": "JAVA_16",
   "client": [
     "EntityAttributeInstanceMixin",
