@@ -225,12 +225,15 @@ public class GuiArmor extends DrawableHelper {
         RenderSystem.depthFunc(GL_EQUAL);
         RenderSystem.blendFuncSeparate(GL_SRC_COLOR, GL_ONE, GL_ONE, GL_ZERO);
         RenderSystem.setShaderTexture(0, ENCHANTED_ITEM_GLINT);
-        RenderSystem.setShaderColor(.75f, .75f, .75f, 1);
+        float intensity = ArmorChroma.config.glintIntensity();
+        RenderSystem.setShaderColor(intensity, intensity, intensity, 1);
 
         // Values taken from RenderPhase#setupGlintTexturing
         long time = net.minecraft.util.Util.getMeasuringTimeMs() * 16;
-        u += -(time % 110000) * 256 / 110000 + x; // Adding x/y to keep the
-        v += (time % 30000) * 256 / 30000 + y; // rows in sync
+        u += -(time % 110000) * 256 / 110000 + x;
+        v += (time % 30000) * 256 / 30000 + y;
+        // Adding x and y so that adjacent icons use adjacent parts of the
+        // texture (instead of the same part) and to remove visible seams
         drawTexture(matrices, x, y, u, v, width, height);
 
         RenderSystem.depthFunc(GL_LEQUAL);

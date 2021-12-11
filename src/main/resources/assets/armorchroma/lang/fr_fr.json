@@ -3,6 +3,7 @@
     "text.autoconfig.armorchroma.option.enabled": "Activer le mod",
     "text.autoconfig.armorchroma.option.renderGlint": "Afficher le scintillement",
     "text.autoconfig.armorchroma.option.renderGlint.@Tooltip": "Affiche un scintillement pour les morceaux d'armure enchentés",
+    "text.autoconfig.armorchroma.option.glintIntensity": "Intensité du scintillement",
     "text.autoconfig.armorchroma.option.renderBackground": "Afficher le fond",
     "text.autoconfig.armorchroma.option.renderBackground.@Tooltip": "Affiche des icônes d'armure vides quand l'armure vaut moins de 20",
     "text.autoconfig.armorchroma.option.compressBar": "Compresser la barre",

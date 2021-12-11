@@ -9,6 +9,7 @@ public class ArmorChromaConfig {
 
     public boolean isEnabled() { return true; }
     public boolean renderGlint() { return true; }
+    public float glintIntensity() { return 0.75f; }
     public boolean renderBackground() { return true; }
     public boolean compressBar() { return false; }
     public boolean reverse() { return false; }
@@ -20,12 +21,14 @@ public class ArmorChromaConfig {
 
         private boolean enabled = super.isEnabled();
         @Tooltip private boolean renderGlint = super.renderGlint();
+        private float glintIntensity = super.glintIntensity();
         @Tooltip private boolean renderBackground = super.renderBackground();
         @Tooltip private boolean compressBar = super.compressBar();
         private boolean reverse = super.reverse();
 
         @Override public boolean isEnabled() { return enabled; }
         @Override public boolean renderGlint() { return renderGlint; }
+        @Override public float glintIntensity() { return glintIntensity; }
         @Override public boolean renderBackground() { return renderBackground; }
         @Override public boolean compressBar() { return compressBar; }
         @Override public boolean reverse() { return reverse; }

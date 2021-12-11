@@ -3,6 +3,7 @@
     "text.autoconfig.armorchroma.option.enabled": "Enable the Mod",
     "text.autoconfig.armorchroma.option.renderGlint": "Render Glint",
     "text.autoconfig.armorchroma.option.renderGlint.@Tooltip": "Display Enchanted Glint",
+    "text.autoconfig.armorchroma.option.glintIntensity": "Glint Intensity",
     "text.autoconfig.armorchroma.option.renderBackground": "Render Background",
     "text.autoconfig.armorchroma.option.renderBackground.@Tooltip": "Display empty armor icons when your armor is less than 20",
     "text.autoconfig.armorchroma.option.compressBar": "Compress Bar",
