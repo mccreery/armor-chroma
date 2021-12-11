@@ -29,15 +29,12 @@ public abstract class ItemStackMixin {
         @Nullable PlayerEntity player, TooltipContext context,
         CallbackInfoReturnable<List<Text>> info, List<Text> list
     ) {
-        if (context.isAdvanced()) {
-            final Item item = getItem();
-            if (item instanceof ArmorItem) {
-                final String material = ((ArmorItem) item).getMaterial().getName();
-                list.add(
+        if (context.isAdvanced() && getItem() instanceof ArmorItem item) {
+            final String material = item.getMaterial().getName();
+            list.add(
                     new TranslatableText("armorchroma.tooltip.material", material)
-                    .formatted(Formatting.DARK_GRAY)
-                );
-            }
+                            .formatted(Formatting.DARK_GRAY)
+            );
         }
     }
 

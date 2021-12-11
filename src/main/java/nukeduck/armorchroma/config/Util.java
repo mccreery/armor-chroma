@@ -17,8 +17,8 @@ public final class Util {
         if(stack != null) {
             Item item = stack.getItem();
 
-            if(item instanceof DyeableItem) {
-                return ((DyeableItem) item).getColor(stack);
+            if(item instanceof DyeableItem dyeableItem) {
+                return dyeableItem.getColor(stack);
             }
         }
         return 0xffffff;

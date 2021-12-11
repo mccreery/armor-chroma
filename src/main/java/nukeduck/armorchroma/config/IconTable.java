@@ -25,8 +25,8 @@ public class IconTable {
         Integer i = null;
         Item item = stack.getItem();
 
-        if(item instanceof ArmorItem) {
-            i = Util.getGlob(materials, ((ArmorItem)item).getMaterial().getName());
+        if(item instanceof ArmorItem armorItem) {
+            i = Util.getGlob(materials, armorItem.getMaterial().getName());
         }
         if(i == null) {
             i = Util.getGlob(items, Registry.ITEM.getId(item).getPath());
