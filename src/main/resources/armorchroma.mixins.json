@@ -8,7 +8,9 @@
     "EntityAttributeInstanceMixin",
     "InGameHudMixin",
     "ItemStackMixin",
-    "compat.extendedarmorbars.ConfigMixin"
+    "compat.extendedarmorbars.ConfigMixin",
+    "compat.semitranslucencyfix.DrawableHelperMixin",
+    "compat.semitranslucencyfix.GuiArmorMixin"
   ],
   "injectors": {
     "defaultRequire": 1

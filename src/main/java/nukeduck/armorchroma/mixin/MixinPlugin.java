@@ -12,11 +12,25 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.startsWith("extendedarmorbars.", "nukeduck.armorchroma.mixin.compat.".length())) {
-            return FabricLoader.getInstance().isModLoaded("extended_armor_bars");
+        if (mixinClassName.startsWith("compat.", "nukeduck.armorchroma.mixin.".length())) {
+            // Compatiblity mixins
+            FabricLoader loader = FabricLoader.getInstance();
+            if (matchesCompatPackage(mixinClassName, "extendedarmorbars.")) {
+                return loader.isModLoaded("extended_armor_bars");
+            } else if (matchesCompatPackage(mixinClassName, "semitranslucencyfix.")) {
+                return loader.isModLoaded("semitranslucency");
+            } else {
+                // Shouldn't happen
+                throw new AssertionError("Compatibility mixin '" + mixinClassName + "' doesn't have a corresponding check in shouldApplyMixin");
+            }
         } else {
+            // Regular mixins
             return true;
         }
+    }
+
+    private boolean matchesCompatPackage(String mixinClassName, String pkg) {
+        return mixinClassName.startsWith(pkg, "nukeduck.armorchroma.mixin.compat.".length());
     }
 
     @Override public void onLoad(String mixinPackage) {}
