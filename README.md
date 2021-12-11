@@ -1,6 +1,6 @@
 # Armor Chroma
 
-This is a [Fabric](https://fabricmc.net/) fork of the original [Armor Chroma](https://www.curseforge.com/minecraft/mc-mods/armor-chroma) mod by [jobicade], a mod to improve on vanilla's default armor bar.
+This is a [Fabric](https://fabricmc.net/) fork of the original [Armor Chroma](https://www.curseforge.com/minecraft/mc-mods/armor-chroma) mod by [jobicade], a client-side mod to improve on vanilla's default armor bar.
 
 Features include:
 - Different icons depending on the material of equipped items

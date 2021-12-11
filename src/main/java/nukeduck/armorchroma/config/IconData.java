@@ -89,7 +89,7 @@ public class IconData implements SimpleResourceReloadListener<Void> {
                             });
                         } catch (JsonSyntaxException | JsonIOException | IOException e) {
                             // If an error is caught here, continue to read the other files
-                            ArmorChroma.LOGGER.error("Loading modid {}", modid, e);
+                            ArmorChroma.LOGGER.error("[Armor Chroma] Error loading icons for {}", modid, e);
                         }
                     }
                 } catch (IOException e) {
@@ -98,7 +98,7 @@ public class IconData implements SimpleResourceReloadListener<Void> {
                         // As below, but with extra information
                         throw new RuntimeException("Missing fallback icons. The mod is damaged", e);
                     } else if (!(e instanceof FileNotFoundException)) {
-                        ArmorChroma.LOGGER.error("Loading modid {}", modid, e);
+                        ArmorChroma.LOGGER.error("[Armor Chroma] Error loading icons for {}", modid, e);
                     }
                 }
             }
@@ -112,7 +112,7 @@ public class IconData implements SimpleResourceReloadListener<Void> {
             }
 
             // Ignore modid minecraft
-            ArmorChroma.LOGGER.info("Loaded {} mods", mods.size() - 1);
+            ArmorChroma.LOGGER.info("[Armor Chroma] Loaded icons for {} mods", mods.size() - 1);
 
             return null;
         });
