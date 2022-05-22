@@ -1,19 +1,8 @@
 package nukeduck.armorchroma.config;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
-
 import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -23,6 +12,16 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 import nukeduck.armorchroma.ArmorChroma;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 public class IconData implements SimpleResourceReloadListener<Void> {
     private final Map<String, IconTable> mods = new HashMap<>();
@@ -78,8 +77,9 @@ public class IconData implements SimpleResourceReloadListener<Void> {
 
             for (ModContainer modContainer : FabricLoader.getInstance().getAllMods()) {
                 String modid = modContainer.getMetadata().getId();
-                try {
-                    for (Resource resource : manager.getAllResources(new Identifier(modid, "textures/gui/armor_chroma.json"))) {
+                List<Resource> resources = manager.getAllResources(new Identifier(modid, "textures/gui/armor_chroma.json"));
+                if (!resources.isEmpty()) {
+                    for (Resource resource : resources) {
                         try (Reader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
                             IconTable mod = new Gson().fromJson(reader, IconTable.class);
 
@@ -92,14 +92,8 @@ public class IconData implements SimpleResourceReloadListener<Void> {
                             ArmorChroma.LOGGER.error("[Armor Chroma] Error loading icons for {}", modid, e);
                         }
                     }
-                } catch (IOException e) {
-                    // Mod is either not present (FileNotFoundException) or failed
-                    if (MINECRAFT.equals(modid)) {
-                        // As below, but with extra information
-                        throw new RuntimeException("Missing fallback icons. The mod is damaged", e);
-                    } else if (!(e instanceof FileNotFoundException)) {
-                        ArmorChroma.LOGGER.error("[Armor Chroma] Error loading icons for {}", modid, e);
-                    }
+                } else if (MINECRAFT.equals(modid)) {
+                    throw new RuntimeException("Missing fallback icons. The mod is damaged");
                 }
             }
 

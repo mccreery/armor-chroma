@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "nukeduck.armorchroma.mixin",
   "plugin": "nukeduck.armorchroma.mixin.MixinPlugin",
-  "compatibilityLevel": "JAVA_16",
+  "compatibilityLevel": "JAVA_17",
   "client": [
     "EntityAttributeInstanceMixin",
     "InGameHudMixin",

@@ -6,7 +6,6 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,7 +31,7 @@ public abstract class ItemStackMixin {
         if (context.isAdvanced() && getItem() instanceof ArmorItem item) {
             final String material = item.getMaterial().getName();
             list.add(
-                    new TranslatableText("armorchroma.tooltip.material", material)
+                    Text.translatable("armorchroma.tooltip.material", material)
                             .formatted(Formatting.DARK_GRAY)
             );
         }
