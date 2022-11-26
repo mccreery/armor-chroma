@@ -12,6 +12,7 @@ public class ArmorChromaConfig {
     public float glintIntensity() { return 0.75f; }
     public boolean renderBackground() { return true; }
     public boolean compressBar() { return false; }
+    public int getDisplayedArmorCap() { return 5 * 20; }
     public boolean reverse() { return false; }
 
     /** Config class requiring AutoConfig */
@@ -24,6 +25,7 @@ public class ArmorChromaConfig {
         private float glintIntensity = super.glintIntensity();
         @Tooltip private boolean renderBackground = super.renderBackground();
         @Tooltip private boolean compressBar = super.compressBar();
+        @Tooltip private int displayedArmorCap = super.getDisplayedArmorCap();
         private boolean reverse = super.reverse();
 
         @Override public boolean isEnabled() { return enabled; }
@@ -31,6 +33,7 @@ public class ArmorChromaConfig {
         @Override public float glintIntensity() { return glintIntensity; }
         @Override public boolean renderBackground() { return renderBackground; }
         @Override public boolean compressBar() { return compressBar; }
+        @Override public int getDisplayedArmorCap() { return displayedArmorCap; }
         @Override public boolean reverse() { return reverse; }
     }
 
