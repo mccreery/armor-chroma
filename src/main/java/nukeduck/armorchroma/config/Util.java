@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.item.DyeableItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -33,7 +33,7 @@ public final class Util {
 
     public static String getModid(ItemStack stack) {
         return stack != null
-            ? Registry.ITEM.getId(stack.getItem()).getNamespace()
+            ? Registries.ITEM.getId(stack.getItem()).getNamespace()
             : null;
     }
 

@@ -18,11 +18,11 @@ public class ArmorIcon {
     public final int color;
 
     public ArmorIcon(int i) {
-        this(null, i, 0xffffff);
+        this(i, 0xffffff);
     }
 
     public ArmorIcon(int i, int color) {
-        this(null, i, color);
+        this(Identifier.DEFAULT_NAMESPACE, i, color);
     }
 
     public ArmorIcon(String modid, int i) {

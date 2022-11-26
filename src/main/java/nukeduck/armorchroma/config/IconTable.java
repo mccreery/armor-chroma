@@ -1,12 +1,12 @@
 package nukeduck.armorchroma.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class IconTable {
     public final Map<String, Integer> materials = new HashMap<>();
@@ -29,7 +29,7 @@ public class IconTable {
             i = Util.getGlob(materials, armorItem.getMaterial().getName());
         }
         if(i == null) {
-            i = Util.getGlob(items, Registry.ITEM.getId(item).getPath());
+            i = Util.getGlob(items, Registries.ITEM.getId(item).getPath());
         }
         return i;
     }
