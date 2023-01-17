@@ -3,14 +3,14 @@
     "text.autoconfig.armorchroma.option.enabled": "모드 활성화",
     "text.autoconfig.armorchroma.option.renderGlint": "인챈트 반짝임",
     "text.autoconfig.armorchroma.option.renderGlint.@Tooltip": "인챈트가 된 아이템이 반짝거릴지 설정합니다.",
-    "text.autoconfig.armorchroma.option.glintIntensity": "Glint Intensity",
+    "text.autoconfig.armorchroma.option.glintIntensity": "반짝임 강도",
     "text.autoconfig.armorchroma.option.renderBackground": "배경 그리기",
     "text.autoconfig.armorchroma.option.renderBackground.@Tooltip": "20 이하일 때, 빈 공간에 배경을 그릴지 설정합니다.",
     "text.autoconfig.armorchroma.option.compressBar": "공간 줄이기",
     "text.autoconfig.armorchroma.option.compressBar.@Tooltip": "20 초과일 때 가장자리를 다른 색깔로 표시하는 방식으로 공간을 줄일지 설정합니다.",
-    "text.autoconfig.armorchroma.option.displayedArmorCap": "Displayed Armor Cap",
-    "text.autoconfig.armorchroma.option.displayedArmorCap.@Tooltip": "Maximum armor points to be displayed",
-    "text.autoconfig.armorchroma.option.reverse": "Reverse the Armor Order",
+    "text.autoconfig.armorchroma.option.displayedArmorCap": "표시되는 수",
+    "text.autoconfig.armorchroma.option.displayedArmorCap.@Tooltip": "표시될 최대 갑옷 수를 설정합니다.",
+    "text.autoconfig.armorchroma.option.reverse": "갑옷 순서 전환",
 
     "armorchroma.tooltip.material": "갑옷 재료: %s"
 }
