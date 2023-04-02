@@ -21,6 +21,8 @@ public class ArmorChroma implements ClientModInitializer {
     public static final GuiArmor GUI = new GuiArmor();
     public static final Logger LOGGER = LogManager.getLogger();
     public static final boolean USE_AUTO_CONFIG = FabricLoader.getInstance().isModLoaded("cloth-config2");
+    public static final int TEXTURE_SIZE = 256;
+
     public static ArmorChromaConfig config;
 
     public static final IconData ICON_DATA = new IconData();

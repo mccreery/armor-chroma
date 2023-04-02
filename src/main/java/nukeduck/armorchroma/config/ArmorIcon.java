@@ -5,8 +5,9 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
+import static nukeduck.armorchroma.ArmorChroma.TEXTURE_SIZE;
+
 public class ArmorIcon {
-    private static final int TEXTURE_SIZE = 256;
     private static final int ICON_SIZE = 9;
 
     private static final int SPAN = TEXTURE_SIZE / ICON_SIZE;
@@ -42,9 +43,9 @@ public class ArmorIcon {
         this.color = color;
     }
 
-    public void draw(MatrixStack matrices, DrawableHelper gui, int x, int y) {
+    public void draw(MatrixStack matrices, int x, int y, int z) {
         RenderSystem.setShaderTexture(0, texture);
         Util.setColor(color);
-        gui.drawTexture(matrices, x, y, u, v, ICON_SIZE, ICON_SIZE);
+        DrawableHelper.drawTexture(matrices, x, y, z, u, v, ICON_SIZE, ICON_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
     }
 }

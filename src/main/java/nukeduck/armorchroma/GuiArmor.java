@@ -20,7 +20,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static net.minecraft.client.render.item.ItemRenderer.ENCHANTED_ITEM_GLINT;
+import static net.minecraft.client.render.item.ItemRenderer.ITEM_ENCHANTMENT_GLINT;
+import static nukeduck.armorchroma.ArmorChroma.TEXTURE_SIZE;
 import static org.lwjgl.opengl.GL11.GL_DST_COLOR;
 import static org.lwjgl.opengl.GL11.GL_EQUAL;
 import static org.lwjgl.opengl.GL11.GL_LEQUAL;
@@ -50,6 +51,7 @@ public class GuiArmor extends DrawableHelper {
     .add(EntityAttributes.GENERIC_ARMOR).build();
 
     private final MinecraftClient client = MinecraftClient.getInstance();
+    private int zOffset;
 
     /** Render the bar as a full replacement for vanilla */
     public void draw(MatrixStack matrices, int left, int top) {
@@ -66,7 +68,7 @@ public class GuiArmor extends DrawableHelper {
         int compressedRows = ArmorChroma.config.compressBar() ? compressRows(pointsMap, totalPoints) : 0;
 
         // Accounts for the +2 glint rect offset
-        setZOffset(-2);
+        zOffset = -2;
 
         for(Entry<EquipmentSlot, Integer> entry : pointsMap.entrySet()) {
             //noinspection ConstantConditions (nullable stuff)
@@ -92,14 +94,14 @@ public class GuiArmor extends DrawableHelper {
         // Plain background
         if (ArmorChroma.config.renderBackground() || drawBorder) {
             RenderSystem.setShaderColor(1, 1, 1, 1);
-            drawTexture(matrices, x, y, 0, 0, 81, 9);
+            drawTexture(matrices, x, y, zOffset, 0, 0, 81, 9, TEXTURE_SIZE, TEXTURE_SIZE);
         }
 
         // Colored border
         if (drawBorder) {
             int color = level <= BG_COLORS.length ? BG_COLORS[level-1] : BG_COLORS[BG_COLORS.length-1];
             Util.setColor(color);
-            drawTexture(matrices, x-1, y-1, 81, 0, 83, 11);
+            drawTexture(matrices, x - 1, y - 1, zOffset, 81, 0, 83, 11, TEXTURE_SIZE, TEXTURE_SIZE);
         }
     }
 
@@ -112,7 +114,7 @@ public class GuiArmor extends DrawableHelper {
         // Repeatedly fill rows when possible
         while((space = ARMOR_PER_ROW - (barPoints % ARMOR_PER_ROW)) <= stackPoints) {
             drawPartialRow(matrices, left, top, ARMOR_PER_ROW - space, space, stack);
-            moveZOffset(-3); // Move out of range of glint offset
+            zOffset -= 3; // Move out of range of glint offset
 
             // Move up a row
             top -= ROW_SPACING;
@@ -123,7 +125,7 @@ public class GuiArmor extends DrawableHelper {
         // Whatever's left over (doesn't fill the whole row)
         if(stackPoints > 0) {
             drawPartialRow(matrices, left, top, ARMOR_PER_ROW - space, stackPoints, stack);
-            moveZOffset(-1);
+            zOffset -= 1;
         }
     }
 
@@ -135,7 +137,7 @@ public class GuiArmor extends DrawableHelper {
 
         boolean glint = ArmorChroma.config.renderGlint() && stack.hasGlint();
 
-        if(glint) moveZOffset(2); // Glint rows should appear on top of normal rows
+        if(glint) zOffset += 2; // Glint rows should appear on top of normal rows
 
         int i = barPoints & 1;
         int x = left + barPoints * 4;
@@ -147,7 +149,7 @@ public class GuiArmor extends DrawableHelper {
             x += 4;
         }
         for(; i < stackPoints - 1; i += 2, x += 8) { // Main body icons
-            icon.draw(matrices, this, x, top);
+            icon.draw(matrices, x, top, zOffset);
         }
         if(i < stackPoints) { // Trailing half icon
             drawMaskedIcon(matrices, x, top, icon, ArmorChroma.ICON_DATA.getSpecial(Util.getModid(stack), "trailingMask"));
@@ -155,7 +157,7 @@ public class GuiArmor extends DrawableHelper {
 
         if(glint) { // Draw one glint quad for the whole row
             this.drawTexturedGlintRect(matrices, left + barPoints * 4, top, left, 0, stackPoints*4 + 1, 9);
-            moveZOffset(-2);
+            zOffset -= 2;
         }
     }
 
@@ -213,10 +215,10 @@ public class GuiArmor extends DrawableHelper {
     }
 
     public void drawMaskedIcon(MatrixStack matrices, int x, int y, ArmorIcon icon, ArmorIcon mask) {
-        mask.draw(matrices, this, x, y);
+        mask.draw(matrices, x, y, zOffset);
         RenderSystem.depthFunc(GL_EQUAL);
         RenderSystem.blendFunc(GL_DST_COLOR, GL_ZERO);
-        icon.draw(matrices, this, x, y);
+        icon.draw(matrices, x, y, zOffset);
         RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         RenderSystem.depthFunc(GL_LEQUAL);
     }
@@ -225,25 +227,23 @@ public class GuiArmor extends DrawableHelper {
     public void drawTexturedGlintRect(MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
         RenderSystem.depthFunc(GL_EQUAL);
         RenderSystem.blendFuncSeparate(GL_SRC_COLOR, GL_ONE, GL_ONE, GL_ZERO);
-        RenderSystem.setShaderTexture(0, ENCHANTED_ITEM_GLINT);
-        float intensity = ArmorChroma.config.glintIntensity();
+        RenderSystem.setShaderTexture(0, ITEM_ENCHANTMENT_GLINT);
+        float intensity = client.options.getGlintStrength().getValue().floatValue()
+                * ArmorChroma.config.glintIntensity();
         RenderSystem.setShaderColor(intensity, intensity, intensity, 1);
 
         // Values taken from RenderPhase#setupGlintTexturing
-        long time = net.minecraft.util.Util.getMeasuringTimeMs() * 16;
+        double glintSpeed = client.options.getGlintSpeed().getValue();
+        long time = (long) (net.minecraft.util.Util.getMeasuringTimeMs() * glintSpeed * 8);
         u += -(time % 110000) * 256 / 110000 + x;
         v += (time % 30000) * 256 / 30000 + y;
         // Adding x and y so that adjacent icons use adjacent parts of the
         // texture (instead of the same part) and to remove visible seams
-        drawTexture(matrices, x, y, u, v, width, height);
+        drawTexture(matrices, x, y, zOffset, u, v, width, height, TEXTURE_SIZE, TEXTURE_SIZE);
 
         RenderSystem.depthFunc(GL_LEQUAL);
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderColor(1, 1, 1, 1);
-    }
-
-    private void moveZOffset(int z) {
-        setZOffset(getZOffset() + z);
     }
 
 }

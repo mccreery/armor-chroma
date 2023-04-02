@@ -9,7 +9,7 @@ public class ArmorChromaConfig {
 
     public boolean isEnabled() { return true; }
     public boolean renderGlint() { return true; }
-    public float glintIntensity() { return 0.75f; }
+    public float glintIntensity() { return 1; }
     public boolean renderBackground() { return true; }
     public boolean compressBar() { return false; }
     public int getDisplayedArmorCap() { return 5 * 20; }
