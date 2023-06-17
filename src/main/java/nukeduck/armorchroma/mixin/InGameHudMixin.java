@@ -1,7 +1,7 @@
 package nukeduck.armorchroma.mixin;
 
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import nukeduck.armorchroma.ArmorChroma;
@@ -18,7 +18,7 @@ public abstract class InGameHudMixin {
 
     /* Removes the vanilla armor bar */
     @ModifyVariable(method = "renderStatusBars",
-            at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/player/PlayerEntity;getArmor()I"),
+            at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/player/PlayerEntity;getArmor()I", shift = At.Shift.BY, by = 2),
             ordinal = 11)
     private int modifyArmor(int armor) {
         return ArmorChroma.config.isEnabled() ? 0 : armor;
@@ -28,9 +28,9 @@ public abstract class InGameHudMixin {
     @Inject(method = "renderStatusBars",
             at = @At(value = "INVOKE", target = "net/minecraft/util/profiler/Profiler.swap(Ljava/lang/String;)V", ordinal = 0),
             locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    private void renderArmor(MatrixStack matrices, CallbackInfo info, PlayerEntity player, int i, boolean bl, long l, int j, HungerManager hungerManager, int k, int left, int n, int o, float f, int p, int q, int r, int top) {
+    private void renderArmor(DrawContext context, CallbackInfo info, PlayerEntity player, int i, boolean bl, long l, int j, HungerManager hungerManager, int k, int left, int n, int o, float f, int p, int q, int r, int top) {
         if (ArmorChroma.config.isEnabled()) {
-            ArmorChroma.GUI.draw(matrices, left, top);
+            ArmorChroma.GUI.draw(context, left, top);
         }
     }
 
