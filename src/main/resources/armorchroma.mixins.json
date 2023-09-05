@@ -1,0 +1,13 @@
+{
+	"required": true,
+	"package": "nukeduck.armorchroma.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"client": [
+		"EntityAttributeInstanceMixin",
+		"InGameHudMixin",
+		"ItemStackMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

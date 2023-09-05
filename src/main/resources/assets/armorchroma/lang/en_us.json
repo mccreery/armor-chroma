@@ -1,0 +1,16 @@
+{
+    "text.autoconfig.armorchroma.title": "Armor Chroma Config",
+    "text.autoconfig.armorchroma.option.enabled": "Enable the Mod",
+    "text.autoconfig.armorchroma.option.renderGlint": "Render Glint",
+    "text.autoconfig.armorchroma.option.renderGlint.@Tooltip": "Display Enchanted Glint",
+    "text.autoconfig.armorchroma.option.glintIntensity": "Glint Intensity",
+    "text.autoconfig.armorchroma.option.renderBackground": "Render Background",
+    "text.autoconfig.armorchroma.option.renderBackground.@Tooltip": "Display empty armor icons when your armor is less than 20",
+    "text.autoconfig.armorchroma.option.compressBar": "Compress Bar",
+    "text.autoconfig.armorchroma.option.compressBar.@Tooltip": "Compress the bar into different colored borders when your armor exceeds 20",
+    "text.autoconfig.armorchroma.option.displayedArmorCap": "Displayed Armor Cap",
+    "text.autoconfig.armorchroma.option.displayedArmorCap.@Tooltip": "Maximum armor points to be displayed",
+    "text.autoconfig.armorchroma.option.reverse": "Reverse the Armor Order",
+
+    "armorchroma.tooltip.material": "Armor Material: %s"
+}

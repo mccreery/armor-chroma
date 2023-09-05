@@ -4,7 +4,9 @@
         "diamond": 1,
         "gold": 2,
         "iron": 3,
-        "leather": 4
+        "leather": 4,
+        "turtle": 5,
+        "netherite": 6
     },
     "special": {
         "default": 3,

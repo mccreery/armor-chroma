@@ -1,0 +1,9 @@
+{
+    "materials": {
+        "quantum": 0,
+        "bronze": 1,
+        "ruby": 2,
+        "sapphire": 3,
+        "peridot": 4
+    }
+}
